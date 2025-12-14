@@ -1,0 +1,60 @@
+package-as: LibIconPicker
+# --------------------------
+license-output: LICENSE.txt
+enable-nolib-creation: no
+#enable-toc-creation: yes
+
+manual-changelog:
+  filename: CHANGELOG.txt
+  markup-type: markdown
+
+embedded-libraries:
+  - LibStub
+  - Ace3
+
+tools-used:
+  - DevSuite
+  - Addon-Usage
+  - Bugsack
+  - Bug-Grabber
+
+# Resources:
+#  - https://github.com/wowace-mirror
+#  - https://www.wowace.com/projects/ace3
+#  - SVN URLs are still the primary source recommendation
+externals:
+  #Core/ExtLib/Kapresoft-LibUtil:
+  #  url: https://github.com/kapresoft/wow-lib-util
+  #  tag: latest
+  # Sourcing Ace3 addon directly from github
+  # LibStub is included in Ace3 add
+  Core/ExtLib/WowAce/Ace3:
+    url: https://repos.wowace.com/wow/ace3/trunk
+    tag: latest
+
+ignore:
+  - "*.sh"
+  - "*.md"
+  - "*.yaml"
+  - "*.yml"
+  - dev
+  - doc
+  - scripts
+  - Core/ExtLib/Kapresoft-LibUtil/LICENSE
+  - Core/ExtLib/Kapresoft-LibUtil/Kapresoft-LibUtil.toc
+  - Core/ExtLib/Kapresoft-LibUtil/External
+  - Core/ExtLib/Kapresoft-LibUtil/dev
+  - Core/ExtLib/Kapresoft-LibUtil/sync-extlibs.sh
+  - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibStub
+  - Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibQTip-1.0.toc
+  - Core/ExtLib/WowAce/LibCompress/LibCompress/LibCompress.toc
+  - Core/ExtLib/WowAce/Ace3/tests
+  - Core/ExtLib/WowAce/Ace3/Ace3.lua
+  - Core/ExtLib/WowAce/Ace3/Ace3.toc
+  - Core/ExtLib/WowAce/Ace3/Ace3_TBC.toc
+  - Core/ExtLib/WowAce/Ace3/Ace3_Vanilla.toc
+  - Core/ExtLib/WowAce/Ace3/Ace3_Wrath.toc
+  - Core/ExtLib/WowAce/Ace3/Bindings.xml
+  - Core/ExtLib/WowAce/Ace3/Bindings.xml
+  - Core/Lib/Developer
+  - Dev.toc
