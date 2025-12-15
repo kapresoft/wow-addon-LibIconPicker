@@ -1,0 +1,5 @@
+## Interface: 100002
+## Title: Pull-Ext-Lib
+## Author: kapresoft@gmail.com
+
+LibIconPicker\Core\_Core.xml

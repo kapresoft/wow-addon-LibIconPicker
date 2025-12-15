@@ -3,8 +3,9 @@
 BUILD_DIR=./build
 SCRIPT_DIR=./dev
 RELEASE_SCRIPT=${SCRIPT_DIR}/release.sh
+PACKAGE_NAME=Pull-Ext-Lib
 
-_Release() {
+_Build() {
     if [[ "$1" = "" ]]; then
         echo "Usage: ./release <pkgmeta-file.yml>"
         return 0
@@ -15,6 +16,11 @@ _Release() {
     echo "Executing: ${cmd}"
     eval "${cmd}" && echo "Execution Complete: ${cmd}"
 }
+_PostBuild() {
+  local cmd1="cp -r ./build/${PACKAGE_NAME}/Core/. ./LibIconPicker/Core/."
+    echo "Executing: ${cmd1}"
+    eval "${cmd1}" && echo "Execution Complete: ${cmd1}"
+}
 
 #_Release pkgmeta-kapresoftlibs-interface.yaml
-_Release pkgmeta-dev.yaml
+_Build pkgmeta-dev.yaml && _PostBuild

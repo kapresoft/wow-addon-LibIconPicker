@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Script file="Print.lua"/>
+    <!--@do-not-package@-->
+    <Include file='Developer\_DeveloperSetup.xml'/>
+    <!--@end-do-not-package@-->
+
+    <Include file="Locales\_Locales.xml"/>
+
+    <!--@do-not-package@-->
+    <Include file='Developer\_Developer.xml'/>
+    <!--@end-do-not-package@-->
+</Ui>

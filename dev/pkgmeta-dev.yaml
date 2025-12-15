@@ -1,4 +1,4 @@
-package-as: Dev
+package-as: Pull-Ext-Lib
 # --------------------------
 manual-changelog:
   filename: CHANGELOG.txt
@@ -9,13 +9,22 @@ manual-changelog:
 #  - https://www.wowace.com/projects/ace3
 #  - SVN URLs are still the primary source recommendation
 externals:
-  Core/ExtLib/Kapresoft-LibUtil:
-    url: https://github.com/kapresoft/wow-lib-util
-    tag: latest
-  # Sourcing Ace3 addon directly from github
+  # Ace3
+  # https://www.wowace.com/projects/ace3
+  # Please note that the CurseForge/WoWAce SVN repository
+  # remains the primary authority, and what should be used
+  # in .pkgmeta to reference Ace3.
   # LibStub is included in Ace3 add
-  Core/ExtLib/WowAce/Ace3:
+  LibIconPicker/Core/ExtLib/WowAce/Ace3:
     url: https://repos.wowace.com/wow/ace3/trunk
+    tag: latest
+  # LibQTip
+  # https://www.wowace.com/projects/libqtip-1-0
+  Core/ExtLib/WowAce/LibQTip/LibQTip-1.0:
+    url: https://repos.wowace.com/wow/libqtip-1-0
+    tag: latest
+  Core/ExtLib/WowAce/LibSharedMedia/LibSharedMedia-3.0:
+    url: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
     tag: latest
 
 ignore:
@@ -63,5 +72,6 @@ ignore:
   - "*.toc"
 
 move-folders:
-  Dev/Core/ExtLib/Kapresoft-LibUtil: ../Core/ExtLib/Kapresoft-LibUtil
-  Dev/Core/ExtLib/WowAce/Ace3: ../Core/ExtLib/WowAce/Ace3
+#  Pull-Ext-Lib/LibIconPicker: LibIconPicker
+#  Pull-Ext-Lib/LibIconPicker/Core/ExtLib/Kapresoft-LibUtil: ../Core/ExtLib/Kapresoft-LibUtil
+#  Pull-Ext-Lib/LibIconPicker/Core/ExtLib/WowAce/Ace3: ../Core/ExtLib/WowAce/Ace3
