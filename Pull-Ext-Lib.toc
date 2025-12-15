@@ -3,3 +3,6 @@
 ## Author: kapresoft@gmail.com
 
 LibIconPicker\Core\_Core.xml
+
+# This file is temporarily used to pull external libs
+# ./dev/pull-extlib.sh
