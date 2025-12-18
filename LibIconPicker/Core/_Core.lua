@@ -1,17 +1,13 @@
 --- @type string
 local addon
---- @type LibIconPickerNamespace
+--- @class LibIconPickerNamespace
 local ns
 addon, ns = ...
 
-ns.addon = addon
-ns.sformat = string.format
-
--- LibIconPicker-1.0
-local MAJOR, MINOR = "LibIconPicker-1.0", 1
-
---- @type LibStub
-local LibStub  = LibStub
+--[[-----------------------------------------------------------------------------
+Local Vars
+-------------------------------------------------------------------------------]]
+LIP_NS = ns
 
 --[[-----------------------------------------------------------------------------
 Type: DebugSettings
@@ -19,15 +15,25 @@ Override in DeveloperSetup to enable
 -------------------------------------------------------------------------------]]
 --- @class LibIconPickerSettings
 --- @field developer boolean if true: enables developer mode
-local settings = {
-    developer = false,
-}; ns.settings    = settings
+local settings = { developer = false }
 
 --[[-----------------------------------------------------------------------------
 Namespace Methods
 -------------------------------------------------------------------------------]]
---- @return boolean
-function ns:IsDev() return ns.settings.developer == true end
+
+---@param n LibIconPickerNamespace
+local function NamespaceMethods(n)
+
+    n.addon = addon
+    n.sformat = string.format
+    n.settings = settings
+
+    --- @return boolean
+    function n:IsDev() return ns.settings.developer == true end
+
+end; NamespaceMethods(ns)
+
+
 
 
 
