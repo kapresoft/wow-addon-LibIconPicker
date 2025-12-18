@@ -1,6 +1,7 @@
 --- @type string
 local addon
 --- @class LibIconPickerNamespace
+--- @field O NamespaceObjects
 local ns
 addon, ns = ...
 
@@ -21,12 +22,13 @@ local settings = { developer = false }
 Namespace Methods
 -------------------------------------------------------------------------------]]
 
----@param n LibIconPickerNamespace
+--- @param n LibIconPickerNamespace
 local function NamespaceMethods(n)
 
     n.addon = addon
     n.sformat = string.format
     n.settings = settings
+    n.O = {}
 
     --- @return boolean
     function n:IsDev() return ns.settings.developer == true end

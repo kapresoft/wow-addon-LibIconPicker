@@ -11,10 +11,15 @@ local MAJOR, MINOR = "LibIconPicker-1.0", 1
 local LibStub = LibStub
 
 --- @class LibIconPicker
-LibIconPicker = {}
+LibIconPicker = {}; local A = LibIconPicker
 local p = ns:Log('A')
-
 
 C_Timer.After(1, function()
     p('loaded...')
 end)
+
+function A:ShowDialog()
+    print('Showing icon chooser dialog.')
+    ns.O.IconSelector:ShowDialog()
+end
+

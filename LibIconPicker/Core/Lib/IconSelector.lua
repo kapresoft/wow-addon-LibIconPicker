@@ -1,3 +1,6 @@
+--- @type LibIconPickerNamespace
+local ns = select(2, ...)
+
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
@@ -89,6 +92,7 @@ function S:OnLoad()
         HybridScrollFrame_OnMouseWheel(sf, delta)
         self:Redraw()
     end)
+    ns.O.IconSelector = self
 end
 
 function S:ShowDialog(callback)
