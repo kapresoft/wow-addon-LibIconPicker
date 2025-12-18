@@ -10,5 +10,7 @@
 
     <!--@do-not-package@-->
     <Include file='Developer\_Developer.xml'/>
+
     <!--@end-do-not-package@-->
+    <Include file='IconSelector.xml'/>
 </Ui>

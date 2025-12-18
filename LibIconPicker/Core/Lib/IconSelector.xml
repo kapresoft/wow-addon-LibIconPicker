@@ -1,0 +1,99 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Script file="IconSelectorBackdrops.lua"/>
+    <Script file="IconSelector.lua"/>
+    <Script file="IconSelectorProvider.lua"/>
+
+    <Frame name="ABP_IconRowTemplate" virtual="true">
+        <Size x="1" y="36"/>
+        <Scripts>
+            <OnLoad>ABP_IconSelectorMixin.OnLoadRow(self)</OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Frame name="ABP_IconSelectorFrameTemplate" virtual="true" hidden="true" movable="true" enableMouse="true"
+           frameStrata="DIALOG"
+           mixin="ABP_IconSelectorMixin">
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+
+        <Size x="450" y="340"/>
+        <Anchors>
+            <Anchor point="CENTER" x="-100" y="100"/>
+        </Anchors>
+
+        <Layers></Layers>
+
+        <!-- Scroll area for icons -->
+        <Frames>
+            <ScrollFrame parentKey="ScrollBox" inherits="HybridScrollFrameTemplate,BackdropTemplate">
+                <!--<KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_GOLD_DIALOG_32_32"
+                              type="global"/>
+                </KeyValues>-->
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent" x="16" y="-50"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-28" y="69"/>
+                </Anchors>
+                <Frames>
+                    <Slider name="$parentScrollBar" parentKey="scrollBar"
+                            inherits="HybridScrollBarTemplate">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="-20" />
+                            <Anchor point="BOTTOMRIGHT" x="-20" />
+                        </Anchors>
+                    </Slider>
+                </Frames>
+                <ScrollChild>
+                    <Frame name="$parentScrollChild" parentKey="scrollChild">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" />
+                            <Anchor point="BOTTOMRIGHT" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+
+            <Button parentKey="CloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-5" y="-5"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():OnClickClose()</OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="CancelButton" name="$parentCancelButton"
+                    inherits="UIPanelButtonTemplate"
+                    text="Cancel">
+                <Size x="90" y="22"/>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-24" y="25"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():OnClickCancel()</OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="OkayButton" name="$parentOkayButton"
+                    inherits="UIPanelButtonTemplate"
+                    text="Okay">
+                <Size x="90" y="22"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentCancelButton"
+                            relativePoint="LEFT"
+                            x="-5" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():OnClickOkay()</OnClick>
+                </Scripts>
+            </Button>
+
+        </Frames>
+    </Frame>
+
+    <Frame name="ABP_IconSelector" hidden="true" movable="true" enableMouse="true"
+           inherits="BackdropTemplate, ABP_IconSelectorFrameTemplate">
+    </Frame>
+</Ui>

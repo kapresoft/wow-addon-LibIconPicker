@@ -6,5 +6,6 @@
 
     <Script file="_Core.lua"/>
     <Include file='Lib\_Lib.xml'/>
+    <Script file="LibIconPicker.lua"/>
 
 </Ui>
