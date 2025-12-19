@@ -16,6 +16,7 @@ local HybridScrollFrame_CreateButtons = HybridScrollFrame_CreateButtons
 New Library
 -------------------------------------------------------------------------------]]
 --- @class IconSelector
+--- @field icons table<number, number>
 --- @field scrollFrame Frame
 --- @field selectedIconButton Button
 LibIconPicker_IconSelectorMixin = {}
@@ -149,7 +150,6 @@ function S:ShowDialog(callback)
 
     -- reload icons
     self.icons = ns.iconDataProvider:GetIcons()
-    self.filtered = self.icons
 
     local showTextField = true
     if not showTextField then
@@ -196,7 +196,7 @@ end
 -- VIRTUAL SCROLL UPDATE
 -- -----------------------------------------------------
 function S:Redraw()
-    local icons = self.filtered
+    local icons = self.icons
     local total = #icons
     local rows = math.ceil(total / ICON_COLS)
 
@@ -235,7 +235,8 @@ function S:Redraw()
     local contentHeight = rows * ROW_HEIGHT
     self.scrollFrame.scrollChild:SetHeight(contentHeight)
 
-    p('offset:', offset, 'visibleRows:', visibleRows, 'cHeight:', contentHeight, 'rows:', rows)
+    p('total:', total, 'offset:', offset, 'visibleRows:', visibleRows,
+      'cHeight:', contentHeight, 'rows:', rows)
 
     HybridScrollFrame_Update(
             self.scrollFrame,
