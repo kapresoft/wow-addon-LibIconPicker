@@ -18,8 +18,9 @@ C_Timer.After(1, function()
     p('loaded...')
 end)
 
-function A:ShowDialog()
+function A:Open()
     print('Showing icon chooser dialog.')
     ns.O.IconSelector:ShowDialog()
 end
+
 

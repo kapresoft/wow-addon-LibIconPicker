@@ -25,15 +25,41 @@
             <Anchor point="CENTER" x="-100" y="100"/>
         </Anchors>
 
-        <Layers></Layers>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parentTitleFrameHeader" parentKey="TitleFrameHeader"
+                         file="Interface\DialogFrame\UI-DialogBox-Header">
+                    <Size x="256" y="64"/>
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="TOP" x="0" y="12"/>
+                    </Anchors>
+                    <Scripts>
+                        <OnMouseDown>
+                            if button == "LeftButton" then
+                            self:GetParent():StartMoving()
+                            end
+                        </OnMouseDown>
+
+                        <OnMouseUp>
+                            self:GetParent():StopMovingOrSizing()
+                        </OnMouseUp>
+                    </Scripts>
+                </Texture>
+                <FontString name="$parentDialogTitle" parentKey="HeaderTitle"
+                            inherits="GameFontNormal">
+                    <Size>
+                        <AbsDimension x="185" y="12"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="TOP" x="0" y="-2" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
 
         <!-- Scroll area for icons -->
         <Frames>
             <ScrollFrame parentKey="ScrollBox" inherits="HybridScrollFrameTemplate,BackdropTemplate">
-                <!--<KeyValues>
-                    <KeyValue key="backdropInfo" value="BACKDROP_GOLD_DIALOG_32_32"
-                              type="global"/>
-                </KeyValues>-->
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent" x="16" y="-50"/>
                     <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-28" y="69"/>

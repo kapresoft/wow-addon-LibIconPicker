@@ -2,6 +2,7 @@
 local addon
 --- @class LibIconPickerNamespace
 --- @field O NamespaceObjects
+--- @field backdrops table<string, table>
 local ns
 addon, ns = ...
 

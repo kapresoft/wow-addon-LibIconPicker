@@ -1,6 +1,10 @@
 --- @type LibIconPickerNamespace
 local ns = select(2, ...)
 
+
+local LSM = LibStub("LibSharedMedia-3.0")
+local whiteBg = LSM:Fetch("background", "WHITE8X8") -- nil unless registered
+
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
@@ -16,6 +20,7 @@ New Library
 ABP_IconSelectorMixin = {}
 --- @type IconSelector | Frame
 local S = ABP_IconSelectorMixin
+local p = ns:Log('IconSelector')
 
 -- Settings
 local ICON_SIZE = 32
@@ -71,18 +76,41 @@ function S.OnLoadRow(self)
     end
 end
 
+function S:CreateTitleFrame()
+    --- @type Frame
+    local headerFrame = CreateFrame("Frame", nil, self, "BackdropTemplate")
+    headerFrame:SetPoint("TOPLEFT", self, 'TOPLEFT', 100, 8)
+    headerFrame:SetPoint("TOPRIGHT", self, 'TOPRIGHT', -100, 8)
+    headerFrame:SetHeight(30)
+    headerFrame:SetFrameLevel(self:GetFrameLevel() + 10)
+
+    --local bg = headerFrame:CreateTexture(nil, "BACKGROUND")
+    headerFrame:SetBackdrop({
+                                bgFile = [[Interface\Buttons\WHITE8X8]],
+                                edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+                                tile     = true,
+                                tileSize = 16,
+                                edgeSize = 16,
+                                insets   = { left = 3, right = 3, top = 3, bottom = 3 },
+                            })
+    --headerFrame:SetBackdropColor(0.1, 0.3, 0.7, 1)      -- background fill
+    headerFrame:SetBackdropColor(0, 0, 0, 1)      -- background fill
+    headerFrame:SetBackdropBorderColor(0.8, 0.8, 0.8, 0.9) -- border
+
+    C_Timer.After(1, function()
+        print('parent alpha:', self:GetAlpha())
+        print('headerFrame alpha:', headerFrame:GetAlpha())
+    end)
+end
+
 -- -----------------------------------------------------
 -- PUBLIC API
 -- -----------------------------------------------------
 function S:OnLoad()
+    self.HeaderTitle:SetText("Icon Picker")
+
     self.scrollFrame = self.ScrollBox
-
-    --self:SetBackdrop(ABP_ICON_SELECTOR_BACKDROPS.backdropThemes.modernDark)
-    self:SetBackdrop(ABP_ICON_SELECTOR_BACKDROPS.backdropThemes.modernDark)
-
-    -- REQUIRED in modern WoW
-    --self:SetBackdropColor(0, 0, 0, 0.85)
-    --self:SetBackdropBorderColor(1, 1, 1, 1)
+    self:SetBackdrop(BACKDROP_TUTORIAL_16_16)
 
     self.scrollFrame:SetScript("OnVerticalScroll", function(sf, offset)
         sf:SetVerticalScroll(offset)
