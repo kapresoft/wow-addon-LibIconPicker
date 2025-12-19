@@ -14,13 +14,16 @@ local LibStub = LibStub
 LibIconPicker = {}; local A = LibIconPicker
 local p = ns:Log('A')
 
-C_Timer.After(1, function()
-    p('loaded...')
-end)
-
 function A:Open()
     print('Showing icon chooser dialog.')
     ns.O.IconSelector:ShowDialog()
 end
+
+C_Timer.After(.5, function()
+    p('loaded...')
+    A:Open()
+end)
+
+
 
 

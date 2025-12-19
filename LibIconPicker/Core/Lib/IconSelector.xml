@@ -59,10 +59,108 @@
 
         <!-- Scroll area for icons -->
         <Frames>
+            <Button parentKey="CloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-5" y="-5"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():OnClickClose()
+                        ReloadUI()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="CancelButton" name="$parentCancelButton"
+                    inherits="UIPanelButtonTemplate"
+                    text="Cancel">
+                <Size x="90" y="22"/>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-18" y="25"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():OnClickCancel()</OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="OkayButton" name="$parentOkayButton"
+                    inherits="UIPanelButtonTemplate"
+                    text="Okay">
+                <Size x="90" y="22"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentCancelButton"
+                            relativePoint="LEFT"
+                            x="-5" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():OnClickOkay()</OnClick>
+                </Scripts>
+            </Button>
+            <Frame name="$parentFirstRow" parentKey="FirstRow" inherits="BackdropTemplate">
+                <Size y="80"/>
+                <!--<KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOAST_12_12" type="global"/>
+                </KeyValues>-->
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-24"/>
+                    <Anchor point="TOPRIGHT" x="-20"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parentLabel" parentKey="Label"
+                                    inherits="GameFontNormal">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativeTo="$parent"
+                                        relativePoint="BOTTOMLEFT"
+                                        x="5" y="50"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <EditBox name="$parentEditBox" parentKey="EditBox"
+                             inherits="InputBoxTemplate">
+                        <Size x="200" y="32"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="$parentLabel"
+                                    relativePoint="BOTTOMLEFT" x="5" y="5"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnEscapePressed>self:GetParent():GetParent():OnClickClose()</OnEscapePressed>
+                        </Scripts>
+                    </EditBox>
+                    <Button name="$parentIconButton" parentKey="SelectedIconButton"
+                            inherits="UIPanelButtonTemplate">
+                        <Size x="40" y="40"/>
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT"
+                                    relativeTo="$parentEditBox"
+                                    relativePoint="BOTTOMRIGHT"
+                                    x="163" y="5"/>
+                        </Anchors>
+
+                        <NormalTexture file="Interface\Icons\INV_Misc_QuestionMark"/>
+                        <!--<PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>-->
+                        <!--<HighlightTexture file="Interface\Buttons\ButtonHilight-Square"/>-->
+
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture name="$parentIcon" parentKey="Icon">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                    <Size x="26" y="26"/>
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                    </Button>
+                </Frames>
+            </Frame>
             <ScrollFrame parentKey="ScrollBox" inherits="HybridScrollFrameTemplate,BackdropTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent" x="16" y="-50"/>
-                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-28" y="69"/>
+                    <!--<Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-28" y="69"/>-->
+                    <Anchor point="TOPLEFT" relativeTo="$parentFirstRow" relativePoint="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentCancelButton"
+                            relativePoint="TOPRIGHT" x="-3" y="10"/>
                 </Anchors>
                 <Frames>
                     <Slider name="$parentScrollBar" parentKey="scrollBar"
@@ -82,40 +180,6 @@
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
-
-            <Button parentKey="CloseButton" inherits="UIPanelCloseButton">
-                <Anchors>
-                    <Anchor point="TOPRIGHT" x="-5" y="-5"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>self:GetParent():OnClickClose()</OnClick>
-                </Scripts>
-            </Button>
-            <Button parentKey="CancelButton" name="$parentCancelButton"
-                    inherits="UIPanelButtonTemplate"
-                    text="Cancel">
-                <Size x="90" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-24" y="25"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>self:GetParent():OnClickCancel()</OnClick>
-                </Scripts>
-            </Button>
-            <Button parentKey="OkayButton" name="$parentOkayButton"
-                    inherits="UIPanelButtonTemplate"
-                    text="Okay">
-                <Size x="90" y="22"/>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="$parentCancelButton"
-                            relativePoint="LEFT"
-                            x="-5" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>self:GetParent():OnClickOkay()</OnClick>
-                </Scripts>
-            </Button>
-
         </Frames>
     </Frame>
 

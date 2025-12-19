@@ -16,6 +16,7 @@ New Library
 -------------------------------------------------------------------------------]]
 --- @class IconSelector
 --- @field scrollFrame Frame
+--- @field selectedIconButton Button
 LibIconPicker_IconSelectorMixin = {}
 
 --- @type IconSelector | Frame
@@ -37,6 +38,12 @@ local ROW_PADDING_LEFT = 5
 local ROW_PADDING_TOP = 0
 
 local MAX_BUTTONS = 200   -- cap regardless of scroll area height
+--[[-----------------------------------------------------------------------------
+Support Functions
+-------------------------------------------------------------------------------]]
+--- @type Button
+local function selectedIconButton() return ns.O.IconSelector.SelectedIconButton end
+
 
 --[[-----------------------------------------------------------------------------
 Handlers
@@ -63,7 +70,11 @@ function S.OnLoadRow(self)
         b.icon = b:CreateTexture(nil, "ARTWORK")
         b.icon:SetAllPoints()
 
+
         b:SetScript("OnClick", function(self)
+            --- @type number
+            local tex = self.iconTexture
+            selectedIconButton():SetNormalTexture(tex)
             if S.callback then
                 S.callback(self.iconTexture)
             end
@@ -77,9 +88,19 @@ end
 -- PUBLIC API
 -- -----------------------------------------------------
 function S:OnLoad()
+
+    local firstRow = self.FirstRow
+    self.selectedIconButton = firstRow.SelectedIconButton
+
     self.HeaderTitle:SetText("Icon Picker")
 
     self.scrollFrame = self.ScrollBox
+    --- @type Button
+    self.SelectedIconButton = self.FirstRow.SelectedIconButton
+    C_Timer.After(1, function()
+        p('Selected:', self.SelectedIconButton)
+    end)
+
     self:SetBackdrop(ns.backdrops.modernDark)
 
     self.scrollFrame:SetScript("OnVerticalScroll", function(sf, offset)
@@ -91,6 +112,18 @@ function S:OnLoad()
         self:Redraw()
     end)
     ns.O.IconSelector = self
+    firstRow.Label:SetText("Name:")
+
+    tinsert(UISpecialFrames, self:GetName())
+
+
+    local mainFrame = self
+    --self.FirstRow.EditBox:SetScript("OnEscapePressed", function(self)
+    --    p('ClearFocus pressed...')
+    --    --self:ClearFocus()
+    --    --frame:Hide()
+    --    mainFrame:OnClickCancel()
+    --end)
 end
 
 function S:ShowDialog(callback)
