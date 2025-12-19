@@ -5,16 +5,16 @@
     <Script file="IconSelector.lua"/>
     <Script file="IconSelectorProvider.lua"/>
 
-    <Frame name="ABP_IconRowTemplate" virtual="true">
+    <Frame name="LibIconPicker_IconRowTemplate" virtual="true">
         <Size x="1" y="36"/>
         <Scripts>
-            <OnLoad>ABP_IconSelectorMixin.OnLoadRow(self)</OnLoad>
+            <OnLoad>LibIconPicker_IconSelectorMixin.OnLoadRow(self)</OnLoad>
         </Scripts>
     </Frame>
 
-    <Frame name="ABP_IconSelectorFrameTemplate" virtual="true" hidden="true" movable="true" enableMouse="true"
+    <Frame name="LibIconPicker_IconSelectorFrameTemplate" virtual="true" hidden="true" movable="true" enableMouse="true"
            frameStrata="DIALOG"
-           mixin="ABP_IconSelectorMixin">
+           mixin="LibIconPicker_IconSelectorMixin">
 
         <Scripts>
             <OnLoad method="OnLoad"/>
@@ -119,7 +119,7 @@
         </Frames>
     </Frame>
 
-    <Frame name="ABP_IconSelector" hidden="true" movable="true" enableMouse="true"
-           inherits="BackdropTemplate, ABP_IconSelectorFrameTemplate">
+    <Frame name="LibIconPicker_IconSelector" hidden="true" movable="true" enableMouse="true"
+           inherits="BackdropTemplate, LibIconPicker_IconSelectorFrameTemplate">
     </Frame>
 </Ui>

@@ -1,6 +1,10 @@
-ABP_IconSelectorProvider = {}
-local P = ABP_IconSelectorProvider
+--- @type LibIconPickerNamespace
+local ns     = select(2, ...)
 
+--- @class IconDataProvider
+ns.iconDataProvider = {}
+local L = ns.iconDataProvider
+local p = ns:Log('IconSelectorProvider')
 local provider = nil
 
 
@@ -23,12 +27,12 @@ end
 -- -----------------------------------------------------
 -- Return unified icon list
 -- -----------------------------------------------------
-function P:GetIcons()
+function L:GetIcons()
     EnsureProvider()
 
     local icons = {}
     local total = provider:GetNumIcons()
-    print('xx totalIcons:', total)
+    p('totalIcons:', total)
     for i = 1, total do
         icons[i] = provider:GetIconByIndex(i)
     end

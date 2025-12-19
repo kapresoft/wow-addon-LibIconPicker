@@ -16,10 +16,10 @@ New Library
 -------------------------------------------------------------------------------]]
 --- @class IconSelector
 --- @field scrollFrame Frame
+LibIconPicker_IconSelectorMixin = {}
 
-ABP_IconSelectorMixin = {}
 --- @type IconSelector | Frame
-local S = ABP_IconSelectorMixin
+local S = LibIconPicker_IconSelectorMixin
 local p = ns:Log('IconSelector')
 
 -- Settings
@@ -37,9 +37,6 @@ local ROW_PADDING_LEFT = 5
 local ROW_PADDING_TOP = 0
 
 local MAX_BUTTONS = 200   -- cap regardless of scroll area height
-
---local frame = ABP_IconSelectorFrame
---local scrollFrame = frame.ScrollBox
 
 --[[-----------------------------------------------------------------------------
 Handlers
@@ -76,33 +73,6 @@ function S.OnLoadRow(self)
     end
 end
 
-function S:CreateTitleFrame()
-    --- @type Frame
-    local headerFrame = CreateFrame("Frame", nil, self, "BackdropTemplate")
-    headerFrame:SetPoint("TOPLEFT", self, 'TOPLEFT', 100, 8)
-    headerFrame:SetPoint("TOPRIGHT", self, 'TOPRIGHT', -100, 8)
-    headerFrame:SetHeight(30)
-    headerFrame:SetFrameLevel(self:GetFrameLevel() + 10)
-
-    --local bg = headerFrame:CreateTexture(nil, "BACKGROUND")
-    headerFrame:SetBackdrop({
-                                bgFile = [[Interface\Buttons\WHITE8X8]],
-                                edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-                                tile     = true,
-                                tileSize = 16,
-                                edgeSize = 16,
-                                insets   = { left = 3, right = 3, top = 3, bottom = 3 },
-                            })
-    --headerFrame:SetBackdropColor(0.1, 0.3, 0.7, 1)      -- background fill
-    headerFrame:SetBackdropColor(0, 0, 0, 1)      -- background fill
-    headerFrame:SetBackdropBorderColor(0.8, 0.8, 0.8, 0.9) -- border
-
-    C_Timer.After(1, function()
-        print('parent alpha:', self:GetAlpha())
-        print('headerFrame alpha:', headerFrame:GetAlpha())
-    end)
-end
-
 -- -----------------------------------------------------
 -- PUBLIC API
 -- -----------------------------------------------------
@@ -110,7 +80,7 @@ function S:OnLoad()
     self.HeaderTitle:SetText("Icon Picker")
 
     self.scrollFrame = self.ScrollBox
-    self:SetBackdrop(BACKDROP_TUTORIAL_16_16)
+    self:SetBackdrop(ns.backdrops.modernDark)
 
     self.scrollFrame:SetScript("OnVerticalScroll", function(sf, offset)
         sf:SetVerticalScroll(offset)
@@ -127,7 +97,7 @@ function S:ShowDialog(callback)
     self.callback = callback
 
     -- reload icons
-    self.icons = ABP_IconSelectorProvider:GetIcons()
+    self.icons = ns.iconDataProvider:GetIcons()
     self.filtered = self.icons
 
     self:InitGrid()
@@ -151,7 +121,7 @@ end
 -- -----------------------------------------------------
 function S:InitGrid()
     if not self.scrollFrame.buttons then
-        HybridScrollFrame_CreateButtons(self.scrollFrame, "ABP_IconRowTemplate", ROW_HEIGHT, 0)
+        HybridScrollFrame_CreateButtons(self.scrollFrame, "LibIconPicker_IconRowTemplate", ROW_HEIGHT, 0)
     end
 
     self:Redraw()
@@ -177,7 +147,7 @@ function S:Redraw()
     local offset = HybridScrollFrame_GetOffset(self.scrollFrame)
     local visibleRows = #self.scrollFrame.buttons
 
-    print('xx total icons:', total, 'visibleRows:', visibleRows)
+    p('visibleRows:', visibleRows)
 
     for rowIndex = 1, visibleRows do
         local row = self.scrollFrame.buttons[rowIndex]
