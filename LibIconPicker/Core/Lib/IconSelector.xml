@@ -76,7 +76,7 @@
         <Frames>
             <Button parentKey="CloseButton" inherits="UIPanelCloseButton">
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="-5" y="-5"/>
+                    <Anchor point="TOPRIGHT" x="-5" y="-7"/>
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -123,9 +123,7 @@
                         <FontString name="$parentLabel" parentKey="Label"
                                     inherits="GameFontNormal">
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativeTo="$parent"
-                                        relativePoint="BOTTOMLEFT"
-                                        x="5" y="50"/>
+                                <Anchor point="TOPLEFT" x="60" y="-10"/>
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -144,10 +142,10 @@
                     </EditBox>
                     <Button name="$parentIconButton" parentKey="SelectedIconButton"
                             inherits="UIPanelButtonTemplate">
-                        <Size x="40" y="40"/>
+                        <Size x="50" y="50"/>
                         <Anchors>
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.EditBox"
-                                    relativePoint="BOTTOMRIGHT" x="163" y="5"/>
+                            <Anchor point="TOPRIGHT" relativeKey="$parent.Label"
+                                    relativePoint="TOPLEFT" x="-5" y="3"/>
                         </Anchors>
 
                         <NormalTexture file="Interface\Icons\INV_Misc_QuestionMark"/>
