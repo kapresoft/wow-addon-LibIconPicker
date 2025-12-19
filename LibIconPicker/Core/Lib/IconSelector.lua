@@ -100,6 +100,7 @@ function S:OnLoad()
 
     self.HeaderTitle:SetText("Icon Picker")
 
+    --- @type ScrollFrame
     self.scrollFrame = self.ScrollBox
     --- @type Button
     self.SelectedIconButton = self.FirstRow.SelectedIconButton
@@ -134,9 +135,17 @@ function S:ShowDialog(callback)
     self.icons = ns.iconDataProvider:GetIcons()
     self.filtered = self.icons
 
+    local showTextField = false
+    if not showTextField then
+        --self.FirstRow:ClearAllPoints()
+        --self.FirstRow:SetHeight(40)
+        --self.FirstRow.Label:Hide()
+        --self.FirstRow.EditBox:Hide()
+        --self.scrollFrame:ClearAllPoints()
+    end
+
     self:InitGrid()
     self:Show()
-
 end
 
 function S:OnClickClose() self:Hide() end
