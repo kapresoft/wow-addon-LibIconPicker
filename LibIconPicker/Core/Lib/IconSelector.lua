@@ -1,9 +1,9 @@
 --- @type LibIconPickerNamespace
 local ns = select(2, ...)
 
-
 local LSM = LibStub("LibSharedMedia-3.0")
 local whiteBg = LSM:Fetch("background", "WHITE8X8") -- nil unless registered
+local emptyTexture = [[Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty]]
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
@@ -45,6 +45,12 @@ Support Functions
 local function selectedIconButton() return ns.O.IconSelector.SelectedIconButton end
 
 
+--- @class _IconButton
+--- @field icon Texture
+
+--- Alias: IconButton
+--- @alias IconButton _IconButton | Button
+
 --[[-----------------------------------------------------------------------------
 Handlers
 -------------------------------------------------------------------------------]]
@@ -57,8 +63,8 @@ function S.OnLoadRow(self)
 
     -- Each row gets 12 icon buttons
     for col = 1, ICON_COLS do
-        --- @type Button
-        local b = CreateFrame("Button", nil, self)
+        --- @type IconButton
+        local b = CreateFrame("Button", nil, self, "LibIconPicker_IconButtonTemplate")
         b:SetSize(ICON_SIZE, ICON_SIZE)
 
         if col == 1 then
@@ -67,16 +73,13 @@ function S.OnLoadRow(self)
             b:SetPoint("LEFT", self[col-1], "RIGHT", ICON_PAD, 0)
         end
 
-        b.icon = b:CreateTexture(nil, "ARTWORK")
-        b.icon:SetAllPoints()
-
-
+        ---@param self IconButton
         b:SetScript("OnClick", function(self)
             --- @type number
-            local tex = self.iconTexture
+            local tex = self.icon:GetTexture()
             selectedIconButton():SetNormalTexture(tex)
             if S.callback then
-                S.callback(self.iconTexture)
+                S.callback(self.icon)
             end
         end)
 
@@ -180,8 +183,6 @@ function S:Redraw()
     local offset = HybridScrollFrame_GetOffset(self.scrollFrame)
     local visibleRows = #self.scrollFrame.buttons
 
-    p('visibleRows:', visibleRows)
-
     for rowIndex = 1, visibleRows do
         local row = self.scrollFrame.buttons[rowIndex]
 
@@ -203,7 +204,6 @@ function S:Redraw()
                 if index <= total then
                     local tex = icons[index]
                     b.icon:SetTexture(tex)
-                    b.iconTexture = tex
                     b:Show()
                 else
                     b:Hide()
@@ -214,6 +214,8 @@ function S:Redraw()
 
     local contentHeight = rows * ROW_HEIGHT
     self.scrollFrame.scrollChild:SetHeight(contentHeight)
+
+    p('visibleRows:', visibleRows, 'cHeight:', contentHeight, 'rows:', rows)
 
     HybridScrollFrame_Update(
             self.scrollFrame,

@@ -5,6 +5,21 @@
     <Script file="IconSelector.lua"/>
     <Script file="IconSelectorProvider.lua"/>
 
+    <Button name="LibIconPicker_IconButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
+        <HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parentIcon" parentKey="icon"
+                        file="Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
     <Frame name="LibIconPicker_IconRowTemplate" virtual="true">
         <Size x="1" y="36"/>
         <Scripts>
@@ -20,7 +35,7 @@
             <OnLoad method="OnLoad"/>
         </Scripts>
 
-        <Size x="450" y="340"/>
+        <Size x="443" y="340"/>
         <Anchors>
             <Anchor point="CENTER" x="-100" y="100"/>
         </Anchors>
@@ -132,14 +147,13 @@
                         <Size x="40" y="40"/>
                         <Anchors>
                             <Anchor point="BOTTOMLEFT"
-                                    relativeTo="$parentEditBox"
+                                    relativeKey="$parent.EditBox"
                                     relativePoint="BOTTOMRIGHT"
                                     x="163" y="5"/>
                         </Anchors>
 
                         <NormalTexture file="Interface\Icons\INV_Misc_QuestionMark"/>
-                        <!--<PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>-->
-                        <!--<HighlightTexture file="Interface\Buttons\ButtonHilight-Square"/>-->
+                        <HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square"/>
 
                         <Layers>
                             <Layer level="ARTWORK">
