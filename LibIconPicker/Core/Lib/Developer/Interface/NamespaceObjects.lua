@@ -1,5 +1,7 @@
 --- @class NamespaceObjects
 local o = {
     --- @type IconSelector
-    IconSelector = {}
+    IconSelector = {},
+    --- @type AceLocale
+    AceLocale = {}
 }

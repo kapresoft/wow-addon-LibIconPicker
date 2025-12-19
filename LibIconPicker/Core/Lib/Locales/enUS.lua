@@ -19,3 +19,5 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ns.addon, 'enUS', true, silent);
 Localized Texts
 -------------------------------------------------------------------------------]]
 L['General'] = true
+L['Selected Icon'] = true
+L['Selected Icon::Desc'] = 'Shows the most recently selected icon. Your previous choice is remembered for this session.'

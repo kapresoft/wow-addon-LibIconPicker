@@ -3,10 +3,12 @@ local ns = select(2, ...)
 
 local LSM = LibStub("LibSharedMedia-3.0")
 local emptyTexture = [[Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty]]
+local L = ns.O.AceLocale:GetLocale(ns.addon)
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
+local GameTooltip = GameTooltip
 local HybridScrollFrame_Update = HybridScrollFrame_Update
 local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
 local HybridScrollFrame_CreateButtons = HybridScrollFrame_CreateButtons
@@ -90,6 +92,19 @@ function S.OnLoadRow(self)
     end
 end
 
+function S:InitTooltips()
+    local button = self.SelectedIconButton
+    button:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(L['Selected Icon'])
+        GameTooltip:AddLine(L['Selected Icon::Desc'], 0.8, 0.8, 0.8, true)
+        GameTooltip:Show()
+    end)
+    button:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+end
+
 -- -----------------------------------------------------
 -- PUBLIC API
 -- -----------------------------------------------------
@@ -124,6 +139,7 @@ function S:OnLoad()
     firstRow.Label:SetText("Name:")
 
     tinsert(UISpecialFrames, self:GetName())
+    self:InitTooltips()
 end
 
 function S:ShowDialog(callback)
@@ -135,13 +151,10 @@ function S:ShowDialog(callback)
     self.icons = ns.iconDataProvider:GetIcons()
     self.filtered = self.icons
 
-    local showTextField = false
+    local showTextField = true
     if not showTextField then
-        --self.FirstRow:ClearAllPoints()
-        --self.FirstRow:SetHeight(40)
-        --self.FirstRow.Label:Hide()
-        --self.FirstRow.EditBox:Hide()
-        --self.scrollFrame:ClearAllPoints()
+        self.FirstRow.Label:Hide()
+        self.FirstRow.EditBox:Hide()
     end
 
     self:InitGrid()
