@@ -5,7 +5,7 @@
     <Script file="IconSelector.lua"/>
     <Script file="IconSelectorProvider.lua"/>
 
-    <Button name="LibIconPicker_IconButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
+    <Button name="LibIconPicker_IconButtonTemplate" virtual="true">
         <HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
         <Layers>
             <Layer level="ARTWORK">
@@ -177,6 +177,7 @@
                             relativePoint="TOPRIGHT" x="-3" y="10"/>
                 </Anchors>
                 <Frames>
+                    <!-- See HybridScrollFrame.xml#HybridScrollBarTrimTemplate -->
                     <Slider name="$parentScrollBar" parentKey="scrollBar"
                             inherits="HybridScrollBarTemplate">
                         <Anchors>

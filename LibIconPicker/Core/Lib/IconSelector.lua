@@ -2,7 +2,6 @@
 local ns = select(2, ...)
 
 local LSM = LibStub("LibSharedMedia-3.0")
-local whiteBg = LSM:Fetch("background", "WHITE8X8") -- nil unless registered
 local emptyTexture = [[Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty]]
 
 --[[-----------------------------------------------------------------------------
@@ -66,6 +65,9 @@ function S.OnLoadRow(self)
         --- @type IconButton
         local b = CreateFrame("Button", nil, self, "LibIconPicker_IconButtonTemplate")
         b:SetSize(ICON_SIZE, ICON_SIZE)
+        if type(LIB_ICON_ID) == 'number' then
+            selectedIconButton():SetNormalTexture(LIB_ICON_ID)
+        end
 
         if col == 1 then
             b:SetPoint("LEFT", self, "LEFT", GRID_PADDING_LEFT, 0)
@@ -78,6 +80,7 @@ function S.OnLoadRow(self)
             --- @type number
             local tex = self.icon:GetTexture()
             selectedIconButton():SetNormalTexture(tex)
+            LIB_ICON_ID = tex
             if S.callback then
                 S.callback(self.icon)
             end
@@ -106,30 +109,25 @@ function S:OnLoad()
 
     self:SetBackdrop(ns.backdrops.modernDark)
 
-    self.scrollFrame:SetScript("OnVerticalScroll", function(sf, offset)
-        sf:SetVerticalScroll(offset)
-        self:Redraw()
+    local scrollBar = self.scrollFrame.scrollBar
+    scrollBar:HookScript("OnValueChanged", function()
+        C_Timer.After(0, function()
+            self:Redraw()
+        end)
     end)
+
     self.scrollFrame:SetScript("OnMouseWheel", function(sf, delta)
         HybridScrollFrame_OnMouseWheel(sf, delta)
-        self:Redraw()
     end)
     ns.O.IconSelector = self
     firstRow.Label:SetText("Name:")
 
     tinsert(UISpecialFrames, self:GetName())
-
-
-    local mainFrame = self
-    --self.FirstRow.EditBox:SetScript("OnEscapePressed", function(self)
-    --    p('ClearFocus pressed...')
-    --    --self:ClearFocus()
-    --    --frame:Hide()
-    --    mainFrame:OnClickCancel()
-    --end)
 end
 
 function S:ShowDialog(callback)
+    if InCombatLockdown() then return end
+
     self.callback = callback
 
     -- reload icons
@@ -197,10 +195,10 @@ function S:Redraw()
 
             for col = 1, ICON_COLS do
                 local index = ((virtualRow - 1) * ICON_COLS) + col
+                --- @type IconButton
                 local b = row[col]
 
                 if not b then break end
-
                 if index <= total then
                     local tex = icons[index]
                     b.icon:SetTexture(tex)
@@ -215,7 +213,7 @@ function S:Redraw()
     local contentHeight = rows * ROW_HEIGHT
     self.scrollFrame.scrollChild:SetHeight(contentHeight)
 
-    p('visibleRows:', visibleRows, 'cHeight:', contentHeight, 'rows:', rows)
+    p('offset:', offset, 'visibleRows:', visibleRows, 'cHeight:', contentHeight, 'rows:', rows)
 
     HybridScrollFrame_Update(
             self.scrollFrame,

@@ -5,7 +5,7 @@
 
 ## Author: Antonio W. Lagnada (kapresoft@gmail.com)
 ## DefaultState: enabled
-## SavedVariables: LIB_ICON_PICKER_DB
+## SavedVariables: LIB_ICON_PICKER_DB, LIB_ICON_ID
 ## LoadOnDemand: 1
 # IconTexture: Interface/AddOns/LibIconPicker/Core/Assets/LibIconPicker-Logo-1
 
