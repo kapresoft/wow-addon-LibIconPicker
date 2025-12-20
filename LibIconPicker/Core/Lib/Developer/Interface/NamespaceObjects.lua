@@ -5,3 +5,4 @@ local o = {
     --- @type AceLocale
     AceLocale = {}
 }
+

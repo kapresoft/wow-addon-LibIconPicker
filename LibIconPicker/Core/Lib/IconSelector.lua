@@ -1,10 +1,6 @@
 --- @type LibIconPickerNamespace
 local ns = select(2, ...)
 
-local LSM = LibStub("LibSharedMedia-3.0")
-local emptyTexture = [[Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty]]
-local L = ns.O.AceLocale:GetLocale(ns.addon)
-
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
 -------------------------------------------------------------------------------]]
@@ -12,50 +8,64 @@ local GameTooltip = GameTooltip
 local HybridScrollFrame_Update = HybridScrollFrame_Update
 local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
 local HybridScrollFrame_CreateButtons = HybridScrollFrame_CreateButtons
+
 --[[-----------------------------------------------------------------------------
 New Library
 -------------------------------------------------------------------------------]]
---- @class IconSelector
+--- @class IconSelector_Mixin
 --- @field icons table<number, number>
 --- @field scrollFrame Frame
+--- @field firstRow Frame
 --- @field selectedIconButton Button
 LibIconPicker_IconSelectorMixin = {}
+--[[-----------------------------------------------------------------------------
+Alias
+-------------------------------------------------------------------------------]]
+--- @alias IconSelector IconSelector_Mixin | Frame
 
---- @type IconSelector | Frame
+--[[-----------------------------------------------------------------------------
+New Instance
+-------------------------------------------------------------------------------]]
+--- @type IconSelector_Mixin | Frame
 local S = LibIconPicker_IconSelectorMixin
 local p = ns:Log('IconSelector')
+
+local L = ns.O.AceLocale:GetLocale(ns.addon)
+local FIRST_ROW_HEIGHT = 80
+local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
+
+
+--- @type Frame
+local firstRow
+
+--- @type IconButton
+local selectedIconBtn
+local selectedIconID
+--- @type LibIconPickerOptions
+local selectorOptions = {
+    showTextInput = false,
+    textInput = { value = nil, label = 'Enter Name (Max 16 Characters):'}
+}
 
 -- Settings
 local ICON_SIZE = 32
 local ICON_PAD = 6
 local ICON_COLS = 10
 local ROW_HEIGHT = ICON_SIZE + ICON_PAD
-local ROW_WIDTH =
-(ICON_COLS * ICON_SIZE) +
-        ((ICON_COLS - 1) * ICON_PAD)
 
 -- The button padding
 local GRID_PADDING_LEFT = 0
 local ROW_PADDING_LEFT = 5
 local ROW_PADDING_TOP = 0
 
-local MAX_BUTTONS = 200   -- cap regardless of scroll area height
---[[-----------------------------------------------------------------------------
-Support Functions
--------------------------------------------------------------------------------]]
---- @type Button
-local function selectedIconButton() return ns.O.IconSelector.SelectedIconButton end
-
-
---- @class _IconButton
---- @field icon Texture
-
---- Alias: IconButton
---- @alias IconButton _IconButton | Button
-
 --[[-----------------------------------------------------------------------------
 Handlers
 -------------------------------------------------------------------------------]]
+--- @param self IconButton
+local function OnClickIconItem(self)
+    selectedIconBtn:SetIcon(self:GetIcon())
+end
+
 -- -----------------------------------------------------
 -- ROW TEMPLATE POPULATION (called by CreateButtons)
 -- -----------------------------------------------------
@@ -68,27 +78,13 @@ function S.OnLoadRow(self)
         --- @type IconButton
         local b = CreateFrame("Button", nil, self, "LibIconPicker_IconButtonTemplate")
         b:SetSize(ICON_SIZE, ICON_SIZE)
-        if type(LIB_ICON_ID) == 'number' then
-            selectedIconButton():SetNormalTexture(LIB_ICON_ID)
-        end
 
         if col == 1 then
             b:SetPoint("LEFT", self, "LEFT", GRID_PADDING_LEFT, 0)
         else
             b:SetPoint("LEFT", self[col-1], "RIGHT", ICON_PAD, 0)
         end
-
-        ---@param self IconButton
-        b:SetScript("OnClick", function(self)
-            --- @type number
-            local tex = self.icon:GetTexture()
-            selectedIconButton():SetNormalTexture(tex)
-            LIB_ICON_ID = tex
-            if S.callback then
-                S.callback(self.icon)
-            end
-        end)
-
+        b:SetScript("OnClick", OnClickIconItem)
         self[col] = b
     end
 end
@@ -111,8 +107,8 @@ end
 -- -----------------------------------------------------
 function S:OnLoad()
 
-    local firstRow = self.FirstRow
-    self.selectedIconButton = firstRow.SelectedIconButton
+    firstRow        = self.FirstRow
+    selectedIconBtn = firstRow.SelectedIconButton
 
     self.HeaderTitle:SetText("Icon Picker")
 
@@ -121,7 +117,7 @@ function S:OnLoad()
     --- @type Button
     self.SelectedIconButton = self.FirstRow.SelectedIconButton
     C_Timer.After(1, function()
-        p('Selected:', self.SelectedIconButton)
+        p('Selected:', self.SelectedIconButton.icon:GetTexture())
     end)
 
     self:SetBackdrop(ns.backdrops.modernDark)
@@ -143,28 +139,61 @@ function S:OnLoad()
     self:InitTooltips()
 end
 
-function S:ShowDialog(callback)
+--- @param callback LibIconChooserCallbackFn
+--- @param opt LibIconPickerOptions|nil
+function S:ShowDialog(callback, opt)
     if InCombatLockdown() then return end
 
-    self.callback = callback
+    if type(LIB_ICON_ID) == 'number' then
+        selectedIconBtn:SetIcon(LIB_ICON_ID)
+    end
+
+    if type(callback) == 'function' then
+        self.callbackInfo = { callback = callback, opt = opt }
+    end
+    if type(opt) == 'table' then
+        if type(opt.showTextInput) == 'boolean' then
+            selectorOptions.showTextInput = opt.showTextInput
+        end
+        if pformat then
+            p('selectorOptions:', pformat(opt))
+        end
+    end
+
+    self:_ToggleFirstRow()
 
     -- reload icons
     self.icons = ns.iconDataProvider:GetIcons()
-
-    local showTextField = true
-    if not showTextField then
-        self.FirstRow.Label:Hide()
-        self.FirstRow.EditBox:Hide()
-    end
-
     self:InitGrid()
     self:Show()
+end
+
+--- @private
+function S:_ToggleFirstRow()
+    local showTextInput = selectorOptions.showTextInput
+    local firstRowHeight = FIRST_ROW_HEIGHT
+    if not showTextInput then
+        firstRowHeight = FIRST_ROW_HEIGHT_NO_TEXT_FIELD
+        firstRow.Label:Hide()
+        firstRow.EditBox:Hide()
+    else
+        firstRow.Label:Show()
+        firstRow.EditBox:Show()
+    end
+    firstRow:SetHeight(firstRowHeight)
 end
 
 function S:OnClickClose() self:Hide() end
 
 function S:OnClickOkay()
     print(self:GetName() .. '::', 'OK clicked')
+    if self.callbackInfo then
+        local fn = self.callbackInfo.callback
+        local icon = selectedIconBtn:GetIcon()
+        LIB_ICON_ID = icon
+        fn({ iconID =  icon })
+        return self:Hide()
+    end
     self:Hide()
 end
 function S:OnClickCancel()
@@ -179,7 +208,6 @@ function S:InitGrid()
     if not self.scrollFrame.buttons then
         HybridScrollFrame_CreateButtons(self.scrollFrame, "LibIconPicker_IconRowTemplate", ROW_HEIGHT, 0)
     end
-
     self:Redraw()
 end
 
@@ -223,7 +251,7 @@ function S:Redraw()
                 if not b then break end
                 if index <= total then
                     local tex = icons[index]
-                    b.icon:SetTexture(tex)
+                    b:SetIcon(tex)
                     b:Show()
                 else
                     b:Hide()
@@ -244,5 +272,3 @@ function S:Redraw()
             self.scrollFrame:GetHeight()
     )
 end
-
-

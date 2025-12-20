@@ -2,15 +2,20 @@
 ..\FrameXML\UI.xsd">
 
     <Script file="IconSelectorBackdrops.lua"/>
+    <Script file="IconButton.lua"/>
     <Script file="IconSelector.lua"/>
     <Script file="IconSelectorProvider.lua"/>
 
-    <Button name="LibIconPicker_IconButtonTemplate" virtual="true">
+    <Button name="LibIconPicker_IconButtonTemplate"
+            mixin="LibIconPicker_IconButtonMixin"
+            virtual="true">
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
         <HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture name="$parentIcon" parentKey="icon"
-                        file="Interface\Addons\LibIconPicker\Core\Assets\ui-button-empty">
+                <Texture name="$parentIcon" parentKey="icon">
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
                         <Anchor point="BOTTOMRIGHT"/>
@@ -35,7 +40,7 @@
             <OnLoad method="OnLoad"/>
         </Scripts>
 
-        <Size x="444" y="340"/>
+        <Size x="444" y="338"/>
         <Anchors>
             <Anchor point="CENTER" x="-100" y="100"/>
         </Anchors>
@@ -141,7 +146,11 @@
                         </Scripts>
                     </EditBox>
                     <Button name="$parentIconButton" parentKey="SelectedIconButton"
-                            inherits="UIPanelButtonTemplate">
+                            inherits="UIPanelButtonTemplate"
+                            mixin="LibIconPicker_IconButtonMixin">
+                        <Scripts>
+                            <OnLoad method="OnLoad"/>
+                        </Scripts>
                         <Size x="50" y="50"/>
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativeKey="$parent.Label"
@@ -153,11 +162,11 @@
 
                         <Layers>
                             <Layer level="ARTWORK">
-                                <Texture name="$parentIcon" parentKey="Icon">
+                                <Texture name="$parentIcon" parentKey="icon">
                                     <Anchors>
-                                        <Anchor point="CENTER"/>
+                                        <Anchor point="TOPLEFT"/>
+                                        <Anchor point="BOTTOMRIGHT"/>
                                     </Anchors>
-                                    <Size x="26" y="26"/>
                                 </Texture>
                             </Layer>
                         </Layers>

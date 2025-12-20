@@ -1,17 +1,39 @@
---- @alias IconSource string | "'spell'" | "'item'" | "'both'"
---- @alias IconSelectionType string | '"spell"' | '"item"'
+--- @alias IconTypeFilter string | "'spell'" | "'item'" | "'both'"
 --- @alias LibIconChooserCallbackFn fun(sel:LibIconChooserSelection) | "function(sel) end"
 
 --- @class LibIconChooserSelection
---- @field type IconSelectionType
---- @field value string The user-updated text field value (if any)
---- @field id number The ID of the selected entity (spell or item)
+--- @field textInputValue string|nil The final text input value, if enabled
+--- @field iconID number The ID of the selected entity (spell or item)
 
---- Example Usage:
---- @param source IconSource
+--- @class TextInputOptions
+--- @field value string|nil
+--- @field label string|nil
+
+--- @class LibIconPickerOptions
+--- @field type IconTypeFilter
+--- @field showTextInput boolean|nil Defaults to false
+--- @field textInput TextInputOptions|nil Text Input Options (only if showTextInput)
+
+--- ### Open the LibIconPicker Dialog
+--- **Defaults**:
+--- - opt.type = "both"
+--- - opt.showTextInput = false
+--- - opt.textInput.value = ""
+--- - opt.textInput.label = "Choose Icon:" (localized)
+--- @param opt LibIconPickerOptions
 --- @param fn LibIconChooserCallbackFn
-function Open(source, fn)  end
+function Open(opt, fn)  end
 
-Open('both', function(sel)
-    print('xx selected icon:', sel.id, 'type:', sel.type, ' user-input-text:', sel.value)
+-- Usecase #1: Show icon picker without textInput
+Open({ type = 'both' }, function(sel)
+    print('xx selected icon:', sel.iconID)
+end)
+
+-- Usecase #2: Show icon picker with textInput
+Open({
+        type = 'both',
+        showTextInput = true,
+        textInput = { value = 'MyName', label='Name:' },
+     }, function(sel)
+    print('xx selected icon:', sel.iconID, ' user-input-text:', sel.textInputValue)
 end)

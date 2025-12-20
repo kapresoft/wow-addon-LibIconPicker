@@ -15,13 +15,20 @@ LibIconPicker = {}; local A = LibIconPicker
 local p = ns:Log('A')
 
 function A:Open()
-    print('Showing icon chooser dialog.')
-    ns.O.IconSelector:ShowDialog()
+    local opt = { type = 'item', showTextInput = true, }
+    ns.O.IconSelector:ShowDialog(function(sel)
+        p('Selected:', sel.iconID)
+    end, opt)
+end
+function A:Open2()
+    local opt = { type = 'item', showTextInput = false, }
+    ns.O.IconSelector:ShowDialog(function(sel)
+        p('Selected:', sel.iconID)
+    end, opt)
 end
 
 C_Timer.After(.5, function()
-    p('loaded...')
-    A:Open()
+    A:Open2()
 end)
 
 
