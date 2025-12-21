@@ -28,7 +28,7 @@ function A:Open2()
 end
 
 C_Timer.After(.5, function()
-    A:Open2()
+    A:Open()
 end)
 
 

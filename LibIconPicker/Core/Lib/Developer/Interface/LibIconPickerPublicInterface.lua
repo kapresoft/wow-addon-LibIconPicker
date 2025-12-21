@@ -1,7 +1,7 @@
 --- @alias IconTypeFilter string | "'spell'" | "'item'" | "'both'"
---- @alias LibIconChooserCallbackFn fun(sel:LibIconChooserSelection) | "function(sel) end"
+--- @alias LibIconPickerCallbackFn fun(sel:LibIconPickerSelection) | "function(sel) end"
 
---- @class LibIconChooserSelection
+--- @class LibIconPickerSelection
 --- @field textInputValue string|nil The final text input value, if enabled
 --- @field iconID number The ID of the selected entity (spell or item)
 
@@ -14,6 +14,10 @@
 --- @field showTextInput boolean|nil Defaults to false
 --- @field textInput TextInputOptions|nil Text Input Options (only if showTextInput)
 
+--- @class CallbackInfo
+--- @field callback LibIconPickerCallbackFn
+--- @field opt LibIconPickerOptions
+
 --- ### Open the LibIconPicker Dialog
 --- **Defaults**:
 --- - opt.type = "both"
@@ -21,7 +25,7 @@
 --- - opt.textInput.value = ""
 --- - opt.textInput.label = "Choose Icon:" (localized)
 --- @param opt LibIconPickerOptions
---- @param fn LibIconChooserCallbackFn
+--- @param fn LibIconPickerCallbackFn
 function Open(opt, fn)  end
 
 -- Usecase #1: Show icon picker without textInput
