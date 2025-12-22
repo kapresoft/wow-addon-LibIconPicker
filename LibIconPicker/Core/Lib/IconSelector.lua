@@ -69,6 +69,7 @@ local ROW_PADDING_TOP = 0
 New Library
 -------------------------------------------------------------------------------]]
 --- @class IconSelector_Mixin
+--- @field private _lastOffset number
 --- @field icons table<number, number>
 --- @field ScrollFrame Frame
 --- @field FirstRow FirstRow
@@ -134,6 +135,10 @@ function S:OnLoad()
 
     local scrollBar = scrollFrame.scrollBar
     scrollBar:HookScript("OnValueChanged", function()
+        local offset = HybridScrollFrame_GetOffset(scrollFrame)
+        -- Prevent redraw at the top or end of scroll: offset didn't change
+        if offset == self._lastOffset then return end
+        self._lastOffset = offset
         self:RedrawDelayed()
     end)
 
