@@ -8,7 +8,8 @@ Types
 --- @alias IconSelector IconSelector_Mixin | Frame
 --- @alias IconScrollFrame _IconScrollFrame | ScrollFrame
 
------- @class FirstRow
+--- @class FirstRow
+--- @field IconTypeDropdown Frame
 --- @field Label FontString
 
 --- @class _IconScrollFrame
@@ -32,8 +33,14 @@ local L = O.AceLocale:GetLocale(ns.addon)
 local FIRST_ROW_HEIGHT = 80
 local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
 
+--- @type table<number, number>
+local icons
+
 --- @type FirstRow
 local firstRow
+--- @type Frame
+local dropdown
+
 --- @type IconScrollFrame
 local scrollFrame
 --- @type IconButton
@@ -127,9 +134,7 @@ function S:OnLoad()
 
     local scrollBar = scrollFrame.scrollBar
     scrollBar:HookScript("OnValueChanged", function()
-        C_Timer.After(0, function()
-            self:Redraw()
-        end)
+        self:RedrawDelayed()
     end)
 
     scrollFrame:SetScript("OnMouseWheel", function(sf, delta)
@@ -145,6 +150,12 @@ function S:OnInit()
     tinsert(UISpecialFrames, self:GetName())
     self:InitTooltips()
     self:InitIconTypeDropdown()
+end
+
+--- @return table<number, number>
+function S:GetIcons()
+    local selValue = UIDropDownMenu_GetSelectedValue(dropdown)
+    return ns.iconDataProvider:GetIcons(selValue)
 end
 
 --- @param callback LibIconPickerCallbackFn
@@ -163,15 +174,10 @@ function S:ShowDialog(callback, opt)
         if type(opt.showTextInput) == 'boolean' then
             selectorOptions.showTextInput = opt.showTextInput
         end
-        if pformat then
-            p('selectorOptions:', pformat(opt))
-        end
     end
-
     self:OnToggleFirstRow()
 
-    -- reload icons
-    self.icons = ns.iconDataProvider:GetIcons()
+    icons = self:GetIcons()
     self:InitGrid()
     self:Show()
 end
@@ -221,7 +227,7 @@ function S:InitGrid()
     if not scrollFrame.buttons then
         HybridScrollFrame_CreateButtons(scrollFrame, "LibIconPicker_IconRowTemplate", ROW_HEIGHT, 0)
     end
-    self:Redraw()
+    self:RedrawDelayed()
 end
 
 --- @private
@@ -239,9 +245,8 @@ end
 
 --- @private
 function S:InitIconTypeDropdown()
-    self.iconTypeDropDown = firstRow.IconTypeDropdown
-    p('xx iconTypeDropDown:', type(self.iconTypeDropDown))
-    local dropdown = self.iconTypeDropDown; dropdown.owner = self
+    dropdown = firstRow.IconTypeDropdown
+    dropdown.owner = self
 
     UIDropDownMenu_SetSelectedValue(dropdown, "both")
     UIDropDownMenu_SetWidth(dropdown, 100, 35)
@@ -250,24 +255,47 @@ function S:InitIconTypeDropdown()
     UIDropDownMenu_SetAnchor(dropdown, 18, 10, "TOPLEFT", dropdown, "BOTTOMLEFT")
 
     UIDropDownMenu_Initialize(dropdown, function(frame, level)
-        local info = UIDropDownMenu_CreateInfo()
+        local sel = UIDropDownMenu_GetSelectedValue(dropdown)
 
-        info.func = IconTypeDropdown_OnClick
-        info.minWidth = 112
+        local function add(text, value)
+            local info    = UIDropDownMenu_CreateInfo()
+            info.text     = text
+            info.value    = value
+            info.owner    = dropdown.owner
+            info.func     = S.OnClick_IconTypeDropdown
+            info.checked  = (sel == value)
+            info.minWidth = 112
+            UIDropDownMenu_AddButton(info, level)
+        end
 
-        info.text = "All Icons"
-        info.value = "both"
-        UIDropDownMenu_AddButton(info)
+        local prov = ns.iconDataProvider
+        add("All Icons", prov.BOTH)
+        add("Items", prov.ITEMS)
+        add("Spells", prov.SPELLS)
 
-        info.text = "Items"
-        info.value = "item"
-        UIDropDownMenu_AddButton(info)
-
-        info.text = "Spells"
-        info.value = "spell"
-        UIDropDownMenu_AddButton(info)
     end)
 
+end
+
+--- @param self UIDropDownMenuButton
+function S.OnClick_IconTypeDropdown(self)
+    UIDropDownMenu_SetSelectedValue(dropdown, self.value)
+    S:OnIconTypeChanged(self.value)
+end
+
+--- @private
+--- @param iconType "'spells'" | "'items'" | "'both'"
+--- @see IconDataProvider#{SPELLS, ITEMS, BOTH}
+function S:OnIconTypeChanged(iconType)
+    -- 1) Fetch new icons
+    icons = self:GetIcons()
+
+    -- 2) Reset scroll position (critical)
+    scrollFrame:SetVerticalScroll(0)
+    HybridScrollFrame_SetOffset(scrollFrame, 0)
+    scrollFrame.scrollBar:SetValue(0)
+
+    self:RedrawDelayed()
 end
 
 --- @private
@@ -280,12 +308,15 @@ function S:ResetRowPoints(row, rowIndex)
     end
 end
 
+function S:RedrawDelayed()
+    C_Timer.After(0.01, function() self:Redraw() end)
+end
+
 -- -----------------------------------------------------
 -- Virtual Scroll Update
 -- -----------------------------------------------------
 --- @private
 function S:Redraw()
-    local icons = self.icons
     local total = #icons
     local rows = math.ceil(total / ICON_COLS)
 
@@ -323,9 +354,8 @@ function S:Redraw()
 
     local contentHeight = rows * ROW_HEIGHT
     scrollFrame.scrollChild:SetHeight(contentHeight)
-
-    p('total:', total, 'offset:', offset, 'visibleRows:', visibleRows,
-      'cHeight:', contentHeight, 'rows:', rows)
+    local selectedType = UIDropDownMenu_GetSelectedValue(dropdown)
+    p(ns.sformat("Redraw:: total=%s, type=%s, offset=%s", total, selectedType, offset))
 
     HybridScrollFrame_Update(
             scrollFrame,

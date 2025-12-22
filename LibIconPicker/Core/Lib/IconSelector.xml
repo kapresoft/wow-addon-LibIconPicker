@@ -92,7 +92,6 @@
                 <Scripts>
                     <OnClick>
                         self:GetParent():OnClickClose()
-                        ReloadUI()
                     </OnClick>
                 </Scripts>
             </Button>
