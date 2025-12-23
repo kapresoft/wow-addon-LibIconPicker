@@ -395,7 +395,9 @@ function S:Redraw()
     local contentHeight = rows * ROW_HEIGHT
     scrollFrame.scrollChild:SetHeight(contentHeight)
     local selectedType = UIDropDownMenu_GetSelectedValue(dropdown)
-    p(ns.sformat("Redraw:: total=%s, type=%s, offset=%s", total, selectedType, offset))
+    if IsAltKeyDown() then
+        p(ns.sformat("Redraw:: total=%s, type=%s, offset=%s", total, selectedType, offset))
+    end
 
     HybridScrollFrame_Update(
             scrollFrame,
