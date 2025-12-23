@@ -10,7 +10,7 @@ on:
 env:
   addonName: LibIconPicker
   curseForgeProjectId: 1404138
-  uploadBuildArtifacts: true
+  uploadBuildArtifacts: false
   createDraftRelease: true
   artifact_retentionDays: 7
   releaseDir: ./.release
