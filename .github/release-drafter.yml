@@ -1,0 +1,27 @@
+## Notes:
+# @SEE https://github.com/marketplace/actions/release-drafter
+#
+# The var env 'addonName' must be defined in the github actions workflow files
+#   - release-build.yml
+#   - dev-build.yml (optional)
+# ----------------------------------------------------------
+
+# For RESOLVED_VERSION
+version-template: '$MAJOR.$MINOR.$PATCH'
+name-template: '$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
+
+template: |
+  ### ${addonName} $RESOLVED_VERSION
+  [Release Notes](https://github.com/kapresoft/$REPOSITORY/releases/tag/$RESOLVED_VERSION) | [Full Changelog](https://github.com/kapresoft/$REPOSITORY/compare/$PREVIOUS_TAG...$RESOLVED_VERSION) | [Release Page](https://github.com/kapresoft/$REPOSITORY/releases)
+  
+  #### What’s Changed
+
+  $CHANGES
+  
+  ### Contributors:
+  $CONTRIBUTORS
+  
+  #### Links:
+
+  - [Curse Forge](https://www.curseforge.com/wow/addons/${addonName}/files) | [Curse Forge Legacy](https://legacy.curseforge.com/wow/addons/${addonName}/files)
