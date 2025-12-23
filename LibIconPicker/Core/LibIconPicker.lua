@@ -1,5 +1,6 @@
 --- @type LibIconPickerNamespace
 local ns = select(2, ...)
+local d = ns.O.IconSelector
 local p = ns:Log('A')
 
 --- @type LibStub
@@ -17,10 +18,7 @@ LibIconPicker = A
 function A:Open(callback, options)
     assert(type(callback) == 'function', 'A callback function is required. Usage:: LibIconPicker(function(sel) end, options)')
     local opt = options or { type = 'both', showTextInput = false, }
-    ns.O.IconSelector:ShowDialog(callback, opt)
+    d:ShowDialog(callback, opt)
 end
 
-
-
-
-
+function A:Close() d:Hide() end

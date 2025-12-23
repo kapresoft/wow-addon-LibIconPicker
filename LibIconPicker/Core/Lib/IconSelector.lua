@@ -181,6 +181,9 @@ function S:ShowDialog(callback, opt)
         opt.textInput = tShallowCopy(selectorOptions.textInput)
     end
     opt.showTextInput = opt.showTextInput == true
+    if not opt.textInput.label then
+        opt.textInput.label = selectorOptions.textInput.label
+    end
 
     local icon = 134400
     if type(opt.icon) == 'number' then icon = opt.icon end
@@ -252,7 +255,7 @@ end
 
 --- @private
 function S:OnClickCancel()
-    print(self:GetName() .. '::', 'Cancel clicked')
+    p(self:GetName() .. '::', 'Cancel clicked')
     self:Hide()
 end
 
