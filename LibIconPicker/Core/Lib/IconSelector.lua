@@ -1,6 +1,7 @@
 --- @type LibIconPickerNamespace
 local ns = select(2, ...)
 local O = ns.O
+local tShallowCopy = ns.O.Util.Table_ShallowCopy
 
 --[[-----------------------------------------------------------------------------
 Types
@@ -11,6 +12,7 @@ Types
 --- @class FirstRow
 --- @field IconTypeDropdown Frame
 --- @field Label FontString
+--- @field EditBox EditBox
 
 --- @class _IconScrollFrame
 --- @field scrollChild ScrollChild
@@ -45,13 +47,20 @@ local dropdown
 local scrollFrame
 --- @type IconButton
 local selectedIconBtn
-local selectedIconID
+
+
+local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
+local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
+
+--- Default Options
 --- @type LibIconPicker_Options
 local selectorOptions = {
     showTextInput = false,
-    textInput = { value = nil, label = nil },
-    anchor = { point = 'CENTER', relativeTo = UIParent, relativePoint = 'CENTER', x = 0, y = 0 }
+    textInput = { value = '', label = labelText },
+    anchor = { point = 'CENTER', relativeTo = UIParent,
+               relativePoint = 'CENTER', x = 0, y = 0 }
 }
+
 --- @type LibIconPicker_CallbackInfo
 local callbackInfo
 
@@ -121,9 +130,7 @@ function S:OnLoad()
     selectedIconBtn = firstRow.SelectedIconButton
 
     self.HeaderTitle:SetText(L['Icon Picker'])
-    local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
-    local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
-    firstRow.Label:SetText(labelText)
+    firstRow.Label:SetText(selectorOptions.textInput.label)
 
     --- @type _IconScrollFrame
     scrollFrame = self.ScrollFrame
@@ -169,6 +176,12 @@ end
 function S:ShowDialog(callback, opt)
     if InCombatLockdown() then return end
 
+    local opt = opt or tShallowCopy(selectorOptions)
+    if opt.textInput == nil then
+        opt.textInput = tShallowCopy(selectorOptions.textInput)
+    end
+    opt.showTextInput = opt.showTextInput == true
+
     local icon = 134400
     if type(opt.icon) == 'number' then icon = opt.icon end
     selectedIconBtn:SetIcon(opt.icon)
@@ -176,13 +189,16 @@ function S:ShowDialog(callback, opt)
     if type(callback) == 'function' then
         callbackInfo = { callback = callback, opt = opt }
     end
-    if type(opt) == 'table' then
-        selectorOptions.showTextInput = opt.showTextInput == true
-    end
-    self:OnToggleFirstRow()
+    self:OnToggleFirstRow(opt)
 
     icons = self:GetIcons()
     self:InitGrid()
+
+
+    if opt.showTextInput == true then
+        firstRow.EditBox:SetText(opt.textInput.value or '')
+        firstRow.Label:SetText(opt.textInput.label)
+    end
 
     local anchor = opt.anchor
     if anchor then
@@ -198,8 +214,9 @@ function S:ShowDialog(callback, opt)
 end
 
 --- @private
-function S:OnToggleFirstRow()
-    local showTextInput = selectorOptions.showTextInput
+--- @param opt LibIconPicker_Options
+function S:OnToggleFirstRow(opt)
+    local showTextInput = opt.showTextInput
     local firstRowHeight = FIRST_ROW_HEIGHT
     if not showTextInput then
         firstRowHeight = FIRST_ROW_HEIGHT_NO_TEXT_FIELD
@@ -221,7 +238,13 @@ function S:OnClickOkay()
     if callbackInfo then
         local fn = callbackInfo.callback
         local icon = selectedIconBtn:GetIcon()
-        fn({ iconID =  icon })
+        --- @type LibIconPicker_Selection
+        local sel  = { icon = icon }
+        local textInputValue
+        if firstRow.EditBox:IsShown() then
+            sel.textInputValue = firstRow.EditBox:GetText()
+        end
+        fn(sel)
         return self:Hide()
     end
     self:Hide()

@@ -2,7 +2,7 @@
 
 --- @class LibIconPicker_Selection
 --- @field textInputValue string|nil The final text input value, if enabled
---- @field iconID number The ID of the selected entity (spell or item)
+--- @field icon number The ID of the selected entity (spell or item)
 
 --- @class LibIconPicker_TextInputOptions
 --- @field value string|nil
@@ -47,16 +47,29 @@ CallbackInfo
 function Open(opt, fn)  end
 
 -- Usecase #1: Show icon picker with textInput
-Open(function(sel)
-    print('xx selected icon:', sel.iconID)
+LibIconPicker:Open(function(sel)
+    print('Selected icon:', sel.icon, ' user-input-text:', sel.textInputValue)
 end, { showTextInput = true })
 
--- Usecase #2: Show icon picker with textInput and anchor
+-- Usecase #2: Show icon picker without textInput (and label)
+LibIconPicker:Open(function(sel)
+    print('Selected icon:', sel.icon)
+end)
+
+-- Usecase #3: Show icon picker with textInput and anchor
 local opt = {
+    anchor = {
+        point = 'TOPRIGHT',
+        relativePoint = 'TOPRIGHT',
+        x = -50,
+        y = -100
+    },
     showTextInput = true,
-    textInput = { value = 'MyName', label = 'Name:' },
-    anchor = { point='TOPLEFT', relativeTo=MacroFrame, relativePoint='TOPRIGHT', x=0, y=5 }
+    textInput = {
+        label = 'Enter Name:',
+        value = 'Uber Spell'
+    }
 }
-Open(function(sel)
-    print('xx selected icon:', sel.iconID, ' user-input-text:', sel.textInputValue)
+LibIconPicker:Open(function(sel)
+    print('Selected icon:', sel.icon, ' user-input-text:', sel.textInputValue)
 end, opt)

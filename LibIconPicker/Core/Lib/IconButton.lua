@@ -20,7 +20,7 @@ Support Functions
 --- @param self IconButton
 local function OnEnter(self)
     if not IsAltKeyDown() then return end
-    p('IconID:', self:GetIcon())
+    p('Icon:', self:GetIcon())
 end
 
 --[[-----------------------------------------------------------------------------
