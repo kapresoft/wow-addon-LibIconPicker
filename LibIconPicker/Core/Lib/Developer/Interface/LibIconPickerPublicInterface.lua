@@ -1,22 +1,40 @@
---- @alias IconTypeFilter string | "'spell'" | "'item'" | "'both'"
---- @alias LibIconPickerCallbackFn fun(sel:LibIconPickerSelection) | "function(sel) end"
+--- @alias LibIconPicker_CallbackFn fun(sel:LibIconPicker_Selection) | "function(sel) end"
 
---- @class LibIconPickerSelection
+--- @class LibIconPicker_Selection
 --- @field textInputValue string|nil The final text input value, if enabled
 --- @field iconID number The ID of the selected entity (spell or item)
 
---- @class TextInputOptions
+--- @class LibIconPicker_TextInputOptions
 --- @field value string|nil
 --- @field label string|nil
 
---- @class LibIconPickerOptions
---- @field type IconTypeFilter
+--- @class LibIconPicker_Options
+--- @field icon IconIDOrPath|nil Set the selected icon/texture. nil defaults to the question-mark icon (ID=134400)
 --- @field showTextInput boolean|nil Defaults to false
---- @field textInput TextInputOptions|nil Text Input Options (only if showTextInput)
+--- @field textInput LibIconPicker_TextInputOptions|nil Text Input Options (only if showTextInput)
+--- @field anchor LibIconPicker_Anchor
 
---- @class CallbackInfo
---- @field callback LibIconPickerCallbackFn
---- @field opt LibIconPickerOptions
+--[[-----------------------------------------------------------------------------
+AnchorPoint
+-------------------------------------------------------------------------------]]
+--- @alias LibIconPicker_AnchorPoint string | "'TOPLEFT'" | "'TOPRIGHT'" | "'BOTTOMLEFT'" | "'BOTTOMRIGHT'" | "'TOP'" | "'BOTTOM'" | "'LEFT'" | "'RIGHT'" | "'CENTER'"
+
+--[[-----------------------------------------------------------------------------
+Anchor
+-------------------------------------------------------------------------------]]
+--- @class LibIconPicker_Anchor
+--- @field point LibIconPicker_AnchorPoint
+--- @field relativePoint LibIconPicker_AnchorPoint
+--- @field relativeTo any
+--- @field x number
+--- @field y number
+
+--[[-----------------------------------------------------------------------------
+CallbackInfo
+-------------------------------------------------------------------------------]]
+--- @class LibIconPicker_CallbackInfo
+--- @field callback LibIconPicker_CallbackFn
+--- @field opt LibIconPicker_Options
 
 --- ### Open the LibIconPicker Dialog
 --- **Defaults**:
@@ -24,20 +42,21 @@
 --- - opt.showTextInput = false
 --- - opt.textInput.value = ""
 --- - opt.textInput.label = "Choose Icon:" (localized)
---- @param opt LibIconPickerOptions
---- @param fn LibIconPickerCallbackFn
+--- @param opt LibIconPicker_Options
+--- @param fn LibIconPicker_CallbackFn
 function Open(opt, fn)  end
 
--- Usecase #1: Show icon picker without textInput
-Open({ type = 'both' }, function(sel)
+-- Usecase #1: Show icon picker with textInput
+Open(function(sel)
     print('xx selected icon:', sel.iconID)
-end)
+end, { showTextInput = true })
 
--- Usecase #2: Show icon picker with textInput
-Open({
-        type = 'both',
-        showTextInput = true,
-        textInput = { value = 'MyName', label='Name:' },
-     }, function(sel)
+-- Usecase #2: Show icon picker with textInput and anchor
+local opt = {
+    showTextInput = true,
+    textInput = { value = 'MyName', label = 'Name:' },
+    anchor = { point='TOPLEFT', relativeTo=MacroFrame, relativePoint='TOPRIGHT', x=0, y=5 }
+}
+Open(function(sel)
     print('xx selected icon:', sel.iconID, ' user-input-text:', sel.textInputValue)
-end)
+end, opt)

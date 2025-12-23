@@ -46,9 +46,9 @@
             <OnLoad method="OnLoad"/>
         </Scripts>
 
-        <Size x="444" y="338"/>
+        <Size x="444" y="450"/>
         <Anchors>
-            <Anchor point="CENTER" x="-100" y="100"/>
+            <Anchor point="CENTER" x="0" y="0"/>
         </Anchors>
 
         <Layers>

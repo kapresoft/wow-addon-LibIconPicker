@@ -46,12 +46,13 @@ local scrollFrame
 --- @type IconButton
 local selectedIconBtn
 local selectedIconID
---- @type LibIconPickerOptions
+--- @type LibIconPicker_Options
 local selectorOptions = {
     showTextInput = false,
-    textInput = { value = nil, label = nil }
+    textInput = { value = nil, label = nil },
+    anchor = { point = 'CENTER', relativeTo = UIParent, relativePoint = 'CENTER', x = 0, y = 0 }
 }
---- @type CallbackInfo
+--- @type LibIconPicker_CallbackInfo
 local callbackInfo
 
 -- Settings
@@ -163,27 +164,36 @@ function S:GetIcons()
     return ns.iconDataProvider:GetIcons(selValue)
 end
 
---- @param callback LibIconPickerCallbackFn
---- @param opt LibIconPickerOptions|nil
+--- @param callback LibIconPicker_CallbackFn
+--- @param opt LibIconPicker_Options|nil
 function S:ShowDialog(callback, opt)
     if InCombatLockdown() then return end
 
-    if type(LIB_ICON_ID) == 'number' then
-        selectedIconBtn:SetIcon(LIB_ICON_ID)
-    end
+    local icon = 134400
+    if type(opt.icon) == 'number' then icon = opt.icon end
+    selectedIconBtn:SetIcon(opt.icon)
 
     if type(callback) == 'function' then
         callbackInfo = { callback = callback, opt = opt }
     end
     if type(opt) == 'table' then
-        if type(opt.showTextInput) == 'boolean' then
-            selectorOptions.showTextInput = opt.showTextInput
-        end
+        selectorOptions.showTextInput = opt.showTextInput == true
     end
     self:OnToggleFirstRow()
 
     icons = self:GetIcons()
     self:InitGrid()
+
+    local anchor = opt.anchor
+    if anchor then
+        anchor.x = type(anchor.x) == 'number' and anchor.x or 0
+        anchor.y = type(anchor.y) == 'number' and anchor.y or 0
+        self:ClearAllPoints()
+        local fmt = 'ShowDialog::anchor point=%s, relativeTo=%s, relativePoint=%s, x=%s, y=%s'
+        p(ns.sformat(fmt, tostring(anchor.point), tostring(anchor.x), tostring(anchor.y),
+                         tostring(anchor.relativeTo), tostring(anchor.relativePoint)))
+        self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
+    end
     self:Show()
 end
 
@@ -211,7 +221,6 @@ function S:OnClickOkay()
     if callbackInfo then
         local fn = callbackInfo.callback
         local icon = selectedIconBtn:GetIcon()
-        LIB_ICON_ID = icon
         fn({ iconID =  icon })
         return self:Hide()
     end

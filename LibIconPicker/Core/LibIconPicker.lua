@@ -14,22 +14,14 @@ local LibStub = LibStub
 LibIconPicker = {}; local A = LibIconPicker
 local p = ns:Log('A')
 
-function A:Open()
-    local opt = { type = 'item', showTextInput = true, }
-    ns.O.IconSelector:ShowDialog(function(sel)
-        p('Selected:', sel.iconID)
-    end, opt)
-end
-function A:Open2()
-    local opt = { type = 'item', showTextInput = false, }
+--- @param options LibIconPicker_Options|nil
+function A:Open(options)
+    local opt = options or { type = 'both', showTextInput = false, }
     ns.O.IconSelector:ShowDialog(function(sel)
         p('Selected:', sel.iconID)
     end, opt)
 end
 
-C_Timer.After(.5, function()
-    A:Open()
-end)
 
 
 
