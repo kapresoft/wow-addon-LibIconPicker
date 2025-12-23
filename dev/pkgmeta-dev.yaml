@@ -17,11 +17,6 @@ externals:
   LibIconPicker/Core/ExtLib/WowAce/Ace3:
     url: https://repos.wowace.com/wow/ace3/trunk
     tag: latest
-  # LibQTip
-  # https://www.wowace.com/projects/libqtip-1-0
-  LibIconPicker/Core/ExtLib/WowAce/LibQTip/LibQTip-1.0:
-    url: https://repos.wowace.com/wow/libqtip-1-0
-    tag: latest
   # LibSharedMedia
   # https://www.wowace.com/projects/libsharedmedia-3-0
   LibIconPicker/Core/ExtLib/WowAce/LibSharedMedia/LibSharedMedia-3.0:
@@ -37,20 +32,18 @@ ignore:
   - doc
   - scripts
   - Interface
-  - LibIconPicker/*.xml
-  - LibIconPicker/*.lua
   - LibIconPicker/Core/Assets
   - LibIconPicker/Core/Lib
   - LibIconPicker/Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibStub
   - LibIconPicker/Core/ExtLib/WowAce/LibQTip/LibQTip-1.0/LibQTip-1.0.toc
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/tests
   - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3.lua
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3.toc
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_TBC.toc
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_Vanilla.toc
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_Wrath.toc
+  - LibIconPicker/Core/ExtLib/WowAce/Ace3/tests
   - LibIconPicker/Core/ExtLib/WowAce/Ace3/Bindings.xml
   - "*.toc"
 
 #move-folders:
 #  Pull-Ext-Lib/LibIconPicker: LibIconPicker
+#  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3.toc
+#  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_TBC.toc
+#  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_Vanilla.toc
+#  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3_Wrath.toc
