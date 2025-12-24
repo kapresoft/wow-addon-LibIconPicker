@@ -142,8 +142,8 @@ jobs:
             
             #### ${{ env.buildArtifactFilename }}
             ```text
-                MD5: ${{ env.buildArtifactChecksum }}
-            SHA-256: ${{ env.buildArtifactSha256 }}
+                MD5:${{ env.buildArtifactChecksum }}
+            sha256:${{ env.buildArtifactSha256 }}
             ```
       ## ------------------------------------------------ ##
       ## https://github.com/actions/upload-artifact
