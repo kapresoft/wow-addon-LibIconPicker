@@ -45,6 +45,7 @@ jobs:
           echo buildBasePath=${buildBasePath}
           echo buildArtifactFilename=${buildArtifactFilename}
           echo buildArtifact=${buildArtifact}
+          echo shasum=$(which shasum)
           echo "------------------------"
           echo "All ENV Vars:"
           echo "$(env|sort)"
