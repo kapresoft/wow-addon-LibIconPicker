@@ -96,6 +96,7 @@ jobs:
       - name: "Setup Build Scripts"
         run: |
           chmod a+x ./dev/md5sum.sh
+          chmod a+x ./dev/sha256.sh
       ## ------------------------------------------------ ##
       ## Show Directory contents
       - name: "Setup Build Scripts"
@@ -111,6 +112,7 @@ jobs:
       - name: Check Vars
         run: |
           echo buildArtifactChecksum="$(./dev/md5sum.sh $buildArtifact)" >> $GITHUB_ENV
+          echo buildArtifactSha256="$(./dev/sha256.sh $buildArtifact)" >> $GITHUB_ENV
           echo "buildArtifact is $buildArtifact"
           echo "buildArtifactChecksum is $buildArtifactChecksum"
       - name: Create checksum file
@@ -138,7 +140,8 @@ jobs:
             
             #### ${{ env.buildArtifactFilename }}
             ```text
-            MD5 ${{ env.buildArtifactChecksum }}
+               MD5: ${{ env.buildArtifactChecksum }}
+            sha256: ${{ env.buildArtifactSha256 }}
             ```
       ## ------------------------------------------------ ##
       ## https://github.com/actions/upload-artifact
