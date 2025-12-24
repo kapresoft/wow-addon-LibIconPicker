@@ -124,6 +124,8 @@ jobs:
           echo -e "::notice::HOME=${HOME}\n::notice::buildArtifact=${buildArtifact}"
           echo "::notice::buildArtifactChecksumFile=${buildArtifactChecksumFile}"
           echo "::notice::buildArtifact=${buildArtifact} Checksum=${buildArtifactChecksum}"
+          echo "::notice::MD5-Checksum=${buildArtifactChecksum}"
+          echo "::notice::Sha256=${buildArtifactSha256}"
 
       - name: Create a draft release
         id: create_draft_release
@@ -140,8 +142,8 @@ jobs:
             
             #### ${{ env.buildArtifactFilename }}
             ```text
-               MD5: ${{ env.buildArtifactChecksum }}
-            sha256: ${{ env.buildArtifactSha256 }}
+                MD5: ${{ env.buildArtifactChecksum }}
+            SHA-256: ${{ env.buildArtifactSha256 }}
             ```
       ## ------------------------------------------------ ##
       ## https://github.com/actions/upload-artifact
