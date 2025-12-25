@@ -15,11 +15,16 @@ See [LibIconPickerPublicInterface.lua](LibIconPicker/Core/Lib/Developer/Interfac
 
 ### LibIconPicker_Options
 
+- [LibIconPicker_TextInputOptions](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/main/LibIconPicker/Core/Lib/Developer/Interface/LibIconPickerPublicInterface.lua#L7-L9)
+- [LibIconPicker_Anchor](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/main/LibIconPicker/Core/Lib/Developer/Interface/LibIconPickerPublicInterface.lua#L22-L30)
+
 ```lua
 --- @type LibIconPicker_Options
 local opt = {
     showTextInput = true,
+    -- @type LibIconPicker_TextInputOptions
     textInput = { label = 'Enter Name:', value = 'Uber Spell' },
+    -- @type LibIconPicker_Anchor
     anchor = {
         point = 'TOPRIGHT',
         relativeTo = UIParent,
@@ -31,6 +36,9 @@ local opt = {
 ```
 
 ### Callback: LibIconPicker_CallbackFn
+
+- [LibIconPicker_Selection](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/main/LibIconPicker/Core/Lib/Developer/Interface/LibIconPickerPublicInterface.lua#L3-L5)
+
 
 ```lua
 --- @param sel LibIconPicker_Selection
@@ -54,7 +62,7 @@ end)
 
 ### Usecase #2: Show Icon Picker with TextInput
 
-> Default
+> Minimal Call
 
 ```lua
 --- @param sel LibIconPicker_Selection
@@ -62,7 +70,7 @@ LibIconPicker:Open(function(sel)
     print('Selected icon:', sel.icon, ' user-input-text:', sel.textInputValue)
 end, { showTextInput = true })
 ```
-> Customize Label and Value
+> Customized Label and Value
 
 ```lua
 --- @type LibIconPicker_Options
