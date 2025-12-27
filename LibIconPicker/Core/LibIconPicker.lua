@@ -2,7 +2,7 @@
 local ns = select(2, ...)
 local d = ns.O.IconSelector
 local p = ns:Log('A')
-
+local GetAddOnMetadata = C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 
 --[[-----------------------------------------------------------------------------
 Vars
