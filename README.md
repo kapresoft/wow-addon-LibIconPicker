@@ -131,7 +131,7 @@ Anchor point on the reference frame.
 **Type:** `number`
 Pixel offsets applied after anchoring.
 
-Notes:
+### Notes
 
 * Unsupported or missing fields are safely ignored.
 * The options table is **read-only after `Open()`**; subsequent changes have no effect.
@@ -178,7 +178,9 @@ LibIconPicker:Open(function(sel)
 end)
 ```
 
-Notes:
+<img width="744" height="769" alt="image" src="https://github.com/user-attachments/assets/be2fe6f4-9b42-482d-af5d-7715803d1dfe" />
+
+### Notes
 * Uses default picker configuration.
 * No text input field is shown unless explicitly enabled.
 * The callback is invoked once the user confirms a selection.
@@ -225,7 +227,9 @@ LibIconPicker:Open(function(sel)
 end, opt)
 ```
 
-Notes:
+<img width="739" height="768" alt="image" src="https://github.com/user-attachments/assets/9e9e3190-f20b-4dbe-83cb-55e00188f5b6" />
+
+### Notes
 
 * `textInput` is ignored unless `showTextInput` is `true`.
 * The final text value is returned via `sel.textInputValue`.
@@ -254,15 +258,15 @@ LibIconPicker:Open(function(sel)
 end, opt)
 ```
 
-Notes:
+### Notes
 
 * Anchoring is resolved once when the picker is opened.
 * The picker does not track subsequent movement of the reference frame.
 * If no anchor is provided, the library uses its default positioning behavior.
 
-### Other Uses 
+## Other Uses 
 
-#### Close the Icon Picker
+### Close the Icon Picker
 
 Programmatically closes the icon picker dialog if it is currently open.
 
@@ -270,13 +274,13 @@ Programmatically closes the icon picker dialog if it is currently open.
 LibIconPicker:Close()
 ```
 
-Notes:
+#### Notes
 
 * Safe to call even if the picker is not open.
 * Closing the picker does not invoke the selection callback.
 * Any pending picker state is discarded.
 
-#### Run from Console
+### Run from Console
 
 Prints diagnostic information about the library to the chat frame.
 Intended for quick inspection and debugging.
@@ -284,4 +288,6 @@ Intended for quick inspection and debugging.
 ```console
 /run LibIconPicker:Info()
 ```
+<img width="520" height="116" alt="image" src="https://github.com/user-attachments/assets/3df41e24-431c-4e57-9a43-fdbcd3b38568" />
+
 
