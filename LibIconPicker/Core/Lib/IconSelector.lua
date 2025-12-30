@@ -15,7 +15,7 @@ Types
 --- @field EditBox EditBox
 
 --- @class _IconScrollFrame
---- @field scrollChild ScrollChild
+--- @field scrollChild SimpleFrame
 --- @field scrollBar Slider
 --- @field buttons table<number, IconButton>
 
@@ -173,10 +173,10 @@ end
 
 --- @param callback LibIconPicker_CallbackFn
 --- @param opt LibIconPicker_Options|nil
-function S:ShowDialog(callback, opt)
+function S:ShowDialog(callback, _opt)
     if InCombatLockdown() then return end
 
-    local opt = opt or tShallowCopy(selectorOptions)
+    local opt = _opt or tShallowCopy(selectorOptions)
     if opt.textInput == nil then
         opt.textInput = tShallowCopy(selectorOptions.textInput)
     end
@@ -243,7 +243,6 @@ function S:OnClickOkay()
         local icon = selectedIconBtn:GetIcon()
         --- @type LibIconPicker_Selection
         local sel  = { icon = icon }
-        local textInputValue
         if firstRow.EditBox:IsShown() then
             sel.textInputValue = firstRow.EditBox:GetText()
         end
