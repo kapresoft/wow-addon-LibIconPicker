@@ -10,6 +10,27 @@ The UI is lazy-loaded and initialized only when needed, ensuring minimal memory 
 
 LibIconPicker is safe to embed or use standalone, supports multiple addons simultaneously, and avoids global side effects by following established WoW library conventions. The result is a fast, scalable, and memory-efficient icon picker that integrates cleanly into any addon without adding performance overhead or maintenance burden.
 
+## Usage
+
+The following example loads LibIconPicker on demand (if not already loaded) before invoking its public API.
+See the use cases below for complete integration patterns and how this library can be leveraged by consumer addons.
+
+```
+local LoadAddOn     = LoadAddOn or C_AddOns.LoadAddOn
+local IsAddOnLoaded = IsAddOnLoaded or C_AddOns.IsAddOnLoaded
+local addOnName     = 'LibIconPicker'
+local loaded, msg   = IsAddOnLoaded(addOnName), nil
+if not loaded then
+    loaded, msg = LoadAddOn(addOnName)
+    if not loaded then
+        return print('Failed to load LibIconPicker, msg:', msg)
+    end
+end
+LibIconPicker:Open(function(sel)
+    print('Selected icon:', sel.icon)
+end)
+```
+
 ## Public Interface
 
 See [LibIconPickerPublicInterface.lua](LibIconPicker/Core/Lib/Developer/Interface/LibIconPickerPublicInterface.lua) for the full EmmyLua function definitions and type annotations.  
