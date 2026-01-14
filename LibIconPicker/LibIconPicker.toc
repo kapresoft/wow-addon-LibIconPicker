@@ -1,12 +1,13 @@
 ## Interface: 110207
 ## Version: @project-version@
-## Title: |TInterface/Addons/LibIconPicker/Core/Assets/LibIconPicker-Logo-1:18:18|t Lib: Lib|cff12E600IconPicker|r
-## Notes: LibIconPicker is a reusable World of Warcraft addon library that provides|na flexible and efficient icon chooser dialog for addon developers.|n|cff1784d1This addon is provided 'as is' without any warranties.All rights|nreserved. Redistribution or modification is not permitted.|r
+## Title: Lib|cff12E600IconPicker|r
+## IconTexture: Interface/Addons/LibIconPicker/Core/Assets/LibIconPicker-Logo-1
 
 ## Author: @project-author@ (kapresoft)
+## Notes: LibIconPicker is a reusable World of Warcraft addon library that provides|na flexible and efficient icon chooser dialog for addon developers.|n|cff1784d1This addon is provided 'as is' without any warranties.All rights|nreserved. Redistribution or modification is not permitted.|r
+
 ## DefaultState: enabled
 ## LoadOnDemand: 1
-# IconTexture: Interface/AddOns/LibIconPicker/Core/Assets/LibIconPicker-Logo-1
 
 ## Category-enUS: Libraries
 ## Category-deDE: Bibliotheken
