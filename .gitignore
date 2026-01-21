@@ -55,7 +55,12 @@ luac.out
 # BigWigMods/packager
 /build
 /.release/
-LibIconPicker/Core/ExtLib/*
+
+# External Lib Dir
+LibIconPicker/ThirdParty/Libs/
+
+# External Lib Dir (Old)
+LibIconPicker/Core/ExtLib/
 
 # Ignore Saved Variables folder with symlinks
 /_SV

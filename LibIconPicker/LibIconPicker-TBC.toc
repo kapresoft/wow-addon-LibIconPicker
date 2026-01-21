@@ -38,6 +38,7 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
+ThirdParty\ThirdParty.xml
 Core\TBC.lua
 Core\_Core.xml
 

@@ -37,6 +37,7 @@
 # To get the Interface/Build Info
 # /dump select(4, GetBuildInfo())
 
+ThirdParty\ThirdParty.xml
 Core\Vanilla.lua
 Core\_Core.xml
 
