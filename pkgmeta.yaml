@@ -7,6 +7,7 @@ enable-nolib-creation: no
 embedded-libraries:
   - LibStub
   - Ace3
+  - LibSharedMedia
 
 tools-used:
   - DevSuite
@@ -20,8 +21,9 @@ tools-used:
 # LibSharedMedia: https://www.wowace.com/projects/libsharedmedia-3-0
 
 externals:
-  LibIconPicker/Core/ExtLib/WowAce/Ace3: https://repos.wowace.com/wow/ace3/trunk
-  LibIconPicker/Core/ExtLib/WowAce/LibSharedMedia/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+  LibIconPicker/ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
+  LibIconPicker/ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
+  LibIconPicker/ThirdParty/Libs/LibSharedMedia/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
 
 ignore:
   - "*.sh"
@@ -30,12 +32,9 @@ ignore:
   - "*.yml"
   - dev
   - doc
-  - scripts
-  - Interface
-  - Pull-Ext-Lib.toc
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Ace3.lua
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/tests
-  - LibIconPicker/Core/ExtLib/WowAce/Ace3/Bindings.xml
+  - LibIconPicker/ThirdParty/Libs/Ace3/Ace3.lua
+  - LibIconPicker/ThirdParty/Libs/Ace3/tests
+  - LibIconPicker/ThirdParty/Libs/Ace3/Bindings.xml
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>
