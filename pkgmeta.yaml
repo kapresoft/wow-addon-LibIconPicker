@@ -7,7 +7,7 @@ enable-nolib-creation: no
 embedded-libraries:
   - LibStub
   - Ace3
-  - LibSharedMedia
+  - LibSharedMedia-3-0
 
 tools-used:
   - DevSuite
