@@ -1,0 +1,19 @@
+<!--suppress XmlPathReference -->
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Include file='ThirdParty\ThirdParty.xml'/>
+
+    <Script file="Libs\Namespace.lua"/>
+    <Include file="Libs\Util\_Util.xml"/>
+    <!--@do-not-package@-->
+    <Include file='Libs\Developer\_DeveloperSetup.xml'/>
+    <!--@end-do-not-package@-->
+    <Include file="Libs\Locales\_Locales.xml"/>
+    <!--@do-not-package@-->
+    <Include file='Libs\Developer\_Developer.xml'/>
+    <!--@end-do-not-package@-->
+    <Include file='Libs\IconSelector.xml'/>
+    <Script file="Libs\LibIconPicker.lua"/>
+
+</Ui>
