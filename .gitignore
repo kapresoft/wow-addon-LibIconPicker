@@ -56,11 +56,7 @@ luac.out
 /build
 /.release/
 
-# External Lib Dir
-LibIconPicker/ThirdParty/Libs/
-
-# External Lib Dir (Old)
-LibIconPicker/Core/ExtLib/
+ThirdParty/Libs/
 
 # Ignore Saved Variables folder with symlinks
 /_SV
