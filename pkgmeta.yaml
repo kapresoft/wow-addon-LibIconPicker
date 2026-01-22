@@ -21,9 +21,9 @@ tools-used:
 # LibSharedMedia: https://www.wowace.com/projects/libsharedmedia-3-0
 
 externals:
-  LibIconPicker/ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
-  LibIconPicker/ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
-  LibIconPicker/ThirdParty/Libs/LibSharedMedia/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+  ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
+  ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
+  ThirdParty/Libs/LibSharedMedia/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
 
 ignore:
   - "*.sh"
@@ -32,9 +32,9 @@ ignore:
   - "*.yml"
   - dev
   - doc
-  - LibIconPicker/ThirdParty/Libs/Ace3/Ace3.lua
-  - LibIconPicker/ThirdParty/Libs/Ace3/tests
-  - LibIconPicker/ThirdParty/Libs/Ace3/Bindings.xml
+  - ThirdParty/Libs/Ace3/Ace3.lua
+  - ThirdParty/Libs/Ace3/tests
+  - ThirdParty/Libs/Ace3/Bindings.xml
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>
@@ -49,5 +49,5 @@ ignore:
 # <repo>/<addon>, `toc_root_paths` will be empty and packaging WILL fail.
 #
 # ⚠️ Do not change unless you also change the repo/addon layout.
-move-folders:
-  LibIconPicker/LibIconPicker: LibIconPicker
+#move-folders:
+#  LibIconPicker/LibIconPicker: LibIconPicker
