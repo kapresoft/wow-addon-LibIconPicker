@@ -50,6 +50,7 @@ jobs:
       - name: "Set ENV Variable: buildArtifact"
         run: |
           echo buildArtifact="${releaseDir}/${buildArtifactFilename}" >> $GITHUB_ENV
+          echo sha256Script="./dev/sha256.sh" >> $GITHUB_ENV
       ## ------------------------------------------------ ##
       - name: Print Environment Variables
         run: |
@@ -63,6 +64,7 @@ jobs:
           echo buildBasePath=${buildBasePath}
           echo buildArtifactFilename=${buildArtifactFilename}
           echo artifact_retentionDays=${{ env.artifact_retentionDays }}
+          echo sha256Script=${sha256Script}
           echo "------------------------"
           echo "All ENV Vars:"
           echo "$(env|sort)"
@@ -86,12 +88,12 @@ jobs:
       - name: "Verify: Supporting Scripts Exists"
         uses: andstor/file-existence-action@v3
         with:
-          files: "./dev/sha256.sh"
+          files: "${{ env.sha256Script }}"
           fail: true
       ## ------------------------------------------------ ##
       - name: "Setup Build Scripts"
         run: |
-          chmod a+x ./dev/sha256.sh
+          chmod a+x $sha256Script
       ## ------------------------------------------------ ##
       ## Show Directory contents
       - name: "Setup Build Scripts"
@@ -106,9 +108,9 @@ jobs:
       ## ------------------------------------------------ ##
       - name: Check Vars
         run: |
-          echo buildArtifactSha256="$(./dev/sha256.sh $buildArtifact)" >> $GITHUB_ENV
+          echo buildArtifactChecksum="$($sha256Script $buildArtifact)" >> $GITHUB_ENV
           echo "buildArtifact is $buildArtifact"
-          echo "buildArtifactSha256 is buildArtifactSha256"
+          echo "buildArtifactChecksum is $buildArtifactChecksum"
       ## ------------------------------------------------ ##
       - name: Notices
         run: |
@@ -117,7 +119,7 @@ jobs:
 
       - name: Create a draft release
         id: create_draft_release
-        if: ${{ env.createDraftRelease == 'true' }}
+        if: ${{ env.createDraftRelease != 'false' }}
         uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,10 +129,10 @@ jobs:
           version: ${{ env.refName }}
           prerelease: false
           footer: |
-            
+            <br><br>
             #### ${{ env.buildArtifactFilename }}
             ```text
-            sha256:${{ env.buildArtifactSha256 }}
+            sha256:${{ env.buildArtifactChecksum }}
             ```
       ## ------------------------------------------------ ##
       ## https://github.com/actions/upload-artifact
