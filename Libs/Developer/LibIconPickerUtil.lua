@@ -18,10 +18,10 @@ local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
 --[[-------------------------------------------------------------------
 New Library
 ---------------------------------------------------------------------]]
---- @class LibIconPickerUtil
+--- @class LibIconPickerUtil_LibIconPickerUtil
 local S = {}; ns.O.LibIconPickerUtil = S
 
---- @type LibIconPickerUtil
+--- @type LibIconPickerUtil_LibIconPickerUtil
 local o = S;
 
 --[[-------------------------------------------------------------------
