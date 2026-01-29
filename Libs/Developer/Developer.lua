@@ -1,4 +1,4 @@
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 local libName = 'LibIconPicker'

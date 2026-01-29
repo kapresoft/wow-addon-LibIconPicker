@@ -1,10 +1,10 @@
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 --[[-----------------------------------------------------------------------------
 New Library
 -------------------------------------------------------------------------------]]
---- @class IconDataProvider
+--- @class LibIconPicker_IconDataProvider
 ns.iconDataProvider = {}
 local S = ns.iconDataProvider
 local p = ns:Log('IconSelectorProvider')
@@ -17,7 +17,7 @@ S.ITEMS = 'items'
 -- -----------------------------------------------------
 -- Initialize unified provider on first use
 -- -----------------------------------------------------
---- @param whichIcon IconTypeFilter
+--- @param whichIcon LibIconPicker_IconTypeFilter
 local function EnsureProvider(whichIcon)
     --if provider then return end
 
@@ -38,7 +38,7 @@ end
 -- -----------------------------------------------------
 -- Return unified icon list
 -- -----------------------------------------------------
---- @param whichIcon IconTypeFilter
+--- @param whichIcon LibIconPicker_IconTypeFilter
 --- @return table<number, number>
 function S:GetIcons(whichIcon)
     EnsureProvider(whichIcon)

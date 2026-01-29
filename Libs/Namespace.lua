@@ -4,16 +4,16 @@ if LibIconPicker then return end
 --- @type string
 local addon
 
---- @class PrivateNamespace
---- @field LibIconPicker LibIconPickerNamespace
+--- @class LibIconPicker_PrivateNamespace
+--- @field LibIconPicker LibIconPicker_Namespace
 local parentNs
 
---- @class LibIconPickerNamespace
+--- @class LibIconPicker_Namespace
 --- @field addon string The addon name; note that this may be different when embedded
 --- @field name string The library name
---- @field O NamespaceObjects
+--- @field O LibIconPicker_NamespaceObjects
 --- @field backdrops table<string, table>
---- @field iconDataProvider IconDataProvider
+--- @field iconDataProvider LibIconPicker_IconDataProvider
 local ns = {}
 
 addon, parentNs = ...; parentNs.LibIconPicker = ns
@@ -28,14 +28,14 @@ LIP_NS = ns
 Type: DebugSettings
 Override in DeveloperSetup to enable
 -------------------------------------------------------------------------------]]
---- @class LibIconPickerSettings
+--- @class LibIconPicker_Settings
 --- @field developer boolean if true: enables developer mode
 local settings = { developer = false }
 
 --[[-----------------------------------------------------------------------------
-NamespaceObjects
+LibIconPicker_NamespaceObjects
 -------------------------------------------------------------------------------]]
----@param o NamespaceObjects
+---@param o LibIconPicker_NamespaceObjects
 local function NSO(o)
     o.AceLocale = LibStub("AceLocale-3.0")
 end
