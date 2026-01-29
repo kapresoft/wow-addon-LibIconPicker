@@ -1,4 +1,4 @@
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
 local tShallowCopy = ns.O.Util.Table_ShallowCopy
@@ -6,18 +6,18 @@ local tShallowCopy = ns.O.Util.Table_ShallowCopy
 --[[-----------------------------------------------------------------------------
 Types
 -------------------------------------------------------------------------------]]
---- @alias IconSelector IconSelector_Mixin | Frame
---- @alias IconScrollFrame _IconScrollFrame | ScrollFrame
+--- @alias LibIconPicker_IconSelector LibIconPicker_IconSelectorMixin | Frame
+--- @alias LibIconPicker_IconScrollFrame _LibIconPicker_IconScrollFrame | ScrollFrame
 
---- @class FirstRow
+--- @class LibIconPicker_FirstRow
 --- @field IconTypeDropdown Frame
 --- @field Label FontString
 --- @field EditBox EditBox
 
---- @class _IconScrollFrame
+--- @class _LibIconPicker_IconScrollFrame
 --- @field scrollChild SimpleFrame
 --- @field scrollBar Slider
---- @field buttons table<number, IconButton>
+--- @field buttons table<number, LibIconPicker_IconButton>
 
 --[[-----------------------------------------------------------------------------
 Blizzard Vars
@@ -38,14 +38,14 @@ local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
 --- @type table<number, number>
 local icons
 
---- @type FirstRow
+--- @type LibIconPicker_FirstRow
 local firstRow
 --- @type Frame
 local dropdown
 
---- @type IconScrollFrame
+--- @type LibIconPicker_IconScrollFrame
 local scrollFrame
---- @type IconButton
+--- @type LibIconPicker_IconButton
 local selectedIconBtn
 
 
@@ -78,22 +78,22 @@ local ROW_PADDING_TOP = 0
 --[[-----------------------------------------------------------------------------
 New Library
 -------------------------------------------------------------------------------]]
---- @class IconSelector_Mixin
+--- @class LibIconPicker_IconSelectorMixin
 --- @field private _lastOffset number
 --- @field icons table<number, number>
 --- @field ScrollFrame Frame
---- @field FirstRow FirstRow
+--- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
 LibIconPicker_IconSelectorMixin = {}
 
---- @type IconSelector_Mixin | Frame
+--- @type LibIconPicker_IconSelectorMixin | Frame
 local S = LibIconPicker_IconSelectorMixin
 local p = ns:Log('IconSelector')
 
 --[[-----------------------------------------------------------------------------
 Handlers
 -------------------------------------------------------------------------------]]
---- @param self IconButton
+--- @param self LibIconPicker_IconButton
 local function OnClickIconItem(self)
     selectedIconBtn:SetIcon(self:GetIcon())
 end
@@ -107,7 +107,7 @@ function S.OnLoadRow(self)
 
     -- Each row gets 12 icon buttons
     for col = 1, ICON_COLS do
-        --- @type IconButton
+        --- @type LibIconPicker_IconButton
         local b = CreateFrame("Button", nil, self, "LibIconPicker_IconButtonTemplate")
         b:SetSize(ICON_SIZE, ICON_SIZE)
 
@@ -132,7 +132,7 @@ function S:OnLoad()
     self.HeaderTitle:SetText(L['Icon Picker'])
     firstRow.Label:SetText(selectorOptions.textInput.label)
 
-    --- @type _IconScrollFrame
+    --- @type _LibIconPicker_IconScrollFrame
     scrollFrame = self.ScrollFrame
 
     self:SetBackdrop(ns.backdrops.modernDark)
@@ -319,7 +319,7 @@ end
 
 --- @private
 --- @param iconType "'spells'" | "'items'" | "'both'"
---- @see IconDataProvider#{SPELLS, ITEMS, BOTH}
+--- @see LibIconPicker_IconDataProvider#{SPELLS, ITEMS, BOTH}
 function S:OnIconTypeChanged(iconType)
     -- 1) Fetch new icons
     icons = self:GetIcons()
@@ -371,7 +371,7 @@ function S:Redraw()
 
             for col = 1, ICON_COLS do
                 local index = ((virtualRow - 1) * ICON_COLS) + col
-                --- @type IconButton
+                --- @type LibIconPicker_IconButton
                 local b = row[col]
 
                 if not b then break end

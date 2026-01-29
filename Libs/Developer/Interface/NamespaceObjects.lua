@@ -1,8 +1,8 @@
---- @class NamespaceObjects
+--- @class LibIconPicker_NamespaceObjects
 local o = {
     --- @type Util
     Util = {},
-    --- @type IconSelector
+    --- @type LibIconPicker_IconSelector
     IconSelector = {},
     --- @type AceLocale
     AceLocale = {}

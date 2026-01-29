@@ -3,9 +3,9 @@ local LibStub = LibStub
 
 --- @type string
 local addon
---- @type PrivateNamespace
+--- @type LibIconPicker_PrivateNamespace
 local parentNs
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns
 
 addon, parentNs = ...

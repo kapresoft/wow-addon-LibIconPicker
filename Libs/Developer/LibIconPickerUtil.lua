@@ -3,7 +3,7 @@ LibIconPickerUtil: This is just a template implementation on to
 properly load the on-demand library.
 ---------------------------------------------------------------------]]
 
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 --[[-------------------------------------------------------------------

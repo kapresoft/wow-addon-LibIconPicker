@@ -1,23 +1,23 @@
---- @type LibIconPickerNamespace
+--- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
---- @class _IconButtonMixin
+--- @class _LibIconPicker_IconButtonMixin
 --- @field icon Texture
 LibIconPicker_IconButtonMixin = {}
 
 local S = LibIconPicker_IconButtonMixin
 local p = ns:Log('IconButton')
 
---- @class _IconButton : _IconButtonMixin
+--- @class _LibIconPicker_IconButton : _LibIconPicker_IconButtonMixin
 
 --- Alias: IconButton
---- @alias IconButton _IconButton | Button
+--- @alias LibIconPicker_IconButton _LibIconPicker_IconButton | Button
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
 
 --- hold down ALT key
---- @param self IconButton
+--- @param self LibIconPicker_IconButton
 local function OnEnter(self)
     if not IsAltKeyDown() then return end
     p('Icon:', self:GetIcon())
@@ -26,7 +26,7 @@ end
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
---- @param o _IconButton | IconButton
+--- @param o _LibIconPicker_IconButton | LibIconPicker_IconButton
 local function Methods(o)
 
     function o:OnLoad()
