@@ -33,7 +33,7 @@ end)
 
 ## Public Interface
 
-See [LibIconPickerPublicInterface.lua](Libs/Interface/LibIconPickerPublicInterface.lua) for the full EmmyLua function definitions and type annotations.  
+See [LibIconPickerPublicInterface.lua](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/f711ef9871715a925218328d1598878c9a39fc48/Libs/Interface/LibIconPickerPublicInterface.lua) for the full EmmyLua function definitions and type annotations.  
 You can import this file into your project to enable code completion and type hints.
 
 ## LibIconPicker_Options
@@ -43,8 +43,8 @@ All fields are optional unless otherwise noted.
 
 Here is an example of a fully populated LibIconPicker options table:
 
-- [LibIconPicker_TextInputOptions](Libs/Interface/LibIconPickerPublicInterface.lua#L7-L9)
-- [LibIconPicker_Anchor](Libs/Interface/LibIconPickerPublicInterface.lua#L22-L30)
+- [LibIconPicker_TextInputOptions](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/f711ef9871715a925218328d1598878c9a39fc48/Libs/Interface/LibIconPickerPublicInterface.lua#L10)
+- [LibIconPicker_Anchor](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/f711ef9871715a925218328d1598878c9a39fc48/Libs/Interface/LibIconPickerPublicInterface.lua#L28)
 
 ```lua
 --- @type LibIconPicker_Options
@@ -164,7 +164,7 @@ Pixel offsets applied after anchoring.
 The callback is invoked when the user confirms an icon selection.
 It is called exactly once per Open() invocation.
 
-- [LibIconPicker_Selection](Libs/Interface/LibIconPickerPublicInterface.lua#L3-L5)
+- [LibIconPicker_Selection](https://github.com/kapresoft/wow-addon-LibIconPicker/blob/f711ef9871715a925218328d1598878c9a39fc48/Libs/Interface/LibIconPickerPublicInterface.lua#L6)
 
 
 ```lua
