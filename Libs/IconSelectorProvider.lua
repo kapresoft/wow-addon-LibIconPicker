@@ -1,5 +1,5 @@
 --- @type LibIconPickerNamespace
-local ns = select(2, ...)
+local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 --[[-----------------------------------------------------------------------------
 New Library

@@ -1,5 +1,5 @@
 --- @type LibIconPickerNamespace
-local ns = select(2, ...)
+local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
 local tShallowCopy = ns.O.Util.Table_ShallowCopy
 
@@ -30,7 +30,7 @@ local HybridScrollFrame_CreateButtons = HybridScrollFrame_CreateButtons
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local L = O.AceLocale:GetLocale(ns.addon)
+local L = O.AceLocale:GetLocale(ns.name)
 
 local FIRST_ROW_HEIGHT = 80
 local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
@@ -135,10 +135,6 @@ function S:OnLoad()
     --- @type _IconScrollFrame
     scrollFrame = self.ScrollFrame
 
-    C_Timer.After(1, function()
-        p('Selected:', selectedIconBtn:GetIcon())
-    end)
-
     self:SetBackdrop(ns.backdrops.modernDark)
 
     local scrollBar = scrollFrame.scrollBar
@@ -237,7 +233,6 @@ function S:OnClickClose() self:Hide() end
 
 --- @private
 function S:OnClickOkay()
-    print(self:GetName() .. '::', 'OK clicked')
     if callbackInfo then
         local fn = callbackInfo.callback
         local icon = selectedIconBtn:GetIcon()

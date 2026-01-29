@@ -1,6 +1,14 @@
+--[[-------------------------------------------------------------------
+LibIconPickerUtil: This is just a template implementation on to
+properly load the on-demand library.
+---------------------------------------------------------------------]]
+
 --- @type LibIconPickerNamespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
+--[[-------------------------------------------------------------------
+Local Vars
+---------------------------------------------------------------------]]
 local libName = 'LibIconPicker'
 -- The old GetAddOnEnableState requires the second arg 'character'
 local GetAddOnEnableState = C_AddOns.GetAddOnEnableState or GetAddOnEnableState
@@ -8,15 +16,21 @@ local LoadAddOn   = C_AddOns.LoadAddOn or LoadAddOn
 local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
 
 --[[-------------------------------------------------------------------
-Developer
+New Library
 ---------------------------------------------------------------------]]
---- @class Developer
-local o = {}; lipd = o
+--- @class LibIconPickerUtil
+local S = {}; ns.O.LibIconPickerUtil = S
 
+--- @type LibIconPickerUtil
+local o = S;
+
+--[[-------------------------------------------------------------------
+Methods
+---------------------------------------------------------------------]]
 --- Get LibIconPicker instance
 --- The global var `LibIconPicker` is available if the addon is already loaded.
 --- @return LibIconPicker
-function o:LIP()
+function o:Instance()
   if LibIconPicker then return LibIconPicker end
   
   EnableAddOn(libName, UnitName('player'))
@@ -28,3 +42,6 @@ function o:LIP()
   
   return LibIconPicker
 end
+
+
+

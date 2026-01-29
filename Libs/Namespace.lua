@@ -1,11 +1,23 @@
+-- if LibIconPicker exists, it's already been loaded
+if LibIconPicker then return end
+
 --- @type string
 local addon
+
+--- @class PrivateNamespace
+--- @field LibIconPicker LibIconPickerNamespace
+local parentNs
+
 --- @class LibIconPickerNamespace
+--- @field addon string The addon name; note that this may be different when embedded
+--- @field name string The library name
 --- @field O NamespaceObjects
 --- @field backdrops table<string, table>
 --- @field iconDataProvider IconDataProvider
-local ns
-addon, ns = ...
+local ns = {}
+
+addon, parentNs = ...; parentNs.LibIconPicker = ns
+
 
 --[[-----------------------------------------------------------------------------
 Local Vars
@@ -31,16 +43,16 @@ end
 --[[-----------------------------------------------------------------------------
 Namespace Methods
 -------------------------------------------------------------------------------]]
---- @param n LibIconPickerNamespace
-local function NamespaceMethods(n)
+do
+  ns.name     = 'LibIconPicker'
+  ns.addon    = addon
+  ns.sformat  = string.format
+  ns.settings = settings
+  ns.O        = {}; NSO(ns.O)
+  
+  --- @return boolean
+  function ns:IsDev() return ns.settings.developer == true end
 
-    n.addon = addon
-    n.sformat = string.format
-    n.settings = settings
-    n.O = {}; NSO(ns.O)
+end
 
-    --- @return boolean
-    function n:IsDev() return ns.settings.developer == true end
-
-end; NamespaceMethods(ns)
 
