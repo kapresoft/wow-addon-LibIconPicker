@@ -1,14 +1,15 @@
+--- @type LibIconPickerNamespace
+local ns = select(2, ...).LibIconPicker; if not ns then return end
+ns.settings.developer = true
+
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
 local sformat, upper, date = string.format, string.upper, date
 
---- @type LibIconPickerNamespace
-local ns = select(2, ...)
-ns.settings.developer = true
 
 local pp = ns:Log('DevSetup')
 
 C_Timer.After(0.5, function()
-    pp('IsDev:', ns)
+    pp('IsDev:', ns:IsDev())
 end)

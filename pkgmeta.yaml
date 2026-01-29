@@ -23,7 +23,6 @@ tools-used:
 externals:
   ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
   ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
-  ThirdParty/Libs/LibSharedMedia/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
 
 ignore:
   - "*.sh"
@@ -32,9 +31,24 @@ ignore:
   - "*.yml"
   - dev
   - doc
+  - ThirdParty/Libs/Ace3/LibStub
   - ThirdParty/Libs/Ace3/Ace3.lua
   - ThirdParty/Libs/Ace3/tests
   - ThirdParty/Libs/Ace3/Bindings.xml
+  - ThirdParty/Libs/Ace3/AceAddon-3.0
+  - ThirdParty/Libs/Ace3/AceBucket-3.0
+  - ThirdParty/Libs/Ace3/AceComm-3.0
+  - ThirdParty/Libs/Ace3/AceConfig-3.0
+  - ThirdParty/Libs/Ace3/AceConsole-3.0
+  - ThirdParty/Libs/Ace3/AceDB-3.0
+  - ThirdParty/Libs/Ace3/AceDBOptions-3.0
+  - ThirdParty/Libs/Ace3/AceEvent-3.0
+  - ThirdParty/Libs/Ace3/AceGUI-3.0
+  - ThirdParty/Libs/Ace3/AceHook-3.0
+  - ThirdParty/Libs/Ace3/AceSerializer-3.0
+  - ThirdParty/Libs/Ace3/AceTab-3.0
+  - ThirdParty/Libs/Ace3/AceTimer-3.0
+  - ThirdParty/Libs/Ace3/CallbackHandler-1.0
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>

@@ -1,5 +1,5 @@
 --- @type LibIconPickerNamespace
-local ns     = select(2, ...)
+local ns     = select(2, ...).LibIconPicker; if not ns then return end
 
 ns.backdrops = {
     modernDark = BACKDROP_DARK_DIALOG_32_32,

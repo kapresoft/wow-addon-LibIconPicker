@@ -1,11 +1,11 @@
+--- @type LibIconPickerNamespace
+local ns = select(2, ...).LibIconPicker; if not ns then return end
+
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
 --- @type LibStub
 local LibStub = LibStub
-
---- @type LibIconPickerNamespace
-local ns = select(2, ...)
 
 local silent = true
 
@@ -13,7 +13,9 @@ local silent = true
 if ns:IsDev() then silent = false end
 --@end-do-not-package@
 
-local L = LibStub('AceLocale-3.0'):NewLocale(ns.addon, 'enUS', true, silent);
+--- Locale name is ns.name (LibIconPicker) so it won't conflict with
+--- main addon if embedded.
+local L = LibStub('AceLocale-3.0'):NewLocale(ns.name, 'enUS', true, silent);
 
 --[[-----------------------------------------------------------------------------
 Localized Texts

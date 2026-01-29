@@ -1,5 +1,6 @@
 --- @type LibIconPickerNamespace
-local ns = select(2, ...)
+local ns = select(2, ...).LibIconPicker; if not ns then return end
+
 local d = ns.O.IconSelector
 local p = ns:Log('A')
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata or GetAddOnMetadata
@@ -17,9 +18,9 @@ local LibStub = LibStub
 LibIconPicker
 -------------------------------------------------------------------------------]]
 -- LibIconPicker-1.0
-local MAJOR, MINOR = "LibIconPicker-1.0", 1
+local MAJOR, MINOR = "LibIconPicker-1.0", 2
 
---- @class LibIconPicker
+--- @type LibIconPicker
 local A = LibStub:NewLibrary(MAJOR, MINOR); if not A then return end
 LibIconPicker = A
 
@@ -54,3 +55,5 @@ function A:Info()
     print(c2('Curse-Forge:'), cf)
     print(c2('Wow Client Version:'), wowVersion, c2('TOC:'), tocVersion)
 end
+
+print(('%s.%s loaded.'):format(MAJOR, MINOR))

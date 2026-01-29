@@ -4,11 +4,6 @@
 
 	<!-- LibStub needs to be at the top -->
 	<Script file="Libs\LibStub\LibStub.lua"/>
-
-	<!--@non-debug@
     <Include file="Ace3.xml"/>
-    @end-non-debug@-->
-
-	<Include file="Libs\LibSharedMedia\LibSharedMedia-3.0\lib.xml"/>
 
 </Ui>

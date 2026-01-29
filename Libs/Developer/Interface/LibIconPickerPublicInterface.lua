@@ -1,5 +1,8 @@
 --- @alias LibIconPicker_CallbackFn fun(sel:LibIconPicker_Selection) | "function(sel) end"
 
+--- @class LibIconPicker
+--- @field Open fun(callback:LibIconPicker_CallbackFn, options:LibIconPicker_Options)
+
 --- @class LibIconPicker_Selection
 --- @field textInputValue string|nil The final text input value, if enabled
 --- @field icon number The ID of the selected entity (spell or item)
