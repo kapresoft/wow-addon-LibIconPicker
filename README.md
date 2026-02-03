@@ -311,4 +311,9 @@ Intended for quick inspection and debugging.
 ```
 <img width="520" height="116" alt="image" src="https://github.com/user-attachments/assets/3df41e24-431c-4e57-9a43-fdbcd3b38568" />
 
+## Donations
 
+As a software engineer, I am passionate about this project and have dedicated a significant amount of time and effort to creating a high-quality product. If you enjoy using this World of Warcraft add-on, please consider supporting me through a donation via [Paypal&trade;](https://www.paypal.com/donate/?hosted_button_id=AX58YP3GSGXVU) or the Bitcoin Address provided below. Your support is greatly appreciated. Thank you in advance for your generosity.
+
+- **[Paypal&trade; Donation](https://www.paypal.com/donate/?hosted_button_id=AX58YP3GSGXVU)**
+- **[Bitcoin Donation](https://www.blockchain.com/btc/address/3QQVAwJGkKHMM2oq6CLVWYgfx83TFVwp39)**
