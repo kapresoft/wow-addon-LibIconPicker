@@ -8,6 +8,7 @@ local x = {
     (function() local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker'); local x={ loaded=loaded, msg=msg }; DevTools_Dump(x, 'loaded') end)()
   end,
   
+  --- One liners
   function()
     -- /run
     (function() LibIconPicker:Open(function(sel) print('sel:', sel.icon) end) end)()
@@ -15,6 +16,18 @@ local x = {
     -- /run
     (function() LibIconPicker:Open(function(sel) print(('text=%s icon=%s'):format(sel.textInputValue, sel.icon)) end, { showTextInput = true }) end)()
   end,
+  
+  --- Open
+function()
+  --- @type LibIconPicker_Options
+  local opt = {
+    icon=132111, showTextInput = true,
+    textInput = { label = 'Name:', value = 'My name'}
+  }
+  LibIconPicker:Open(function(sel)
+    print('selected:', pf(sel))
+  end, opt)
+end,
   
   function()
     if LibIconPicker then return LibIconPicker end
@@ -34,7 +47,7 @@ local x = {
       print('selected:', sel.icon)
     end)
   end,
-
+  
   function()
     local function getLIP()
       if LibIconPicker then return LibIconPicker end
@@ -51,15 +64,17 @@ local x = {
       end
       return LibIconPicker
     end
-    
     local lip = getLIP()
-    if not lip then
-      return
-    end
+    if not lip then return end
     
+    --- @type LibIconPicker_Options
+    local opt = {
+      icon      = 132111, showTextInput = true,
+      textInput = { label = 'Name:', value = 'My name' }
+    }
     lip:Open(function(sel)
-      print('selected:', sel.icon)
-    end)
+      print('selected:', pf(sel))
+    end, opt)
   end
   
 }

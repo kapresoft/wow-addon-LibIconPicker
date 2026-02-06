@@ -168,7 +168,7 @@ function S:GetIcons()
 end
 
 --- @param callback LibIconPicker_CallbackFn
---- @param opt LibIconPicker_Options|nil
+--- @param _opt LibIconPicker_Options|nil
 function S:ShowDialog(callback, _opt)
     if InCombatLockdown() then return end
 
