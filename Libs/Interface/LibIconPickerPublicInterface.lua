@@ -1,7 +1,7 @@
 --- @alias LibIconPicker_CallbackFn fun(sel:LibIconPicker_Selection) | "function(sel) end"
 
 --- @class LibIconPicker
---- @field Open fun(callback:LibIconPicker_CallbackFn, options:LibIconPicker_Options)
+--- @field Open fun(self:LibIconPicker, callback:LibIconPicker_CallbackFn, options:LibIconPicker_Options)
 
 --- @class LibIconPicker_Selection
 --- @field textInputValue string|nil The final text input value, if enabled
@@ -10,6 +10,8 @@
 --- @class LibIconPicker_TextInputOptions
 --- @field value string|nil
 --- @field label string|nil
+--- @field min number|nil
+--- @field max number|nil
 
 --- @class LibIconPicker_Options
 --- @field icon IconIDOrPath|nil Set the selected icon/texture. nil defaults to the question-mark icon (ID=134400)
