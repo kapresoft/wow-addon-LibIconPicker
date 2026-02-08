@@ -1,7 +1,9 @@
 --- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
-local tShallowCopy = ns.O.Util.Table_ShallowCopy
+
+local strlenutf8 = strlenutf8
+local tMergeWithDefaults = ns.O.Util.Table_MergeWithDefaults
 
 --[[-----------------------------------------------------------------------------
 Types
@@ -12,7 +14,7 @@ Types
 --- @class LibIconPicker_FirstRow
 --- @field IconTypeDropdown Frame
 --- @field Label FontString
---- @field EditBox EditBox
+--- @field EditBox LibIconPicker_EditBox
 
 --- @class _LibIconPicker_IconScrollFrame
 --- @field scrollChild SimpleFrame
@@ -48,15 +50,17 @@ local scrollFrame
 --- @type LibIconPicker_IconButton
 local selectedIconBtn
 
-
 local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
 local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
 
+-- For LibIconPicker_Options textInput.max
+local NAME_FIELD_MAX_LIMIT = 100
+
 --- Default Options
 --- @type LibIconPicker_Options
-local selectorOptions = {
+local DEFAULT_ICON_PICKER_OPTIONS = {
     showTextInput = false,
-    textInput = { value = '', label = labelText },
+    textInput = { value = '', label = labelText, min=1 },
     anchor = { point = 'CENTER', relativeTo = UIParent,
                relativePoint = 'CENTER', x = 0, y = 0 }
 }
@@ -91,13 +95,30 @@ local S = LibIconPicker_IconSelectorMixin
 local p = ns:Log('IconSelector')
 
 --[[-----------------------------------------------------------------------------
-Handlers
+Local Functions and Handlers
 -------------------------------------------------------------------------------]]
 --- @param self LibIconPicker_IconButton
 local function OnClickIconItem(self)
     selectedIconBtn:SetIcon(self:GetIcon())
 end
+--- @param opt LibIconPicker_Options|nil
+local function CreateOptions(opt) return tMergeWithDefaults(DEFAULT_ICON_PICKER_OPTIONS, opt) end
 
+local function NormalizeTextInput(textInput)
+  if type(textInput) ~= 'table' then return end
+  
+  local min, max = tonumber(textInput.min), tonumber(textInput.max)
+  
+  -- normalize max
+  if not max or max < 1 then max = NAME_FIELD_MAX_LIMIT
+  elseif max > NAME_FIELD_MAX_LIMIT then max = NAME_FIELD_MAX_LIMIT end
+  -- normalize min
+  if not min or min < 1 then min = 1
+  elseif min > max then min = max end
+  
+  textInput.min = min
+  textInput.max = max
+end
 -- -----------------------------------------------------
 -- Row Template Population (called by CreateButtons)
 -- -----------------------------------------------------
@@ -130,7 +151,7 @@ function S:OnLoad()
     selectedIconBtn = firstRow.SelectedIconButton
 
     self.HeaderTitle:SetText(L['Icon Picker'])
-    firstRow.Label:SetText(selectorOptions.textInput.label)
+    firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
 
     --- @type _LibIconPicker_IconScrollFrame
     scrollFrame = self.ScrollFrame
@@ -170,46 +191,47 @@ end
 --- @param callback LibIconPicker_CallbackFn
 --- @param _opt LibIconPicker_Options|nil
 function S:ShowDialog(callback, _opt)
-    if InCombatLockdown() then return end
-
-    local opt = _opt or tShallowCopy(selectorOptions)
-    if opt.textInput == nil then
-        opt.textInput = tShallowCopy(selectorOptions.textInput)
-    end
-    opt.showTextInput = opt.showTextInput == true
-    if not opt.textInput.label then
-        opt.textInput.label = selectorOptions.textInput.label
-    end
-
-    local icon = 134400
-    if type(opt.icon) == 'number' then icon = opt.icon end
-    selectedIconBtn:SetIcon(opt.icon)
-
-    if type(callback) == 'function' then
-        callbackInfo = { callback = callback, opt = opt }
-    end
-    self:OnToggleFirstRow(opt)
-
-    icons = self:GetIcons()
-    self:InitGrid()
-
-
-    if opt.showTextInput == true then
-        firstRow.EditBox:SetText(opt.textInput.value or '')
-        firstRow.Label:SetText(opt.textInput.label)
-    end
-
-    local anchor = opt.anchor
-    if anchor then
-        anchor.x = type(anchor.x) == 'number' and anchor.x or 0
-        anchor.y = type(anchor.y) == 'number' and anchor.y or 0
-        self:ClearAllPoints()
-        local fmt = 'ShowDialog::anchor point=%s, relativeTo=%s, relativePoint=%s, x=%s, y=%s'
-        p(ns.sformat(fmt, tostring(anchor.point), tostring(anchor.x), tostring(anchor.y),
-                         tostring(anchor.relativeTo), tostring(anchor.relativePoint)))
-        self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
-    end
-    self:Show()
+  if InCombatLockdown() then return end
+  
+  --- @type LibIconPicker_Options
+  local opt = CreateOptions(_opt)
+  opt.showTextInput = opt.showTextInput == true
+  
+  if not opt.textInput.label then
+    opt.textInput.label = DEFAULT_ICON_PICKER_OPTIONS.textInput.label
+  end
+  
+  local icon = 134400
+  if type(opt.icon) == 'number' then icon = opt.icon end
+  selectedIconBtn:SetIcon(opt.icon)
+  
+  if type(callback) == 'function' then
+    callbackInfo = { callback = callback, opt = opt }
+  end
+  self:OnToggleFirstRow(opt)
+  
+  icons = self:GetIcons()
+  self:InitGrid()
+  
+  firstRow.EditBox.opt = opt.textInput
+  if opt.showTextInput == true then
+    firstRow.EditBox:SetText(opt.textInput.value or '')
+    firstRow.Label:SetText(opt.textInput.label)
+    NormalizeTextInput(opt.textInput)
+    firstRow.EditBox:SetMaxLetters(opt.textInput.max)
+  end
+  
+  local anchor = opt.anchor
+  if anchor then
+    anchor.x = type(anchor.x) == 'number' and anchor.x or 0
+    anchor.y = type(anchor.y) == 'number' and anchor.y or 0
+    self:ClearAllPoints()
+    local fmt = 'ShowDialog::anchor point=%s, relativeTo=%s, relativePoint=%s, x=%s, y=%s'
+    p(ns.sformat(fmt, tostring(anchor.point), tostring(anchor.x), tostring(anchor.y),
+            tostring(anchor.relativeTo), tostring(anchor.relativePoint)))
+    self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
+  end
+  self:Show()
 end
 
 --- @private
@@ -399,3 +421,48 @@ function S:Redraw()
             scrollFrame:GetHeight()
     )
 end
+
+--[[-------------------------------------------------------------------
+LibIconPicker_IconSelector_EditBoxMixin
+@see IconSelector.xml
+---------------------------------------------------------------------]]
+--- @alias LibIconPicker_EditBox LibIconPicker_IconSelector_EditBoxMixin|EditBoxObj
+
+--- @class LibIconPicker_IconSelector_EditBoxMixin : EditBox
+--- @field opt LibIconPicker_TextInputOptions
+--- @field OkayButton ButtonObj
+LibIconPicker_IconSelector_EditBoxMixin = {}
+
+--- @type LibIconPicker_IconSelector_EditBoxMixin|LibIconPicker_EditBox
+local ebm = LibIconPicker_IconSelector_EditBoxMixin
+
+function ebm:OnLoad()
+  self.OkayButton = self:GetParent():GetParent().OkayButton
+end
+
+-- Delay focus to avoid keybind input bleeding into EditBox
+function ebm:SetFocusDelayed() C_Timer.After(0.01, function() self:SetFocus() end) end
+
+--- To be safe, set focus here only after showing the EditBox
+function ebm:OnShow()
+  self:SetFocusDelayed()
+  self:UpdateOkayButtonState()
+end
+
+--- @param userInput boolean
+function ebm:OnTextChanged(userInput)
+  if not userInput then return end
+  self:UpdateOkayButtonState()
+end
+
+function ebm:OnEnterPressed()
+  if self.OkayButton and self.OkayButton:IsEnabled() then
+    self.OkayButton:Click()
+  end
+end
+
+function ebm:OnEscapePressed() self:GetParent():GetParent():OnClickClose() end
+
+--- @return boolean True if min utf8 char length is satisfied
+function ebm:IsMinCharsValid() return strlenutf8(self:GetText() or "") >= self.opt.min end
+function ebm:UpdateOkayButtonState() self.OkayButton:SetEnabled(self:IsMinCharsValid()) end

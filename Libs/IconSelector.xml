@@ -148,14 +148,19 @@
                         </Anchors>
                     </Frame>
                     <EditBox name="$parentEditBox" parentKey="EditBox"
-                             inherits="InputBoxTemplate">
+                             mixin="LibIconPicker_IconSelector_EditBoxMixin"
+                             autoFocus="false" inherits="InputBoxTemplate">
                         <Size x="200" y="32"/>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeKey="$parent.Label"
                                     relativePoint="BOTTOMLEFT" x="2" y="5"/>
                         </Anchors>
                         <Scripts>
-                            <OnEscapePressed>self:GetParent():GetParent():OnClickClose()</OnEscapePressed>
+                            <OnLoad method="OnLoad"/>
+                            <OnShow method="OnShow"/>
+                            <OnEnterPressed method="OnEnterPressed"/>
+                            <OnTextChanged method="OnTextChanged"/>
+                            <OnEscapePressed method="OnEscapePressed"/>
                         </Scripts>
                     </EditBox>
                     <Button name="$parentIconButton" parentKey="SelectedIconButton"
