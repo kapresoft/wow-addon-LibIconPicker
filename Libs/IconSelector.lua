@@ -226,9 +226,6 @@ function S:ShowDialog(callback, _opt)
     anchor.x = type(anchor.x) == 'number' and anchor.x or 0
     anchor.y = type(anchor.y) == 'number' and anchor.y or 0
     self:ClearAllPoints()
-    local fmt = 'ShowDialog::anchor point=%s, relativeTo=%s, relativePoint=%s, x=%s, y=%s'
-    p(ns.sformat(fmt, tostring(anchor.point), tostring(anchor.x), tostring(anchor.y),
-            tostring(anchor.relativeTo), tostring(anchor.relativePoint)))
     self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
   end
   self:Show()
