@@ -1,6 +1,5 @@
 package-as: LibIconPicker
 # --------------------------
-manual-changelog: false
 license-output: LICENSE.txt
 enable-nolib-creation: no
 

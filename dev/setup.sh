@@ -5,8 +5,12 @@ RELEASE_SCRIPT=./dev/release.sh
 TOC_FILE="setup.toc"
 PKGMETA_FILE="setup.yml"
 
+ts() {
+  date '+[%Y-%m-%d %H:%M:%S]'
+}
+
 p() {
-  printf "%-9s: %-40s\n" "$1" "$2"
+  printf "%-9s: %-40s\n" "`ts`" "$2"
 }
 ensure_dir() {
   local dir="$1"
