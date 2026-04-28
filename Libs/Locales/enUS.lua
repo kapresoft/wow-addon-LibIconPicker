@@ -4,7 +4,6 @@ local ns = select(2, ...).LibIconPicker; if not ns then return end
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
---- @type LibStub
 local LibStub = LibStub
 
 local silent = true

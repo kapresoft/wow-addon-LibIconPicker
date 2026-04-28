@@ -14,15 +14,9 @@ local parentNs
 --- @field O LibIconPicker_NamespaceObjects
 --- @field backdrops table<string, table>
 --- @field iconDataProvider LibIconPicker_IconDataProvider
-local ns = {}
+local ns = {}; LIP_NS = ns
 
 addon, parentNs = ...; parentNs.LibIconPicker = ns
-
-
---[[-----------------------------------------------------------------------------
-Local Vars
--------------------------------------------------------------------------------]]
-LIP_NS = ns
 
 --[[-----------------------------------------------------------------------------
 Type: DebugSettings
@@ -31,6 +25,15 @@ Override in DeveloperSetup to enable
 --- @class LibIconPicker_Settings
 --- @field developer boolean if true: enables developer mode
 local settings = { developer = false }
+
+--[[-----------------------------------------------------------------------------
+NoOp Logger by Default
+-------------------------------------------------------------------------------]]
+local noop = function() end
+
+--- @param name Name The log name
+--- @return LibIconPicker_LogFn
+function ns.log(name) return noop end
 
 --[[-----------------------------------------------------------------------------
 LibIconPicker_NamespaceObjects
@@ -52,6 +55,13 @@ do
   
   --- @return boolean
   function ns:IsDev() return ns.settings.developer == true end
+
+  --[[-----------------------------------------------------------------------------
+  Trace function: NoOp by default. This is enabled in DeveloperSetup (not deployed in release)
+  -------------------------------------------------------------------------------]]
+  --- @param prefix Name
+  --- @param ... any
+  function ns.tr(prefix, ...) end
 
 end
 

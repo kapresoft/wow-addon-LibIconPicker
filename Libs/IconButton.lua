@@ -2,17 +2,15 @@
 local ns = select(2, ...).LibIconPicker;
 if not ns then return end
 
---- @class _LibIconPicker_IconButtonMixin
+--- @class LibIconPicker_IconButtonMixin
 --- @field icon Texture
 LibIconPicker_IconButtonMixin = {}
 
-local S = LibIconPicker_IconButtonMixin
-local p = ns:Log('IconButton')
+local o = LibIconPicker_IconButtonMixin
+local p = ns.log('IconButton')
 
---- @class _LibIconPicker_IconButton : _LibIconPicker_IconButtonMixin
+--- @class LibIconPicker_IconButton : LibIconPicker_IconButtonMixin
 
---- Alias: IconButton
---- @alias LibIconPicker_IconButton _LibIconPicker_IconButton | Button
 --[[-----------------------------------------------------------------------------
 Support Functions
 -------------------------------------------------------------------------------]]
@@ -24,8 +22,6 @@ local function OnEnter(self)
   p('Icon:', self:GetIcon())
 end
 
---- @type _LibIconPicker_IconButton | LibIconPicker_IconButton
-local o = S
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]

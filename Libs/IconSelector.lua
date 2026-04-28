@@ -3,20 +3,20 @@ local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
 
 local strlenutf8 = strlenutf8
-local tMergeWithDefaults = ns.O.Util.Table_MergeWithDefaults
+local tMergeWithDefaults = O.Util.Table_MergeWithDefaults
 
 --[[-----------------------------------------------------------------------------
 Types
 -------------------------------------------------------------------------------]]
---- @alias LibIconPicker_IconSelector LibIconPicker_IconSelectorMixin | Frame
---- @alias LibIconPicker_IconScrollFrame _LibIconPicker_IconScrollFrame | ScrollFrame
+--- @class IconTypeDropdown : Frame
+--- @field owner LibIconPicker_IconSelectorMixin
 
 --- @class LibIconPicker_FirstRow
---- @field IconTypeDropdown Frame
+--- @field IconTypeDropdown IconTypeDropdown
 --- @field Label FontString
 --- @field EditBox LibIconPicker_EditBox
 
---- @class _LibIconPicker_IconScrollFrame
+--- @class LibIconPicker_IconScrollFrame : ScrollFrame
 --- @field scrollChild SimpleFrame
 --- @field scrollBar Slider
 --- @field buttons table<number, LibIconPicker_IconButton>
@@ -42,11 +42,12 @@ local icons
 
 --- @type LibIconPicker_FirstRow
 local firstRow
---- @type Frame
+--- @type IconTypeDropdown
 local dropdown
 
 --- @type LibIconPicker_IconScrollFrame
 local scrollFrame
+
 --- @type LibIconPicker_IconButton
 local selectedIconBtn
 
@@ -82,17 +83,18 @@ local ROW_PADDING_TOP = 0
 --[[-----------------------------------------------------------------------------
 New Library
 -------------------------------------------------------------------------------]]
---- @class LibIconPicker_IconSelectorMixin
+--- @class LibIconPicker_IconSelectorMixin : Frame
 --- @field private _lastOffset number
 --- @field icons table<number, number>
---- @field ScrollFrame Frame
+--- @field ScrollFrame LibIconPicker_IconScrollFrame
 --- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
-LibIconPicker_IconSelectorMixin = {}
+LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
+local p = ns.log('IconSelector')
 
---- @type LibIconPicker_IconSelectorMixin | Frame
-local S = LibIconPicker_IconSelectorMixin
-local p = ns:Log('IconSelector')
+--
+--- @class LibIconPicker_IconSelector : LibIconPicker_IconSelectorMixin
+--
 
 --[[-----------------------------------------------------------------------------
 Local Functions and Handlers
@@ -119,17 +121,20 @@ local function NormalizeTextInput(textInput)
   textInput.min = min
   textInput.max = max
 end
+
 -- -----------------------------------------------------
 -- Row Template Population (called by CreateButtons)
 -- -----------------------------------------------------
 --- @param self Frame The frame of the row
-function S.OnLoadRow(self)
+function o.OnLoadRow(self)
     self:SetHeight(ROW_HEIGHT)
 
+    --- @type Template
+    local template = "LibIconPicker_IconButtonTemplate"
     -- Each row gets 12 icon buttons
     for col = 1, ICON_COLS do
         --- @type LibIconPicker_IconButton
-        local b = CreateFrame("Button", nil, self, "LibIconPicker_IconButtonTemplate")
+        local b = CreateFrame("Button", nil, self, template)
         b:SetSize(ICON_SIZE, ICON_SIZE)
 
         if col == 1 then
@@ -145,7 +150,7 @@ end
 -- -----------------------------------------------------
 -- Methods
 -- -----------------------------------------------------
-function S:OnLoad()
+function o:OnLoad()
 
     firstRow        = self.FirstRow
     selectedIconBtn = firstRow.SelectedIconButton
@@ -153,7 +158,6 @@ function S:OnLoad()
     self.HeaderTitle:SetText(L['Icon Picker'])
     firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
 
-    --- @type _LibIconPicker_IconScrollFrame
     scrollFrame = self.ScrollFrame
 
     self:SetBackdrop(ns.backdrops.modernDark)
@@ -170,27 +174,27 @@ function S:OnLoad()
     scrollFrame:SetScript("OnMouseWheel", function(sf, delta)
         HybridScrollFrame_OnMouseWheel(sf, delta)
     end)
-    ns.O.IconSelector = self
+    O.IconSelector = self
 
     self:OnInit()
 end
 
 --- @private
-function S:OnInit()
+function o:OnInit()
     tinsert(UISpecialFrames, self:GetName())
     self:InitTooltips()
     self:InitIconTypeDropdown()
 end
 
 --- @return table<number, number>
-function S:GetIcons()
+function o:GetIcons()
     local selValue = UIDropDownMenu_GetSelectedValue(dropdown)
     return ns.iconDataProvider:GetIcons(selValue)
 end
 
 --- @param callback LibIconPicker_CallbackFn
 --- @param _opt LibIconPicker_Options|nil
-function S:ShowDialog(callback, _opt)
+function o:ShowDialog(callback, _opt)
   if InCombatLockdown() then return end
   
   --- @type LibIconPicker_Options
@@ -233,7 +237,7 @@ end
 
 --- @private
 --- @param opt LibIconPicker_Options
-function S:OnToggleFirstRow(opt)
+function o:OnToggleFirstRow(opt)
     local showTextInput = opt.showTextInput
     local firstRowHeight = FIRST_ROW_HEIGHT
     if not showTextInput then
@@ -248,10 +252,10 @@ function S:OnToggleFirstRow(opt)
 end
 
 --- @private
-function S:OnClickClose() self:Hide() end
+function o:OnClickClose() self:Hide() end
 
 --- @private
-function S:OnClickOkay()
+function o:OnClickOkay()
     if callbackInfo then
         local fn = callbackInfo.callback
         local icon = selectedIconBtn:GetIcon()
@@ -267,7 +271,7 @@ function S:OnClickOkay()
 end
 
 --- @private
-function S:OnClickCancel()
+function o:OnClickCancel()
     p(self:GetName() .. '::', 'Cancel clicked')
     self:Hide()
 end
@@ -276,7 +280,7 @@ end
 -- Initialization
 -- -----------------------------------------------------
 --- @private
-function S:InitGrid()
+function o:InitGrid()
     if not scrollFrame.buttons then
         HybridScrollFrame_CreateButtons(scrollFrame, "LibIconPicker_IconRowTemplate", ROW_HEIGHT, 0)
     end
@@ -284,7 +288,7 @@ function S:InitGrid()
 end
 
 --- @private
-function S:InitTooltips()
+function o:InitTooltips()
     selectedIconBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetText(L['Selected Icon'])
@@ -297,7 +301,7 @@ function S:InitTooltips()
 end
 
 --- @private
-function S:InitIconTypeDropdown()
+function o:InitIconTypeDropdown()
     dropdown = firstRow.IconTypeDropdown
     dropdown.owner = self
 
@@ -315,7 +319,7 @@ function S:InitIconTypeDropdown()
             info.text     = text
             info.value    = value
             info.owner    = dropdown.owner
-            info.func     = S.OnClick_IconTypeDropdown
+            info.func     = o.OnClick_IconTypeDropdown
             info.checked  = (sel == value)
             info.minWidth = 112
             UIDropDownMenu_AddButton(info, level)
@@ -331,15 +335,15 @@ function S:InitIconTypeDropdown()
 end
 
 --- @param self UIDropDownMenuButton
-function S.OnClick_IconTypeDropdown(self)
+function o.OnClick_IconTypeDropdown(self)
     UIDropDownMenu_SetSelectedValue(dropdown, self.value)
-    S:OnIconTypeChanged(self.value)
+    o:OnIconTypeChanged(self.value)
 end
 
 --- @private
 --- @param iconType "'spells'" | "'items'" | "'both'"
 --- @see LibIconPicker_IconDataProvider#{SPELLS, ITEMS, BOTH}
-function S:OnIconTypeChanged(iconType)
+function o:OnIconTypeChanged(iconType)
     -- 1) Fetch new icons
     icons = self:GetIcons()
 
@@ -352,7 +356,7 @@ function S:OnIconTypeChanged(iconType)
 end
 
 --- @private
-function S:ResetRowPoints(row, rowIndex)
+function o:ResetRowPoints(row, rowIndex)
     row:ClearAllPoints()
     if rowIndex == 1 then
         row:SetPoint("TOPLEFT", scrollFrame.scrollChild, "TOPLEFT", ROW_PADDING_LEFT, ROW_PADDING_TOP)
@@ -361,7 +365,7 @@ function S:ResetRowPoints(row, rowIndex)
     end
 end
 
-function S:RedrawDelayed()
+function o:RedrawDelayed()
     C_Timer.After(0.01, function() self:Redraw() end)
 end
 
@@ -369,7 +373,7 @@ end
 -- Virtual Scroll Update
 -- -----------------------------------------------------
 --- @private
-function S:Redraw()
+function o:Redraw()
     local total = #icons
     local rows = math.ceil(total / ICON_COLS)
 
@@ -423,15 +427,16 @@ end
 LibIconPicker_IconSelector_EditBoxMixin
 @see IconSelector.xml
 ---------------------------------------------------------------------]]
---- @alias LibIconPicker_EditBox LibIconPicker_IconSelector_EditBoxMixin|EditBoxObj
 
 --- @class LibIconPicker_IconSelector_EditBoxMixin : EditBox
 --- @field opt LibIconPicker_TextInputOptions
 --- @field OkayButton ButtonObj
 LibIconPicker_IconSelector_EditBoxMixin = {}
-
---- @type LibIconPicker_IconSelector_EditBoxMixin|LibIconPicker_EditBox
 local ebm = LibIconPicker_IconSelector_EditBoxMixin
+
+--
+--- @class LibIconPicker_EditBox : LibIconPicker_IconSelector_EditBoxMixin
+--
 
 function ebm:OnLoad()
   self.OkayButton = self:GetParent():GetParent().OkayButton

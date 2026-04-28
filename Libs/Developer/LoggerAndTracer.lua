@@ -2,6 +2,11 @@
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 --[[-----------------------------------------------------------------------------
+Types
+-------------------------------------------------------------------------------]]
+--- @alias LibIconPicker_LogFn fun(...: any) : void @A log function that accepts any values and outputs formatted text; behaves like print
+
+--[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
 local sformat, date = string.format, date
@@ -34,10 +39,9 @@ local function valToStr(tbl)
 end
 
 --- @param name Name The log name
-function ns:Log(name)
-    assert(type(name) == "string", "name must be a string")
-
-    if not ns:IsDev() then return function() end end
+--- @return LibIconPicker_LogFn
+function ns.log(name)
+    assert(type(name) == "string", "ns.log(name): {name} should be a string")
 
     local prefix = sformat("{{%s::%s}}:", logName, nameC:WrapTextInColorCode(name))
 
@@ -48,8 +52,18 @@ function ns:Log(name)
                 args[i] = valToStr(args[i])
             end
         end
-
         print("[" .. date("%H:%M:%S") .. "]", prefix, unpack(args, 1, args.n))
     end
 end
 
+--[[-----------------------------------------------------------------------------
+Trace Function: Override from Namespace
+-------------------------------------------------------------------------------]]
+--- @param prefix Name
+--- @param ... any
+function ns.tr(prefix, ...)
+  local _ns = ns
+  local c = CreateColorFromHexString('466EFFff')
+  local identifier = c:WrapTextInColorCode(strupper(_ns.name)) .. '::'
+  if not EventTrace then return end; EventTrace:LogEvent(identifier .. prefix, ...)
+end

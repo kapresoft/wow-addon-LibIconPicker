@@ -2,7 +2,7 @@
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 local d = ns.O.IconSelector
-local p = ns:Log('A')
+local p = ns.log('A')
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 
 --[[-----------------------------------------------------------------------------
@@ -20,7 +20,7 @@ LibIconPicker
 -- LibIconPicker-1.0
 local MAJOR, MINOR = "LibIconPicker-1.0", 2
 
---- @type LibIconPicker
+--- @class LibIconPickerImpl : LibIconPicker
 local A = LibStub:NewLibrary(MAJOR, MINOR); if not A then return end
 LibIconPicker = A
 

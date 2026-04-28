@@ -7,7 +7,7 @@ local o = {}; ns.O.Util = o
 --- @param tbl table
 --- @param shallow boolean
 --- @param seen table|nil
---- @return table
+--- @return table?
 function o.Table_Copy(tbl, shallow, seen)
   if tbl == nil then return nil end
   if type(tbl) ~= 'table' then return tbl end
@@ -42,7 +42,7 @@ end
 --- Returns a new table; inputs are not modified.
 --- @param left table|nil
 --- @param right table
---- @return table
+--- @return table?
 function o.Table_MergeWithDefaults(left, right)
   assert(type(right) == 'table', 'Table_MergeWithDefaults(left, right):: The param [right] must be a table.')
   -- Do not merge UI objects
