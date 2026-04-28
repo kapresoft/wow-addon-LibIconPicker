@@ -64,5 +64,3 @@ do
   function ns.tr(prefix, ...) end
 
 end
-
-
