@@ -19,7 +19,13 @@ local x = {
     -- ==========================
     -- /run
     (function()
-      local tr, n = 'Test::IconOnly', LIP_NS.tr
+      local n, tr = 'Test::IconOnly', LIP_NS.tr
+      LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
+    end)()
+    -- ==========================
+    -- /run
+    (function()
+      local n, tr = 'Test::IconOnly', print
       LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
     end)()
     -- ==========================
