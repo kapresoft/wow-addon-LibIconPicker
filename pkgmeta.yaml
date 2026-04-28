@@ -47,6 +47,7 @@ ignore:
   - ThirdParty/Libs/Ace3/AceTab-3.0
   - ThirdParty/Libs/Ace3/AceTimer-3.0
   - ThirdParty/Libs/Ace3/CallbackHandler-1.0
+  - Libs/Developer
 
 # REQUIRED for CurseForge packager (non-obvious):
 # The LEFT side MUST be <repo-folder>/<addon-folder>

@@ -37,7 +37,11 @@ ignore:
   - ThirdParty-Libs/Ace3/AceTab-3.0
   - ThirdParty-Libs/Ace3/AceTimer-3.0
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0
-  - ThirdParty-Libs/LibStub/tests
+  - ThirdParty/Ace3.xml
+  - ThirdParty/ThirdParty.xml
+  - Libs
+  - LibIconPicker.xml
+  - LICENSE.txt
 
 # Base path is .release/
 move-folders:
