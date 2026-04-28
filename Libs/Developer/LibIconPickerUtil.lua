@@ -18,18 +18,15 @@ local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
 --[[-------------------------------------------------------------------
 New Library
 ---------------------------------------------------------------------]]
---- @class LibIconPickerUtil_LibIconPickerUtil
-local S = {}; ns.O.LibIconPickerUtil = S
-
---- @type LibIconPickerUtil_LibIconPickerUtil
-local o = S;
+--- @class LibIconPicker_LibIconPickerUtil
+local o = {}; ns.O.LibIconPickerUtil = o
 
 --[[-------------------------------------------------------------------
 Methods
 ---------------------------------------------------------------------]]
 --- Get LibIconPicker instance
 --- The global var `LibIconPicker` is available if the addon is already loaded.
---- @return LibIconPicker
+--- @return LibIconPicker?
 function o:Instance()
   if LibIconPicker then return LibIconPicker end
   

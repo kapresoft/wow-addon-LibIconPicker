@@ -7,7 +7,7 @@ New Library
 --- @class LibIconPicker_IconDataProvider
 ns.iconDataProvider = {}
 local S = ns.iconDataProvider
-local p = ns:Log('IconSelectorProvider')
+local p = ns.log('IconSelectorProvider')
 local provider = nil
 
 S.BOTH = 'both'

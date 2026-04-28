@@ -4,7 +4,9 @@ local o = {
     Util = {},
     --- @type LibIconPicker_IconSelector
     IconSelector = {},
-    --- @type AceLocale
+    --- @type LibIconPicker_LibIconPickerUtil
+    LibIconPickerUtil = {},
+    --- @type AceLocale-3.0
     AceLocale = {}
 }
 

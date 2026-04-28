@@ -5,16 +5,31 @@ local x = {
   function()
     --- Run this one-liner to load the library
     --- /run
-    (function() local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker'); local x={ loaded=loaded, msg=msg }; DevTools_Dump(x, 'loaded') end)()
+    (function()
+      local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker');
+      local x={ loaded=loaded, msg=msg }
+      DevTools_Dump(x, 'loaded')
+    end)()
   end,
   
   --- One liners
   function()
+    -- ==========================
+    -- Test: Icon only
+    -- ==========================
     -- /run
-    (function() LibIconPicker:Open(function(sel) print('sel:', sel.icon) end) end)()
-    -- with text
+    (function()
+      local tr, n = 'Test::IconOnly', LIP_NS.tr
+      LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
+    end)()
+    -- ==========================
+    -- Test: With Text & Icon
+    -- ==========================
     -- /run
-    (function() LibIconPicker:Open(function(sel) print(('text=%s icon=%s'):format(sel.textInputValue, sel.icon)) end, { showTextInput = true }) end)()
+    (function() LibIconPicker:Open(function(sel)
+      local n, msg, tr = 'Test::Text-And-Icon', ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon), LIP_NS.tr
+        tr(n, msg) end, { showTextInput = true })
+    end)()
   end,
   
   --- Open

@@ -19,7 +19,7 @@
         </Scripts>
         <HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
         <Layers>
-            <Layer level="ARTWORK">
+            <Layer>
                 <Texture name="$parentIcon" parentKey="icon">
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
@@ -52,7 +52,7 @@
         </Anchors>
 
         <Layers>
-            <Layer level="ARTWORK">
+            <Layer>
                 <Texture name="$parentTitleFrameHeader" parentKey="TitleFrameHeader"
                          file="Interface\DialogFrame\UI-DialogBox-Header">
                     <Size x="256" y="64"/>
@@ -129,7 +129,7 @@
                     <Anchor point="TOPRIGHT" x="-20"/>
                 </Anchors>
                 <Layers>
-                    <Layer level="ARTWORK">
+                    <Layer>
                         <FontString name="$parentLabel" parentKey="Label"
                                     inherits="LibIconPicker_LabelFont">
                             <Anchors>
@@ -181,7 +181,7 @@
                         <HighlightTexture/>
 
                         <Layers>
-                            <Layer level="ARTWORK">
+                            <Layer>
                                 <Texture name="$parentIcon" parentKey="icon">
                                     <Anchors>
                                         <Anchor point="TOPLEFT"/>

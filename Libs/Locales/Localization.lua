@@ -1,4 +1,3 @@
---- @type LibStub
 local LibStub = LibStub
 
 --- @type string

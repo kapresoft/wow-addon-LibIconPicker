@@ -44,19 +44,19 @@ luac.out
 /.idea/
 /.history/
 /.vscode/
-/Core/ExtLib/.Ace3.*
 
 # Visual Source Code Test Deployment
 /.deploy
-
-/Interface
-/External
-
 # BigWigMods/packager
 /build
-/.release/
+/.release
+# Ignore Saved Variables folder with symlinks
+/_SV
 
 ThirdParty/Libs/
 
-# Ignore Saved Variables folder with symlinks
-/_SV
+# Build artifacts
+_setup.*
+# Don't save this
+deployer-config.lua
+.emmyrc.json
