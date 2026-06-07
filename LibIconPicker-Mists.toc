@@ -1,4 +1,4 @@
-## Interface: 50503
+## Interface: 50504
 ## Version: @project-version@
 ## Title: |TInterface/Addons/LibIconPicker/Libs/Assets/LibIconPicker-Logo-1:18:18|t Lib: Lib|cff12E600IconPicker|r
 
