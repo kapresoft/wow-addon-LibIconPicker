@@ -31,7 +31,7 @@ function o:Instance()
   if LibIconPicker then return LibIconPicker end
   
   EnableAddOn(libName, UnitName('player'))
-  local status, msg = LoadAddOn(libName)
+  local status, msg = C_AddOns.LoadAddOn(libName)
   if not status then
     print(('LoadAddOn(%q) failed with status=%s; msg=%s'):format(libName, status, msg))
     return nil
