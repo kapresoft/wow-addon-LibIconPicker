@@ -1,4 +1,4 @@
-## Interface: 120007
+## Interface: 11509, 20506, 30403, 40402, 50504, 120007
 ## Version: @project-version@
 ## Title: Lib|cff12E600IconPicker|r
 ## IconTexture: Interface/Addons/LibIconPicker/Libs/Assets/LibIconPicker-Logo-1
