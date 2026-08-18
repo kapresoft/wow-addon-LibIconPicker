@@ -2,6 +2,9 @@ package-as: LibIconPicker
 # --------------------------
 license-output: LICENSE.txt
 enable-nolib-creation: no
+manual-changelog:
+  filename: dev/changelog-release.md
+  markup-type: markdown
 
 embedded-libraries:
   - LibStub
