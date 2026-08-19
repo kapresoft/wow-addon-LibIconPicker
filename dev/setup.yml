@@ -46,7 +46,6 @@ ignore:
   - ThirdParty/ThirdParty.xml
   - Libs
   - LibIconPicker.xml
-  - LICENSE.txt
 
 # Base path is .release/
 move-folders:
