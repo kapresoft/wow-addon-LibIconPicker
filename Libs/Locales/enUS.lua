@@ -4,17 +4,7 @@ local ns = select(2, ...).LibIconPicker; if not ns then return end
 --[[-----------------------------------------------------------------------------
 Lua Vars
 -------------------------------------------------------------------------------]]
-local LibStub = LibStub
-
-local silent = true
-
---@do-not-package@
-if ns:IsDev() then silent = false end
---@end-do-not-package@
-
---- Locale name is ns.name (LibIconPicker) so it won't conflict with
---- main addon if embedded.
-local L = LibStub('AceLocale-3.0'):NewLocale(ns.name, 'enUS', true, silent);
+local L = ns.O.AceLocale:NewLocale(ns.name, 'enUS', true, true); if not L then return end
 
 --[[-----------------------------------------------------------------------------
 Localized Texts
@@ -26,3 +16,6 @@ L['Max']           = true
 L['Characters']    = true
 L['Selected Icon'] = true
 L['Selected Icon::Desc'] = 'Shows the most recently selected icon. Your previous choice is remembered for this session.'
+L['All Icons']     = true
+L['Items']         = true
+L['Spells']        = true
