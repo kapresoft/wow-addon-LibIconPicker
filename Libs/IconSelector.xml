@@ -97,7 +97,7 @@
             </Button>
             <Button parentKey="CancelButton" name="$parentCancelButton"
                     inherits="UIPanelButtonTemplate"
-                    text="Cancel">
+                    text="CANCEL">
                 <Size x="90" y="22"/>
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-18" y="25"/>
@@ -108,7 +108,7 @@
             </Button>
             <Button parentKey="OkayButton" name="$parentOkayButton"
                     inherits="UIPanelButtonTemplate"
-                    text="Okay">
+                    text="OKAY">
                 <Size x="90" y="22"/>
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.CancelButton"

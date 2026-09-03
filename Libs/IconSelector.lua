@@ -32,7 +32,7 @@ local HybridScrollFrame_CreateButtons = HybridScrollFrame_CreateButtons
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local L = O.AceLocale:GetLocale(ns.name)
+local L = ns:GetLocale()
 
 local FIRST_ROW_HEIGHT = 80
 local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
@@ -307,7 +307,7 @@ function o:InitIconTypeDropdown()
 
     UIDropDownMenu_SetSelectedValue(dropdown, "both")
     UIDropDownMenu_SetWidth(dropdown, 100, 35)
-    UIDropDownMenu_SetText(dropdown, "All Icons")
+    UIDropDownMenu_SetText(dropdown, L['All Icons'])
 
     UIDropDownMenu_SetAnchor(dropdown, 18, 10, "TOPLEFT", dropdown, "BOTTOMLEFT")
 
@@ -326,9 +326,9 @@ function o:InitIconTypeDropdown()
         end
 
         local prov = ns.iconDataProvider
-        add("All Icons", prov.BOTH)
-        add("Items", prov.ITEMS)
-        add("Spells", prov.SPELLS)
+        add(L['All Icons'], prov.BOTH)
+        add(L['Items'], prov.ITEMS)
+        add(L['Spells'], prov.SPELLS)
 
     end)
 
