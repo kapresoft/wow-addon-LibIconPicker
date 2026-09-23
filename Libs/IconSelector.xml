@@ -189,6 +189,15 @@
                                     </Anchors>
                                 </Texture>
                             </Layer>
+                            <Layer level="OVERLAY">
+                                <Texture parentKey="Checked" hidden="true" alphaMode="ADD"
+                                         file="Interface\Buttons\CheckButtonHilight">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT"/>
+                                        <Anchor point="BOTTOMRIGHT"/>
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
                         </Layers>
                     </Button>
                 </Frames>

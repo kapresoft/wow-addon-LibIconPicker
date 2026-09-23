@@ -16,6 +16,9 @@ Types
 --- @field Label FontString
 --- @field EditBox LibIconPicker_EditBox
 
+--- @class LibIconPicker_SelectedIconButton : LibIconPicker_IconButton
+--- @field Checked Texture
+
 --- @class LibIconPicker_IconScrollFrame : ScrollFrame
 --- @field scrollChild SimpleFrame
 --- @field scrollBar Slider
@@ -48,7 +51,7 @@ local dropdown
 --- @type LibIconPicker_IconScrollFrame
 local scrollFrame
 
---- @type LibIconPicker_IconButton
+--- @type LibIconPicker_SelectedIconButton
 local selectedIconBtn
 
 local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
@@ -103,6 +106,52 @@ Local Functions and Handlers
 local function OnClickIconItem(self)
     selectedIconBtn:SetIcon(self:GetIcon())
 end
+
+--- @param setName string
+--- @return IconIDOrPath|nil
+local function GetEquipmentSetIcon(setName)
+    local setID = C_EquipmentSet.GetEquipmentSetID(setName)
+    return setID and select(2, C_EquipmentSet.GetEquipmentSetInfo(setID))
+end
+
+--- Keyed by GetCursorInfo() type; args are its other returns
+--- @type table<string, fun(id: number|string, arg2: any, arg3: any): IconIDOrPath|nil>
+local cursorIconResolvers = {
+    item         = function(itemID) return C_Item.GetItemIconByID(itemID) end,
+    spell        = function(_, _, spellID) return (C_Spell.GetSpellTexture(spellID)) end,
+    macro        = function(index) return (select(2, GetMacroInfo(index))) end,
+    mount        = function(mountID) return (select(3, C_MountJournal.GetMountInfoByID(mountID))) end,
+    battlepet    = function(petID) return (select(9, C_PetJournal.GetPetInfoByPetID(petID))) end,
+    equipmentset = GetEquipmentSetIcon,
+}
+
+--- @return IconIDOrPath|nil
+local function GetCursorIcon()
+    local cursorType, id, arg2, arg3 = GetCursorInfo()
+    local resolve = cursorType and cursorIconResolvers[cursorType]
+    return resolve and resolve(id, arg2, arg3)
+end
+
+--- @param self LibIconPicker_SelectedIconButton
+local function OnDropCursorIcon(self)
+    local icon = GetCursorIcon()
+    if not icon then return end
+    self:SetIcon(icon)
+    ClearCursor()
+end
+
+--- @param self LibIconPicker_SelectedIconButton
+local function UpdateCheckedState(self) self.Checked:SetShown(GetCursorIcon() ~= nil) end
+
+--- @param self LibIconPicker_SelectedIconButton
+local function OnShowSelectedIcon(self)
+    self:RegisterEvent("CURSOR_CHANGED")
+    UpdateCheckedState(self)
+end
+
+--- @param self LibIconPicker_SelectedIconButton
+local function OnHideSelectedIcon(self) self:UnregisterEvent("CURSOR_CHANGED") end
+
 --- @param opt LibIconPicker_Options|nil
 local function CreateOptions(opt) return tMergeWithDefaults(DEFAULT_ICON_PICKER_OPTIONS, opt) end
 
@@ -183,6 +232,7 @@ end
 function o:OnInit()
     tinsert(UISpecialFrames, self:GetName())
     self:InitTooltips()
+    self:InitDragAndDrop()
     self:InitIconTypeDropdown()
 end
 
@@ -298,6 +348,15 @@ function o:InitTooltips()
     selectedIconBtn:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
+end
+
+--- @private
+function o:InitDragAndDrop()
+    selectedIconBtn:SetScript("OnReceiveDrag", OnDropCursorIcon)
+    selectedIconBtn:SetScript("OnClick", OnDropCursorIcon)
+    selectedIconBtn:SetScript("OnEvent", UpdateCheckedState)
+    selectedIconBtn:HookScript("OnShow", OnShowSelectedIcon)
+    selectedIconBtn:HookScript("OnHide", OnHideSelectedIcon)
 end
 
 --- @private
