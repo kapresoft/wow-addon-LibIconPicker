@@ -13,6 +13,7 @@
     <!--@do-not-package@-->
     <Include file='Libs\Developer\Developer.lua'/>
     <!--@end-do-not-package@-->
+    <Include file='Libs\Help\Help.xml'/>
     <Include file='Libs\IconSelector.xml'/>
     <Script file="Libs\LibIconPicker.lua"/>
 
