@@ -26,6 +26,9 @@ Override in DeveloperSetup to enable
 --- @field developer boolean if true: enables developer mode
 local settings = { developer = false }
 
+--- @class LibIconPicker_HelpTips
+--- @field DragTip boolean|nil
+
 --[[-----------------------------------------------------------------------------
 NoOp Logger by Default
 -------------------------------------------------------------------------------]]
@@ -55,6 +58,16 @@ do
   
   --- @return boolean
   function ns:IsDev() return ns.settings.developer == true end
+
+  local sessionHelpTips = {}
+
+  --- Embedded copies have no SavedVariables; session-only
+  --- @return LibIconPicker_HelpTips
+  function ns:GetHelpTips()
+    if ns.addon ~= ns.name then return sessionHelpTips end
+    LibIconPicker_HelpTips = LibIconPicker_HelpTips or {}
+    return LibIconPicker_HelpTips
+  end
 
   --- Registers a non-default locale. Always isDefault=false, silent=true.
   --- @see AceLocale-3.0.NewLocale

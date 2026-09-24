@@ -8,6 +8,7 @@
 
 ## DefaultState: enabled
 ## LoadOnDemand: 1
+## SavedVariables: LibIconPicker_HelpTips
 
 ## Category-enUS: Libraries
 ## Category-deDE: Bibliotheken
@@ -37,4 +38,3 @@
 
 ThirdParty\ThirdParty.xml
 LibIconPicker.xml
-

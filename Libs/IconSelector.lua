@@ -54,6 +54,9 @@ local scrollFrame
 --- @type LibIconPicker_SelectedIconButton
 local selectedIconBtn
 
+--- @type LibIconPicker_IconDragTip
+local dragTip
+
 local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
 local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
 
@@ -92,6 +95,7 @@ New Library
 --- @field ScrollFrame LibIconPicker_IconScrollFrame
 --- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
+--- @field DragTip LibIconPicker_IconDragTip
 LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
 local p = ns.log('IconSelector')
 
@@ -138,6 +142,7 @@ local function OnDropCursorIcon(self)
     if not icon then return end
     self:SetIcon(icon)
     ClearCursor()
+    dragTip:Dismiss()
 end
 
 --- @param self LibIconPicker_SelectedIconButton
@@ -203,6 +208,7 @@ function o:OnLoad()
 
     firstRow        = self.FirstRow
     selectedIconBtn = firstRow.SelectedIconButton
+    dragTip         = self.DragTip
 
     self.HeaderTitle:SetText(L['Icon Picker'])
     firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
@@ -282,6 +288,7 @@ function o:ShowDialog(callback, _opt)
     self:ClearAllPoints()
     self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
   end
+  dragTip:ShowOnce()
   self:Show()
 end
 
@@ -340,9 +347,13 @@ end
 --- @private
 function o:InitTooltips()
     selectedIconBtn:SetScript("OnEnter", function(self)
+        if GetCursorIcon() then return end
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetText(L['Selected Icon'])
         GameTooltip:AddLine(L['Selected Icon::Desc'], 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine(' ')
+        local r, g, b = GREEN_FONT_COLOR:GetRGB()
+        GameTooltip:AddLine(L['Selected Icon::DragHint'], r, g, b, true)
         GameTooltip:Show()
     end)
     selectedIconBtn:SetScript("OnLeave", function()

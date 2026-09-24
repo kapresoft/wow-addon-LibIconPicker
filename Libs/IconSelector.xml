@@ -232,6 +232,12 @@
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
+            <Frame parentKey="DragTip" inherits="LibIconPicker_IconDragTipTemplate">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.FirstRow.SelectedIconButton"
+                            relativePoint="TOPLEFT" x="-10" y="19"/>
+                </Anchors>
+            </Frame>
         </Frames>
     </Frame>
 
