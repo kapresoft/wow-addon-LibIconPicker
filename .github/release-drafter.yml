@@ -1,20 +1,13 @@
-## Notes:
-# @SEE https://github.com/marketplace/actions/release-drafter
-#
-# The var env 'addonName' must be defined in the github actions workflow files
-#   - release-build.yml
-#   - dev-build.yml (optional)
-# ----------------------------------------------------------
-
+# see https://github.com/marketplace/actions/release-drafter
 # For RESOLVED_VERSION
 version-template: '$MAJOR.$MINOR.$PATCH'
+#
 name-template: '$RESOLVED_VERSION'
 tag-template: '$RESOLVED_VERSION'
-
+#
 template: |
   ### LibIconPicker $RESOLVED_VERSION
-  [Release Notes](https://github.com/kapresoft/$REPOSITORY/releases/tag/$RESOLVED_VERSION) | [Full Changelog](https://github.com/kapresoft/$REPOSITORY/compare/$PREVIOUS_TAG...$RESOLVED_VERSION) | [Release Page](https://github.com/kapresoft/$REPOSITORY/releases) | [Curse Forge](https://www.curseforge.com/wow/addons/LibIconPicker/files)
+  [Release Notes](https://github.com/kapresoft/$REPOSITORY/releases/tag/$RESOLVED_VERSION) | [Full Changelog](https://github.com/kapresoft/$REPOSITORY/compare/$PREVIOUS_TAG...$RESOLVED_VERSION) | [Curse Forge](https://www.curseforge.com/wow/addons/LibIconPicker/files)
   
   #### What’s Changed
-  
   $CHANGES
