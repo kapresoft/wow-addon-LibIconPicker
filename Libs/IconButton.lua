@@ -1,5 +1,5 @@
 --- @type LibIconPicker_Namespace
-local ns = select(2, ...).LibIconPicker;
+local ns = select(2, ...).LibIconPicker
 if not ns then return end
 
 --- @class LibIconPicker_IconButtonMixin
@@ -28,7 +28,7 @@ Methods
 
 function o:OnLoad()
   self:HideNormalTexture()
-  
+
   if not ns:IsDev() then return end
   self:SetScript('OnEnter', OnEnter)
 end

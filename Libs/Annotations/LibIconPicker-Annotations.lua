@@ -11,10 +11,8 @@ Pretty Format Function From DevSuite
 --- @type fun(...)
 pf = nil
 
-
 --[[-----------------------------------------------------------------------------
 Global Vars
 -------------------------------------------------------------------------------]]
 --- @type LibIconPicker_HelpTips
 LibIconPicker_HelpTips = {}
-

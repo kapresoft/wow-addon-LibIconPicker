@@ -8,4 +8,3 @@ Local Vars
 -------------------------------------------------------------------------------]]
 local sformat, upper, date = string.format, string.upper, date
 local tr = ns.tr
-

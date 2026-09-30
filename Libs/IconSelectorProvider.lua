@@ -19,20 +19,19 @@ S.ITEMS = 'items'
 -- -----------------------------------------------------
 --- @param whichIcon LibIconPicker_IconTypeFilter
 local function EnsureProvider(whichIcon)
-    --if provider then return end
+  --if provider then return end
 
-    local requestedTypes = IconDataProvider_GetAllIconTypes()
-    if S.SPELLS == whichIcon then
-        requestedTypes = { IconDataProviderIconType.Spell }
-    elseif S.ITEMS == whichIcon then
-        requestedTypes = { IconDataProviderIconType.Item }
-    end
+  local requestedTypes = IconDataProvider_GetAllIconTypes()
+  if S.SPELLS == whichIcon then
+    requestedTypes = { IconDataProviderIconType.Spell }
+  elseif S.ITEMS == whichIcon then
+    requestedTypes = { IconDataProviderIconType.Item }
+  end
 
-    -- ## SEE: IconDataProvider.lua#IconDataProviderMixin:Init(type, extraIconsOnly, requestedIconTypes)
-    -- type: IconDataProviderExtraType.Spellbook or IconDataProviderExtraType.Equipment
-    -- extraIconsOnly: true means only return player items/equip
-    provider = CreateAndInitFromMixin(
-            IconDataProviderMixin, nil, false, requestedTypes)
+  -- ## SEE: IconDataProvider.lua#IconDataProviderMixin:Init(type, extraIconsOnly, requestedIconTypes)
+  -- type: IconDataProviderExtraType.Spellbook or IconDataProviderExtraType.Equipment
+  -- extraIconsOnly: true means only return player items/equip
+  provider = CreateAndInitFromMixin(IconDataProviderMixin, nil, false, requestedTypes)
 end
 
 -- -----------------------------------------------------
@@ -41,14 +40,14 @@ end
 --- @param whichIcon LibIconPicker_IconTypeFilter
 --- @return table<number, number>
 function S:GetIcons(whichIcon)
-    EnsureProvider(whichIcon)
+  EnsureProvider(whichIcon)
 
-    --- @type table<number, number>
-    local icons = {}
-    local total = provider:GetNumIcons()
-    for i = 1, total do
-        icons[i] = provider:GetIconByIndex(i)
-    end
+  --- @type table<number, number>
+  local icons = {}
+  local total = provider:GetNumIcons()
+  for i = 1, total do
+    icons[i] = provider:GetIconByIndex(i)
+  end
 
-    return icons
+  return icons
 end

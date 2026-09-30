@@ -16,4 +16,3 @@ local L = ns:GetLocale()
 
 -- General
 LIB_ICON_PICKER_TITLE = addon
-

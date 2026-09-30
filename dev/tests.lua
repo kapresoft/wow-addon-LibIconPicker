@@ -1,17 +1,17 @@
 local x = {
-  
+
   --- Load the addon
   --- /dump LibIconPicker
   function()
     --- Run this one-liner to load the library
     --- /run
     (function()
-      local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker');
-      local x={ loaded=loaded, msg=msg }
+      local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker')
+      local x = { loaded = loaded, msg = msg }
       DevTools_Dump(x, 'loaded')
     end)()
   end,
-  
+
   --- One liners
   function()
     -- ==========================
@@ -22,41 +22,47 @@ local x = {
       local n, tr = 'Test::IconOnly', LIP_NS.tr
       LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
     end)()
-    -- ==========================
-    -- /run
-    (function()
-      local n, tr = 'Test::IconOnly', print
-      LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
-    end)()
-    -- ==========================
-    -- Test: With Text & Icon
-    -- ==========================
-    -- /run
-    (function() LibIconPicker:Open(function(sel)
-      local n, msg, tr = 'Test::Text-And-Icon', ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon), LIP_NS.tr
-        tr(n, msg) end, { showTextInput = true })
-    end)()
+      -- ==========================
+      -- /run
+      (function()
+        local n, tr = 'Test::IconOnly', print
+        LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
+      end)
+      ()
+      -- ==========================
+      -- Test: With Text & Icon
+      -- ==========================
+      -- /run
+      (function()
+        LibIconPicker:Open(function(sel)
+          local n, msg, tr =
+            'Test::Text-And-Icon',
+            ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon),
+            LIP_NS.tr
+          tr(n, msg)
+        end, { showTextInput = true })
+      end)
+      ()
   end,
-  
+
   --- Open
-function()
-  --- @type LibIconPicker_Options
-  local opt = {
-    icon=132111, showTextInput = true,
-    textInput = { label = 'Name:', value = 'My name'}
-  }
-  LibIconPicker:Open(function(sel)
-    print('selected:', pf(sel))
-  end, opt)
-end,
-  
+  function()
+    --- @type LibIconPicker_Options
+    local opt = {
+      icon = 132111,
+      showTextInput = true,
+      textInput = { label = 'Name:', value = 'My name' },
+    }
+    LibIconPicker:Open(function(sel) print('selected:', pf(sel)) end, opt)
+  end,
+
   function()
     if LibIconPicker then return LibIconPicker end
-    
-    local LoadAddOn   = C_AddOns.LoadAddOn or LoadAddOn
+
+    local LoadAddOn = C_AddOns.LoadAddOn or LoadAddOn
     local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
-    local libName     = 'LibIconPicker'
-    local c           = UnitName('player')
+    local libName = 'LibIconPicker'
+    local c = UnitName('player')
     EnableAddOn(libName, UnitName('player'))
     local status, msg = LoadAddOn(libName)
     if not status then
@@ -64,19 +70,17 @@ end,
       return nil
     end
     local lip = LibIconPicker
-    lip:Open(function(sel)
-      print('selected:', sel.icon)
-    end)
+    lip:Open(function(sel) print('selected:', sel.icon) end)
   end,
-  
+
   function()
     local function getLIP()
       if LibIconPicker then return LibIconPicker end
-      
-      local LoadAddOn   = C_AddOns.LoadAddOn or LoadAddOn
+
+      local LoadAddOn = C_AddOns.LoadAddOn or LoadAddOn
       local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
-      local libName     = 'LibIconPicker'
-      local c           = UnitName('player')
+      local libName = 'LibIconPicker'
+      local c = UnitName('player')
       EnableAddOn(libName, UnitName('player'))
       local status, msg = LoadAddOn(libName)
       if not status then
@@ -87,15 +91,13 @@ end,
     end
     local lip = getLIP()
     if not lip then return end
-    
+
     --- @type LibIconPicker_Options
     local opt = {
-      icon      = 132111, showTextInput = true,
-      textInput = { label = 'Name:', value = 'My name' }
+      icon = 132111,
+      showTextInput = true,
+      textInput = { label = 'Name:', value = 'My name' },
     }
-    lip:Open(function(sel)
-      print('selected:', pf(sel))
-    end, opt)
-  end
-  
+    lip:Open(function(sel) print('selected:', pf(sel)) end, opt)
+  end,
 }

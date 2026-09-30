@@ -6,14 +6,15 @@ local L = ns:NewLocale('zhTW'); if not L then return end
 --[[-----------------------------------------------------------------------------
 Localized Texts
 -------------------------------------------------------------------------------]]
-L['General']       = '一般'
-L['Icon Picker']   = '圖示選擇器'
-L['Name']          = '名稱'
-L['Max']           = '最大'
-L['Characters']    = '字元'
+L['General'] = '一般'
+L['Icon Picker'] = '圖示選擇器'
+L['Name'] = '名稱'
+L['Max'] = '最大'
+L['Characters'] = '字元'
 L['Selected Icon'] = '已選圖示'
-L['Selected Icon::Desc'] = '顯示最近選擇的圖示。您先前的選擇會在此次工作階段中保留。'
+L['Selected Icon::Desc'] =
+  '顯示最近選擇的圖示。您先前的選擇會在此次工作階段中保留。'
 L['Selected Icon::DragHint'] = '將圖示拖曳到此處即可使用。'
-L['All Icons']     = '所有圖示'
-L['Items']         = '物品'
-L['Spells']        = '法術'
+L['All Icons'] = '所有圖示'
+L['Items'] = '物品'
+L['Spells'] = '法術'
