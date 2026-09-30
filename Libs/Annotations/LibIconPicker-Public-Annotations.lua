@@ -40,4 +40,3 @@ CallbackInfo
 --- @class LibIconPicker_CallbackInfo
 --- @field callback LibIconPicker_CallbackFn
 --- @field opt LibIconPicker_Options
-

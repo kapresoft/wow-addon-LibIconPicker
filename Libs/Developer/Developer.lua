@@ -3,7 +3,7 @@ local ns = select(2, ...).LibIconPicker; if not ns then return end
 
 -- The old GetAddOnEnableState requires the second arg 'character'
 local GetAddOnEnableState = C_AddOns.GetAddOnEnableState or GetAddOnEnableState
-local LoadAddOn   = C_AddOns.LoadAddOn or LoadAddOn
+local LoadAddOn = C_AddOns.LoadAddOn or LoadAddOn
 local EnableAddOn = C_AddOns.EnableAddOn or EnableAddOn
 
 local libName = 'Developer'
@@ -20,14 +20,14 @@ local o = {}; lipd = o
 --- @return LibIconPicker?
 function o:LIP()
   if LibIconPicker then return LibIconPicker end
-  
+
   EnableAddOn(libName, UnitName('player'))
   local status, msg = LoadAddOn(libName)
   if not status then
     tr(('LoadAddOn(%q) failed with status=%s; msg=%s'):format(libName, status, msg))
     return nil
   end
-  
+
   return LibIconPicker
 end
 

@@ -6,14 +6,15 @@ local L = ns:NewLocale('itIT'); if not L then return end
 --[[-----------------------------------------------------------------------------
 Localized Texts
 -------------------------------------------------------------------------------]]
-L['General']       = 'Generale'
-L['Icon Picker']   = 'Selettore icone'
-L['Name']          = 'Nome'
-L['Max']           = 'Max'
-L['Characters']    = 'Caratteri'
+L['General'] = 'Generale'
+L['Icon Picker'] = 'Selettore icone'
+L['Name'] = 'Nome'
+L['Max'] = 'Max'
+L['Characters'] = 'Caratteri'
 L['Selected Icon'] = 'Icona selezionata'
-L['Selected Icon::Desc'] = "Mostra l'icona selezionata più di recente. La scelta precedente viene ricordata per questa sessione."
+L['Selected Icon::Desc'] =
+  "Mostra l'icona selezionata più di recente. La scelta precedente viene ricordata per questa sessione."
 L['Selected Icon::DragHint'] = "Trascina qui un'icona per usarla."
-L['All Icons']     = 'Tutte le icone'
-L['Items']         = 'Oggetti'
-L['Spells']        = 'Incantesimi'
+L['All Icons'] = 'Tutte le icone'
+L['Items'] = 'Oggetti'
+L['Spells'] = 'Incantesimi'

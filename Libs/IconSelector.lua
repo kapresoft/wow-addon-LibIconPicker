@@ -66,10 +66,15 @@ local NAME_FIELD_MAX_LIMIT = 100
 --- Default Options
 --- @type LibIconPicker_Options
 local DEFAULT_ICON_PICKER_OPTIONS = {
-    showTextInput = false,
-    textInput = { value = '', label = labelText, min=1 },
-    anchor = { point = 'CENTER', relativeTo = UIParent,
-               relativePoint = 'CENTER', x = 0, y = 0 }
+  showTextInput = false,
+  textInput = { value = '', label = labelText, min = 1 },
+  anchor = {
+    point = 'CENTER',
+    relativeTo = UIParent,
+    relativePoint = 'CENTER',
+    x = 0,
+    y = 0,
+  },
 }
 
 --- @type LibIconPicker_CallbackInfo
@@ -107,42 +112,40 @@ local p = ns.log('IconSelector')
 Local Functions and Handlers
 -------------------------------------------------------------------------------]]
 --- @param self LibIconPicker_IconButton
-local function OnClickIconItem(self)
-    selectedIconBtn:SetIcon(self:GetIcon())
-end
+local function OnClickIconItem(self) selectedIconBtn:SetIcon(self:GetIcon()) end
 
 --- @param setName string
 --- @return IconIDOrPath|nil
 local function GetEquipmentSetIcon(setName)
-    local setID = C_EquipmentSet.GetEquipmentSetID(setName)
-    return setID and select(2, C_EquipmentSet.GetEquipmentSetInfo(setID))
+  local setID = C_EquipmentSet.GetEquipmentSetID(setName)
+  return setID and select(2, C_EquipmentSet.GetEquipmentSetInfo(setID))
 end
 
 --- Keyed by GetCursorInfo() type; args are its other returns
 --- @type table<string, fun(id: number|string, arg2: any, arg3: any): IconIDOrPath|nil>
 local cursorIconResolvers = {
-    item         = function(itemID) return C_Item.GetItemIconByID(itemID) end,
-    spell        = function(_, _, spellID) return (C_Spell.GetSpellTexture(spellID)) end,
-    macro        = function(index) return (select(2, GetMacroInfo(index))) end,
-    mount        = function(mountID) return (select(3, C_MountJournal.GetMountInfoByID(mountID))) end,
-    battlepet    = function(petID) return (select(9, C_PetJournal.GetPetInfoByPetID(petID))) end,
-    equipmentset = GetEquipmentSetIcon,
+  item = function(itemID) return C_Item.GetItemIconByID(itemID) end,
+  spell = function(_, _, spellID) return (C_Spell.GetSpellTexture(spellID)) end,
+  macro = function(index) return (select(2, GetMacroInfo(index))) end,
+  mount = function(mountID) return (select(3, C_MountJournal.GetMountInfoByID(mountID))) end,
+  battlepet = function(petID) return (select(9, C_PetJournal.GetPetInfoByPetID(petID))) end,
+  equipmentset = GetEquipmentSetIcon,
 }
 
 --- @return IconIDOrPath|nil
 local function GetCursorIcon()
-    local cursorType, id, arg2, arg3 = GetCursorInfo()
-    local resolve = cursorType and cursorIconResolvers[cursorType]
-    return resolve and resolve(id, arg2, arg3)
+  local cursorType, id, arg2, arg3 = GetCursorInfo()
+  local resolve = cursorType and cursorIconResolvers[cursorType]
+  return resolve and resolve(id, arg2, arg3)
 end
 
 --- @param self LibIconPicker_SelectedIconButton
 local function OnDropCursorIcon(self)
-    local icon = GetCursorIcon()
-    if not icon then return end
-    self:SetIcon(icon)
-    ClearCursor()
-    dragTip:Dismiss()
+  local icon = GetCursorIcon()
+  if not icon then return end
+  self:SetIcon(icon)
+  ClearCursor()
+  dragTip:Dismiss()
 end
 
 --- @param self LibIconPicker_SelectedIconButton
@@ -150,28 +153,34 @@ local function UpdateCheckedState(self) self.Checked:SetShown(GetCursorIcon() ~=
 
 --- @param self LibIconPicker_SelectedIconButton
 local function OnShowSelectedIcon(self)
-    self:RegisterEvent("CURSOR_CHANGED")
-    UpdateCheckedState(self)
+  self:RegisterEvent('CURSOR_CHANGED')
+  UpdateCheckedState(self)
 end
 
 --- @param self LibIconPicker_SelectedIconButton
-local function OnHideSelectedIcon(self) self:UnregisterEvent("CURSOR_CHANGED") end
+local function OnHideSelectedIcon(self) self:UnregisterEvent('CURSOR_CHANGED') end
 
 --- @param opt LibIconPicker_Options|nil
 local function CreateOptions(opt) return tMergeWithDefaults(DEFAULT_ICON_PICKER_OPTIONS, opt) end
 
 local function NormalizeTextInput(textInput)
   if type(textInput) ~= 'table' then return end
-  
+
   local min, max = tonumber(textInput.min), tonumber(textInput.max)
-  
+
   -- normalize max
-  if not max or max < 1 then max = NAME_FIELD_MAX_LIMIT
-  elseif max > NAME_FIELD_MAX_LIMIT then max = NAME_FIELD_MAX_LIMIT end
+  if not max or max < 1 then
+    max = NAME_FIELD_MAX_LIMIT
+  elseif max > NAME_FIELD_MAX_LIMIT then
+    max = NAME_FIELD_MAX_LIMIT
+  end
   -- normalize min
-  if not min or min < 1 then min = 1
-  elseif min > max then min = max end
-  
+  if not min or min < 1 then
+    min = 1
+  elseif min > max then
+    min = max
+  end
+
   textInput.min = min
   textInput.max = max
 end
@@ -181,98 +190,96 @@ end
 -- -----------------------------------------------------
 --- @param self Frame The frame of the row
 function o.OnLoadRow(self)
-    self:SetHeight(ROW_HEIGHT)
+  self:SetHeight(ROW_HEIGHT)
 
-    --- @type Template
-    local template = "LibIconPicker_IconButtonTemplate"
-    -- Each row gets 12 icon buttons
-    for col = 1, ICON_COLS do
-        --- @type LibIconPicker_IconButton
-        local b = CreateFrame("Button", nil, self, template)
-        b:SetSize(ICON_SIZE, ICON_SIZE)
+  --- @type Template
+  local template = 'LibIconPicker_IconButtonTemplate'
+  -- Each row gets 12 icon buttons
+  for col = 1, ICON_COLS do
+    --- @type LibIconPicker_IconButton
+    local b = CreateFrame('Button', nil, self, template)
+    b:SetSize(ICON_SIZE, ICON_SIZE)
 
-        if col == 1 then
-            b:SetPoint("LEFT", self, "LEFT", GRID_PADDING_LEFT, 0)
-        else
-            b:SetPoint("LEFT", self[col-1], "RIGHT", ICON_PAD, 0)
-        end
-        b:SetScript("OnClick", OnClickIconItem)
-        self[col] = b
+    if col == 1 then
+      b:SetPoint('LEFT', self, 'LEFT', GRID_PADDING_LEFT, 0)
+    else
+      b:SetPoint('LEFT', self[col - 1], 'RIGHT', ICON_PAD, 0)
     end
+    b:SetScript('OnClick', OnClickIconItem)
+    self[col] = b
+  end
 end
 
 -- -----------------------------------------------------
 -- Methods
 -- -----------------------------------------------------
 function o:OnLoad()
+  firstRow = self.FirstRow
+  selectedIconBtn = firstRow.SelectedIconButton
+  dragTip = self.DragTip
 
-    firstRow        = self.FirstRow
-    selectedIconBtn = firstRow.SelectedIconButton
-    dragTip         = self.DragTip
+  self.HeaderTitle:SetText(L['Icon Picker'])
+  firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
 
-    self.HeaderTitle:SetText(L['Icon Picker'])
-    firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
+  scrollFrame = self.ScrollFrame
 
-    scrollFrame = self.ScrollFrame
+  self:SetBackdrop(ns.backdrops.modernDark)
 
-    self:SetBackdrop(ns.backdrops.modernDark)
+  local scrollBar = scrollFrame.scrollBar
+  scrollBar:HookScript('OnValueChanged', function()
+    local offset = HybridScrollFrame_GetOffset(scrollFrame)
+    -- Prevent redraw at the top or end of scroll: offset didn't change
+    if offset == self._lastOffset then return end
+    self._lastOffset = offset
+    self:RedrawDelayed()
+  end)
 
-    local scrollBar = scrollFrame.scrollBar
-    scrollBar:HookScript("OnValueChanged", function()
-        local offset = HybridScrollFrame_GetOffset(scrollFrame)
-        -- Prevent redraw at the top or end of scroll: offset didn't change
-        if offset == self._lastOffset then return end
-        self._lastOffset = offset
-        self:RedrawDelayed()
-    end)
+  scrollFrame:SetScript(
+    'OnMouseWheel',
+    function(sf, delta) HybridScrollFrame_OnMouseWheel(sf, delta) end
+  )
+  O.IconSelector = self
 
-    scrollFrame:SetScript("OnMouseWheel", function(sf, delta)
-        HybridScrollFrame_OnMouseWheel(sf, delta)
-    end)
-    O.IconSelector = self
-
-    self:OnInit()
+  self:OnInit()
 end
 
 --- @private
 function o:OnInit()
-    tinsert(UISpecialFrames, self:GetName())
-    self:InitTooltips()
-    self:InitDragAndDrop()
-    self:InitIconTypeDropdown()
+  tinsert(UISpecialFrames, self:GetName())
+  self:InitTooltips()
+  self:InitDragAndDrop()
+  self:InitIconTypeDropdown()
 end
 
 --- @return table<number, number>
 function o:GetIcons()
-    local selValue = UIDropDownMenu_GetSelectedValue(dropdown)
-    return ns.iconDataProvider:GetIcons(selValue)
+  local selValue = UIDropDownMenu_GetSelectedValue(dropdown)
+  return ns.iconDataProvider:GetIcons(selValue)
 end
 
 --- @param callback LibIconPicker_CallbackFn
 --- @param _opt LibIconPicker_Options|nil
 function o:ShowDialog(callback, _opt)
   if InCombatLockdown() then return end
-  
+
   --- @type LibIconPicker_Options
   local opt = CreateOptions(_opt)
   opt.showTextInput = opt.showTextInput == true
-  
+
   if not opt.textInput.label then
     opt.textInput.label = DEFAULT_ICON_PICKER_OPTIONS.textInput.label
   end
-  
+
   local icon = 134400
   if type(opt.icon) == 'number' then icon = opt.icon end
   selectedIconBtn:SetIcon(opt.icon)
-  
-  if type(callback) == 'function' then
-    callbackInfo = { callback = callback, opt = opt }
-  end
+
+  if type(callback) == 'function' then callbackInfo = { callback = callback, opt = opt } end
   self:OnToggleFirstRow(opt)
-  
+
   icons = self:GetIcons()
   self:InitGrid()
-  
+
   firstRow.EditBox.opt = opt.textInput
   if opt.showTextInput == true then
     firstRow.EditBox:SetText(opt.textInput.value or '')
@@ -280,7 +287,7 @@ function o:ShowDialog(callback, _opt)
     NormalizeTextInput(opt.textInput)
     firstRow.EditBox:SetMaxLetters(opt.textInput.max)
   end
-  
+
   local anchor = opt.anchor
   if anchor then
     anchor.x = type(anchor.x) == 'number' and anchor.x or 0
@@ -295,17 +302,17 @@ end
 --- @private
 --- @param opt LibIconPicker_Options
 function o:OnToggleFirstRow(opt)
-    local showTextInput = opt.showTextInput
-    local firstRowHeight = FIRST_ROW_HEIGHT
-    if not showTextInput then
-        firstRowHeight = FIRST_ROW_HEIGHT_NO_TEXT_FIELD
-        firstRow.Label:Hide()
-        firstRow.EditBox:Hide()
-    else
-        firstRow.Label:Show()
-        firstRow.EditBox:Show()
-    end
-    firstRow:SetHeight(firstRowHeight)
+  local showTextInput = opt.showTextInput
+  local firstRowHeight = FIRST_ROW_HEIGHT
+  if not showTextInput then
+    firstRowHeight = FIRST_ROW_HEIGHT_NO_TEXT_FIELD
+    firstRow.Label:Hide()
+    firstRow.EditBox:Hide()
+  else
+    firstRow.Label:Show()
+    firstRow.EditBox:Show()
+  end
+  firstRow:SetHeight(firstRowHeight)
 end
 
 --- @private
@@ -313,24 +320,22 @@ function o:OnClickClose() self:Hide() end
 
 --- @private
 function o:OnClickOkay()
-    if callbackInfo then
-        local fn = callbackInfo.callback
-        local icon = selectedIconBtn:GetIcon()
-        --- @type LibIconPicker_Selection
-        local sel  = { icon = icon }
-        if firstRow.EditBox:IsShown() then
-            sel.textInputValue = firstRow.EditBox:GetText()
-        end
-        fn(sel)
-        return self:Hide()
-    end
-    self:Hide()
+  if callbackInfo then
+    local fn = callbackInfo.callback
+    local icon = selectedIconBtn:GetIcon()
+    --- @type LibIconPicker_Selection
+    local sel = { icon = icon }
+    if firstRow.EditBox:IsShown() then sel.textInputValue = firstRow.EditBox:GetText() end
+    fn(sel)
+    return self:Hide()
+  end
+  self:Hide()
 end
 
 --- @private
 function o:OnClickCancel()
-    p(self:GetName() .. '::', 'Cancel clicked')
-    self:Hide()
+  p(self:GetName() .. '::', 'Cancel clicked')
+  self:Hide()
 end
 
 -- -----------------------------------------------------
@@ -338,105 +343,101 @@ end
 -- -----------------------------------------------------
 --- @private
 function o:InitGrid()
-    if not scrollFrame.buttons then
-        HybridScrollFrame_CreateButtons(scrollFrame, "LibIconPicker_IconRowTemplate", ROW_HEIGHT, 0)
-    end
-    self:RedrawDelayed()
+  if not scrollFrame.buttons then
+    HybridScrollFrame_CreateButtons(scrollFrame, 'LibIconPicker_IconRowTemplate', ROW_HEIGHT, 0)
+  end
+  self:RedrawDelayed()
 end
 
 --- @private
 function o:InitTooltips()
-    selectedIconBtn:SetScript("OnEnter", function(self)
-        if GetCursorIcon() then return end
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(L['Selected Icon'])
-        GameTooltip:AddLine(L['Selected Icon::Desc'], 0.8, 0.8, 0.8, true)
-        GameTooltip:AddLine(' ')
-        local r, g, b = GREEN_FONT_COLOR:GetRGB()
-        GameTooltip:AddLine(L['Selected Icon::DragHint'], r, g, b, true)
-        GameTooltip:Show()
-    end)
-    selectedIconBtn:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
+  selectedIconBtn:SetScript('OnEnter', function(self)
+    if GetCursorIcon() then return end
+    GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+    GameTooltip:SetText(L['Selected Icon'])
+    GameTooltip:AddLine(L['Selected Icon::Desc'], 0.8, 0.8, 0.8, true)
+    GameTooltip:AddLine(' ')
+    local r, g, b = GREEN_FONT_COLOR:GetRGB()
+    GameTooltip:AddLine(L['Selected Icon::DragHint'], r, g, b, true)
+    GameTooltip:Show()
+  end)
+  selectedIconBtn:SetScript('OnLeave', function() GameTooltip:Hide() end)
 end
 
 --- @private
 function o:InitDragAndDrop()
-    selectedIconBtn:SetScript("OnReceiveDrag", OnDropCursorIcon)
-    selectedIconBtn:SetScript("OnClick", OnDropCursorIcon)
-    selectedIconBtn:SetScript("OnEvent", UpdateCheckedState)
-    selectedIconBtn:HookScript("OnShow", OnShowSelectedIcon)
-    selectedIconBtn:HookScript("OnHide", OnHideSelectedIcon)
+  selectedIconBtn:SetScript('OnReceiveDrag', OnDropCursorIcon)
+  selectedIconBtn:SetScript('OnClick', OnDropCursorIcon)
+  selectedIconBtn:SetScript('OnEvent', UpdateCheckedState)
+  selectedIconBtn:HookScript('OnShow', OnShowSelectedIcon)
+  selectedIconBtn:HookScript('OnHide', OnHideSelectedIcon)
 end
 
 --- @private
 function o:InitIconTypeDropdown()
-    dropdown = firstRow.IconTypeDropdown
-    dropdown.owner = self
+  dropdown = firstRow.IconTypeDropdown
+  dropdown.owner = self
 
-    UIDropDownMenu_SetSelectedValue(dropdown, "both")
-    UIDropDownMenu_SetWidth(dropdown, 100, 35)
-    UIDropDownMenu_SetText(dropdown, L['All Icons'])
+  UIDropDownMenu_SetSelectedValue(dropdown, 'both')
+  UIDropDownMenu_SetWidth(dropdown, 100, 35)
+  UIDropDownMenu_SetText(dropdown, L['All Icons'])
 
-    UIDropDownMenu_SetAnchor(dropdown, 18, 10, "TOPLEFT", dropdown, "BOTTOMLEFT")
+  UIDropDownMenu_SetAnchor(dropdown, 18, 10, 'TOPLEFT', dropdown, 'BOTTOMLEFT')
 
-    UIDropDownMenu_Initialize(dropdown, function(frame, level)
-        local sel = UIDropDownMenu_GetSelectedValue(dropdown)
+  UIDropDownMenu_Initialize(dropdown, function(frame, level)
+    local sel = UIDropDownMenu_GetSelectedValue(dropdown)
 
-        local function add(text, value)
-            local info    = UIDropDownMenu_CreateInfo()
-            info.text     = text
-            info.value    = value
-            info.owner    = dropdown.owner
-            info.func     = o.OnClick_IconTypeDropdown
-            info.checked  = (sel == value)
-            info.minWidth = 112
-            UIDropDownMenu_AddButton(info, level)
-        end
+    local function add(text, value)
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = text
+      info.value = value
+      info.owner = dropdown.owner
+      info.func = o.OnClick_IconTypeDropdown
+      info.checked = (sel == value)
+      info.minWidth = 112
+      UIDropDownMenu_AddButton(info, level)
+    end
 
-        local prov = ns.iconDataProvider
-        add(L['All Icons'], prov.BOTH)
-        add(L['Items'], prov.ITEMS)
-        add(L['Spells'], prov.SPELLS)
-
-    end)
-
+    local prov = ns.iconDataProvider
+    add(L['All Icons'], prov.BOTH)
+    add(L['Items'], prov.ITEMS)
+    add(L['Spells'], prov.SPELLS)
+  end)
 end
 
 --- @param self UIDropDownMenuButton
 function o.OnClick_IconTypeDropdown(self)
-    UIDropDownMenu_SetSelectedValue(dropdown, self.value)
-    o:OnIconTypeChanged(self.value)
+  UIDropDownMenu_SetSelectedValue(dropdown, self.value)
+  o:OnIconTypeChanged(self.value)
 end
 
 --- @private
 --- @param iconType "'spells'" | "'items'" | "'both'"
 --- @see LibIconPicker_IconDataProvider#{SPELLS, ITEMS, BOTH}
 function o:OnIconTypeChanged(iconType)
-    -- 1) Fetch new icons
-    icons = self:GetIcons()
+  -- 1) Fetch new icons
+  icons = self:GetIcons()
 
-    -- 2) Reset scroll position (critical)
-    scrollFrame:SetVerticalScroll(0)
-    HybridScrollFrame_SetOffset(scrollFrame, 0)
-    scrollFrame.scrollBar:SetValue(0)
+  -- 2) Reset scroll position (critical)
+  scrollFrame:SetVerticalScroll(0)
+  HybridScrollFrame_SetOffset(scrollFrame, 0)
+  scrollFrame.scrollBar:SetValue(0)
 
-    self:RedrawDelayed()
+  self:RedrawDelayed()
 end
 
 --- @private
 function o:ResetRowPoints(row, rowIndex)
-    row:ClearAllPoints()
-    if rowIndex == 1 then
-        row:SetPoint("TOPLEFT", scrollFrame.scrollChild, "TOPLEFT", ROW_PADDING_LEFT, ROW_PADDING_TOP)
-    else
-        row:SetPoint("TOPLEFT", scrollFrame.buttons[rowIndex-1], "BOTTOMLEFT", 0, 0)
-    end
+  row:ClearAllPoints()
+  if rowIndex == 1 then
+    row:SetPoint('TOPLEFT', scrollFrame.scrollChild, 'TOPLEFT', ROW_PADDING_LEFT, ROW_PADDING_TOP)
+  else
+    row:SetPoint('TOPLEFT', scrollFrame.buttons[rowIndex - 1], 'BOTTOMLEFT', 0, 0)
+  end
 end
 
 function o:RedrawDelayed()
-    C_Timer.After(0.01, function() self:Redraw() end)
+  C_Timer.After(0.01, function() self:Redraw() end)
 end
 
 -- -----------------------------------------------------
@@ -444,53 +445,49 @@ end
 -- -----------------------------------------------------
 --- @private
 function o:Redraw()
-    local total = #icons
-    local rows = math.ceil(total / ICON_COLS)
+  local total = #icons
+  local rows = math.ceil(total / ICON_COLS)
 
-    local offset = HybridScrollFrame_GetOffset(scrollFrame)
-    local visibleRows = #scrollFrame.buttons
+  local offset = HybridScrollFrame_GetOffset(scrollFrame)
+  local visibleRows = #scrollFrame.buttons
 
-    for rowIndex = 1, visibleRows do
-        local row = scrollFrame.buttons[rowIndex]
+  for rowIndex = 1, visibleRows do
+    local row = scrollFrame.buttons[rowIndex]
 
-        self:ResetRowPoints(row, rowIndex)
+    self:ResetRowPoints(row, rowIndex)
 
-        local virtualRow = rowIndex + offset
+    local virtualRow = rowIndex + offset
 
-        if virtualRow > rows then
-            row:Hide()
+    if virtualRow > rows then
+      row:Hide()
+    else
+      row:Show()
+
+      for col = 1, ICON_COLS do
+        local index = ((virtualRow - 1) * ICON_COLS) + col
+        --- @type LibIconPicker_IconButton
+        local b = row[col]
+
+        if not b then break end
+        if index <= total then
+          local tex = icons[index]
+          b:SetIcon(tex)
+          b:Show()
         else
-            row:Show()
-
-            for col = 1, ICON_COLS do
-                local index = ((virtualRow - 1) * ICON_COLS) + col
-                --- @type LibIconPicker_IconButton
-                local b = row[col]
-
-                if not b then break end
-                if index <= total then
-                    local tex = icons[index]
-                    b:SetIcon(tex)
-                    b:Show()
-                else
-                    b:Hide()
-                end
-            end
+          b:Hide()
         end
+      end
     end
+  end
 
-    local contentHeight = rows * ROW_HEIGHT
-    scrollFrame.scrollChild:SetHeight(contentHeight)
-    local selectedType = UIDropDownMenu_GetSelectedValue(dropdown)
-    if IsAltKeyDown() then
-        p(ns.sformat("Redraw:: total=%s, type=%s, offset=%s", total, selectedType, offset))
-    end
+  local contentHeight = rows * ROW_HEIGHT
+  scrollFrame.scrollChild:SetHeight(contentHeight)
+  local selectedType = UIDropDownMenu_GetSelectedValue(dropdown)
+  if IsAltKeyDown() then
+    p(ns.sformat('Redraw:: total=%s, type=%s, offset=%s', total, selectedType, offset))
+  end
 
-    HybridScrollFrame_Update(
-            scrollFrame,
-            contentHeight,
-            scrollFrame:GetHeight()
-    )
+  HybridScrollFrame_Update(scrollFrame, contentHeight, scrollFrame:GetHeight())
 end
 
 --[[-------------------------------------------------------------------
@@ -508,12 +505,12 @@ local ebm = LibIconPicker_IconSelector_EditBoxMixin
 --- @class LibIconPicker_EditBox : LibIconPicker_IconSelector_EditBoxMixin
 --
 
-function ebm:OnLoad()
-  self.OkayButton = self:GetParent():GetParent().OkayButton
-end
+function ebm:OnLoad() self.OkayButton = self:GetParent():GetParent().OkayButton end
 
 -- Delay focus to avoid keybind input bleeding into EditBox
-function ebm:SetFocusDelayed() C_Timer.After(0.01, function() self:SetFocus() end) end
+function ebm:SetFocusDelayed()
+  C_Timer.After(0.01, function() self:SetFocus() end)
+end
 
 --- To be safe, set focus here only after showing the EditBox
 function ebm:OnShow()
@@ -528,13 +525,11 @@ function ebm:OnTextChanged(userInput)
 end
 
 function ebm:OnEnterPressed()
-  if self.OkayButton and self.OkayButton:IsEnabled() then
-    self.OkayButton:Click()
-  end
+  if self.OkayButton and self.OkayButton:IsEnabled() then self.OkayButton:Click() end
 end
 
 function ebm:OnEscapePressed() self:GetParent():GetParent():OnClickClose() end
 
 --- @return boolean True if min utf8 char length is satisfied
-function ebm:IsMinCharsValid() return strlenutf8(self:GetText() or "") >= self.opt.min end
+function ebm:IsMinCharsValid() return strlenutf8(self:GetText() or '') >= self.opt.min end
 function ebm:UpdateOkayButtonState() self.OkayButton:SetEnabled(self:IsMinCharsValid()) end

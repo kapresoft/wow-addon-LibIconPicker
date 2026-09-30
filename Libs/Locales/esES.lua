@@ -6,14 +6,15 @@ local L = ns:NewLocale('esES'); if not L then return end
 --[[-----------------------------------------------------------------------------
 Localized Texts
 -------------------------------------------------------------------------------]]
-L['General']       = 'General'
-L['Icon Picker']   = 'Selector de iconos'
-L['Name']          = 'Nombre'
-L['Max']           = 'Máx'
-L['Characters']    = 'Caracteres'
+L['General'] = 'General'
+L['Icon Picker'] = 'Selector de iconos'
+L['Name'] = 'Nombre'
+L['Max'] = 'Máx'
+L['Characters'] = 'Caracteres'
 L['Selected Icon'] = 'Icono seleccionado'
-L['Selected Icon::Desc'] = 'Muestra el icono seleccionado más recientemente. Tu elección anterior se recuerda durante esta sesión.'
+L['Selected Icon::Desc'] =
+  'Muestra el icono seleccionado más recientemente. Tu elección anterior se recuerda durante esta sesión.'
 L['Selected Icon::DragHint'] = 'Arrastra un icono aquí para usarlo.'
-L['All Icons']     = 'Todos los iconos'
-L['Items']         = 'Objetos'
-L['Spells']        = 'Hechizos'
+L['All Icons'] = 'Todos los iconos'
+L['Items'] = 'Objetos'
+L['Spells'] = 'Hechizos'
