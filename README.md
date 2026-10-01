@@ -1,6 +1,10 @@
-# LibIconPicker:: Fast Icons, Happy Addons
+[![Release Build](https://github.com/kapresoft/wow-addon-LibIconPicker/actions/workflows/release-build.yml/badge.svg)](https://github.com/kapresoft/wow-addon-LibIconPicker/actions/workflows/release-build.yml)
+
+# LibIconPicker :: Fast Icons, Happy Addons
 
 > Every icon in Azeroth, one click away.
+
+![download-count](https://cf.way2muchnoise.eu/full_1404138_downloads.svg?badge_style=for_the_badge) ![supported-wow-versions](https://cf.way2muchnoise.eu/versions/World%20of%20Warcraft%20Versions_1404138_all.svg?badge_style=for_the_badge)
 
 ![Log](doc/media/LibIconPicker-Logo-1-Dark-100px.png)
 
