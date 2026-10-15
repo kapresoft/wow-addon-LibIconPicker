@@ -1,6 +1,7 @@
 --- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
+local IconHistory = O.IconHistory
 
 local strlenutf8 = strlenutf8
 local tMergeWithDefaults = O.Util.Table_MergeWithDefaults
@@ -15,6 +16,7 @@ Types
 --- @field IconTypeDropdown IconTypeDropdown
 --- @field Label FontString
 --- @field EditBox LibIconPicker_EditBox
+--- @field HistoryButton DropdownButton
 
 --- @class LibIconPicker_SelectedIconButton : LibIconPicker_IconButton
 --- @field Checked Texture
@@ -54,8 +56,10 @@ local scrollFrame
 --- @type LibIconPicker_SelectedIconButton
 local selectedIconBtn
 
---- @type LibIconPicker_IconDragTip
+--- @type LibIconPicker_HelpTip
 local dragTip
+--- @type LibIconPicker_HelpTip
+local historyTip
 
 local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
 local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
@@ -86,6 +90,14 @@ local ICON_PAD = 6
 local ICON_COLS = 10
 local ROW_HEIGHT = ICON_SIZE + ICON_PAD
 
+local HISTORY_GRID_COLUMNS = 5
+-- Blizzard's minimum menu cell width; smaller ones stretch
+local HISTORY_ICON_SIZE = 50
+-- Columns via Blizzard's grid padding; rows via AddRowGap
+local HISTORY_GRID_GAP = 4
+-- Whole menu, not cells, so Blizzard's insets stay even
+local HISTORY_MENU_SCALE = 0.8
+
 -- The button padding
 local GRID_PADDING_LEFT = 0
 local ROW_PADDING_LEFT = 5
@@ -100,7 +112,8 @@ New Library
 --- @field ScrollFrame LibIconPicker_IconScrollFrame
 --- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
---- @field DragTip LibIconPicker_IconDragTip
+--- @field DragTip LibIconPicker_HelpTip
+--- @field HistoryTip LibIconPicker_HelpTip
 LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
 local p = ns.log('IconSelector')
 
@@ -160,6 +173,20 @@ end
 --- @param self LibIconPicker_SelectedIconButton
 local function OnHideSelectedIcon(self) self:UnregisterEvent('CURSOR_CHANGED') end
 
+--- Grid has no row gap; an unclickable strip is one.
+--- @param button LibIconPicker_IconButton
+--- @param gap number @0 on the last row, so the menu ends at the icons
+local function AddRowGap(button, gap)
+  button:SetHeight(HISTORY_ICON_SIZE + gap)
+  button:SetHitRectInsets(0, 0, 0, gap)
+  for _, region in ipairs({ button.icon, button:GetHighlightTexture() }) do
+    region:ClearAllPoints()
+    region:SetPoint('TOPLEFT')
+    region:SetPoint('TOPRIGHT')
+    region:SetHeight(HISTORY_ICON_SIZE)
+  end
+end
+
 --- @param opt LibIconPicker_Options|nil
 local function CreateOptions(opt) return tMergeWithDefaults(DEFAULT_ICON_PICKER_OPTIONS, opt) end
 
@@ -217,6 +244,7 @@ function o:OnLoad()
   firstRow = self.FirstRow
   selectedIconBtn = firstRow.SelectedIconButton
   dragTip = self.DragTip
+  historyTip = self.HistoryTip
 
   self.HeaderTitle:SetText(L['Icon Picker'])
   firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
@@ -249,6 +277,7 @@ function o:OnInit()
   self:InitTooltips()
   self:InitDragAndDrop()
   self:InitIconTypeDropdown()
+  self:InitHistoryButton()
 end
 
 --- @return table<number, number>
@@ -295,8 +324,15 @@ function o:ShowDialog(callback, _opt)
     self:ClearAllPoints()
     self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
   end
-  dragTip:ShowOnce()
+  self:ShowHelpTip()
   self:Show()
+end
+
+--- One tip at a time; history waits until it has picks.
+--- @private
+function o:ShowHelpTip()
+  if dragTip:ShowOnce() then return end
+  if #IconHistory:GetIcons() > 0 then historyTip:ShowOnce() end
 end
 
 --- @private
@@ -326,6 +362,7 @@ function o:OnClickOkay()
     --- @type LibIconPicker_Selection
     local sel = { icon = icon }
     if firstRow.EditBox:IsShown() then sel.textInputValue = firstRow.EditBox:GetText() end
+    IconHistory:Add(icon)
     fn(sel)
     return self:Hide()
   end
@@ -403,6 +440,59 @@ function o:InitIconTypeDropdown()
     add(L['Items'], prov.ITEMS)
     add(L['Spells'], prov.SPELLS)
   end)
+end
+
+--- @private
+function o:InitHistoryButton()
+  local button = firstRow.HistoryButton
+  button:SetupMenu(function(_, root) self:BuildHistoryMenu(root) end)
+  button:SetDefaultText(L['Recent Icons'])
+  button:RegisterCallback(DropdownButtonMixin.Event.OnMenuOpen, function() historyTip:Dismiss() end)
+end
+
+--- Newest first; picking one only sets the selected icon.
+--- @private
+--- @param root RootMenuDescriptionProxy
+function o:BuildHistoryMenu(root)
+  local history = IconHistory:GetIcons()
+  if #history == 0 then
+    root:CreateTitle(L['No Recent Icons'])
+    return
+  end
+  -- Non-zero, or the dropdown's width stretches 1 to 2 cells
+  root:SetMinimumWidth(1)
+  -- Blizzard resets the scale on every open
+  root:AddMenuAcquiredCallback(
+    function(menu) menu:SetScale(menu:GetScale() * HISTORY_MENU_SCALE) end
+  )
+  root:SetGridMode(MenuConstants.HorizontalGridDirection, HISTORY_GRID_COLUMNS, HISTORY_GRID_GAP)
+  local lastRowStart = #history - (#history - 1) % HISTORY_GRID_COLUMNS
+  for i, icon in ipairs(history) do
+    self:AddHistoryCell(root, icon, i >= lastRowStart)
+  end
+end
+
+--- Icon-only cell; a custom template must Pick() itself.
+--- @private
+--- @param root RootMenuDescriptionProxy
+--- @param icon IconIDOrPath
+--- @param isLastRow boolean
+function o:AddHistoryCell(root, icon, isLastRow)
+  local cell = root:CreateTemplate('LibIconPicker_IconButtonTemplate')
+  cell:AddInitializer(function(button, description)
+    button:SetWidth(HISTORY_ICON_SIZE)
+    AddRowGap(button, isLastRow and 0 or HISTORY_GRID_GAP)
+    button:SetIcon(icon)
+    button:SetScript(
+      'OnClick',
+      function(_, buttonName) description:Pick(MenuInputContext.MouseButton, buttonName) end
+    )
+  end)
+  cell:SetResponder(function()
+    selectedIconBtn:SetIcon(icon)
+    return MenuResponse.CloseAll
+  end)
+  cell:SetTooltip(function(tooltip) tooltip:SetText(tostring(icon)) end)
 end
 
 --- @param self UIDropDownMenuButton

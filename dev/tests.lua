@@ -1,3 +1,42 @@
+--[[-----------------------------------------------------------------------------
+For LuaDevKit Editor
+-------------------------------------------------------------------------------]]
+local function load()
+  local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker')
+  local x = { loaded = loaded, msg = msg }
+  p('LIP', 'Loaded=', fs(x))
+end; load()
+
+local function t1()
+  local db_tips = LibIconPicker_HelpTips
+  local db_hist = LibIconPicker_IconHistory
+  db_tips.HistoryTip = nil
+  --wipe(LibIconPicker_IconHistory)
+  --wipe(LibIconPicker_HelpTips)
+  print('LIP_NS:db_tips=', fs(db_tips))
+  print('LIP_NS:db_hist=', fs(db_hist))
+end; t1()
+
+local function open1()
+  p('LibIconPicker=', LibIconPicker)
+  local n, tr = 'Test::IconOnly', LIP_NS.tr
+  LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
+end; open1()
+
+local function open2()
+  LibIconPicker:Open(function(sel)
+      local n, msg, tr =
+      'Test::Text-And-Icon',
+      ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon),
+      LIP_NS.tr
+      tr(n, msg)
+    end, { showTextInput = true })
+end; open2()
+
+--[[-----------------------------------------------------------------------------
+For one-line command consoles
+-------------------------------------------------------------------------------]]
+
 local x = {
 
   --- Load the addon

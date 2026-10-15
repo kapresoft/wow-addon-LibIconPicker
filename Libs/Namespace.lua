@@ -14,6 +14,7 @@ local parentNs
 --- @field O LibIconPicker_NamespaceObjects
 --- @field backdrops table<string, table>
 --- @field iconDataProvider LibIconPicker_IconDataProvider
+--- @field QUESTION_MARK_ICON_ID number @Empty selection; never a real pick
 local ns = {}; LIP_NS = ns
 
 addon, parentNs = ...; parentNs.LibIconPicker = ns
@@ -28,6 +29,7 @@ local settings = { developer = false }
 
 --- @class LibIconPicker_HelpTips
 --- @field DragTip boolean|nil
+--- @field HistoryTip boolean?
 
 --[[-----------------------------------------------------------------------------
 NoOp Logger by Default
@@ -51,6 +53,7 @@ do
   ns.name = 'LibIconPicker'
   ns.addon = addon
   ns.sformat = string.format
+  ns.QUESTION_MARK_ICON_ID = 134400
   ns.settings = settings
   ns.O = {}
   NSO(ns.O)
@@ -66,6 +69,16 @@ do
     if ns.addon ~= ns.name then return sessionHelpTips end
     LibIconPicker_HelpTips = LibIconPicker_HelpTips or {}
     return LibIconPicker_HelpTips
+  end
+
+  local sessionIconHistory = {}
+
+  --- Embedded copies have no SavedVariables; session-only
+  --- @return IconIDOrPath[]
+  function ns:GetIconHistory()
+    if ns.addon ~= ns.name then return sessionIconHistory end
+    LibIconPicker_IconHistory = LibIconPicker_IconHistory or {}
+    return LibIconPicker_IconHistory
   end
 
   --- Registers a non-default locale. Always isDefault=false, silent=true.

@@ -1,11 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
 
-    <Script file="IconDragTip.lua"/>
+    <Script file="HelpTip.lua"/>
 
-    <!-- One-time drag hint; hidden for good once dismissed. Arrow sits under the left edge. -->
-    <Frame name="LibIconPicker_IconDragTipTemplate" inherits="GlowBoxTemplate"
-           mixin="LibIconPicker_IconDragTipMixin"
+    <!-- One-time hint; hidden for good once dismissed. Arrow sits under the left edge.
+         Instances set KeyValues tipKey (LibIconPicker_HelpTips key) and textKey (locale key). -->
+    <Frame name="LibIconPicker_HelpTipTemplate" inherits="GlowBoxTemplate"
+           mixin="LibIconPicker_HelpTipMixin"
            enableMouse="true" hidden="true" virtual="true">
         <Size x="220" y="60"/>
         <Scripts>

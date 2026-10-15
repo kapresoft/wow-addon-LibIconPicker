@@ -16,3 +16,6 @@ Global Vars
 -------------------------------------------------------------------------------]]
 --- @type LibIconPicker_HelpTips
 LibIconPicker_HelpTips = {}
+
+--- @type IconIDOrPath[]
+LibIconPicker_IconHistory = {}

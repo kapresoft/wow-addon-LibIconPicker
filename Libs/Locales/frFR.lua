@@ -18,3 +18,6 @@ L['Selected Icon::DragHint'] = "Faites glisser une icône ici pour l'utiliser."
 L['All Icons'] = 'Toutes les icônes'
 L['Items'] = 'Objets'
 L['Spells'] = 'Sorts'
+L['Recent Icons'] = 'Icônes récentes'
+L['No Recent Icons'] = 'Aucune icône récente'
+L['Recent Icons::Tip'] = 'Réutilisez une icône choisie récemment.'
