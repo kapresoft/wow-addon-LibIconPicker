@@ -9,11 +9,8 @@ local tMergeWithDefaults = O.Util.Table_MergeWithDefaults
 --[[-----------------------------------------------------------------------------
 Types
 -------------------------------------------------------------------------------]]
---- @class IconTypeDropdown : Frame
---- @field owner LibIconPicker_IconSelectorMixin
-
 --- @class LibIconPicker_FirstRow
---- @field IconTypeDropdown IconTypeDropdown
+--- @field IconTypeDropdown DropdownButton
 --- @field Label FontString
 --- @field EditBox LibIconPicker_EditBox
 --- @field HistoryButton DropdownButton
@@ -47,8 +44,8 @@ local icons
 
 --- @type LibIconPicker_FirstRow
 local firstRow
---- @type IconTypeDropdown
-local dropdown
+--- @type LibIconPicker_IconTypeFilter
+local selectedIconType
 
 --- @type LibIconPicker_IconScrollFrame
 local scrollFrame
@@ -98,6 +95,21 @@ local HISTORY_GRID_GAP = 4
 -- Whole menu, not cells, so Blizzard's insets stay even
 local HISTORY_MENU_SCALE = 0.8
 
+-- Warm tint marks OK as the main action
+local OKAY_TINT = CreateColor(1, 0.8, 0.5)
+-- UIMenuButtonStretchTemplate's nine background slices
+local STRETCH_SLICES = {
+  'TopLeft',
+  'TopMiddle',
+  'TopRight',
+  'MiddleLeft',
+  'MiddleMiddle',
+  'MiddleRight',
+  'BottomLeft',
+  'BottomMiddle',
+  'BottomRight',
+}
+
 -- The button padding
 local GRID_PADDING_LEFT = 0
 local ROW_PADDING_LEFT = 5
@@ -114,6 +126,7 @@ New Library
 --- @field HeaderTitle FontString
 --- @field DragTip LibIconPicker_HelpTip
 --- @field HistoryTip LibIconPicker_HelpTip
+--- @field OkayButton Button
 LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
 local p = ns.log('IconSelector')
 
@@ -187,6 +200,34 @@ local function AddRowGap(button, gap)
   end
 end
 
+--- Multiplies the silver art, so it can tint but not lighten.
+--- @param button Button @UIMenuButtonStretchTemplate
+--- @param color ColorMixin
+local function TintStretchButton(button, color)
+  for _, key in ipairs(STRETCH_SLICES) do
+    button[key]:SetVertexColor(color:GetRGB())
+  end
+end
+
+--- Template pins Text to the top; center it at any height.
+--- @param button DropdownButton
+local function CenterText(button)
+  button.Text:ClearAllPoints()
+  button.Text:SetPoint('CENTER')
+end
+
+--- Widest label's width, so a pick never shifts the row.
+--- @param dropdown DropdownButton @Filter template, resizeToText off
+--- @param labels table<string, string>
+local function FitWidestLabel(dropdown, labels)
+  local widest = 0
+  for _, label in pairs(labels) do
+    dropdown.Text:SetText(label)
+    widest = math.max(widest, dropdown.Text:GetUnboundedStringWidth())
+  end
+  dropdown:SetWidth(widest + dropdown.resizeToTextPadding)
+end
+
 --- @param opt LibIconPicker_Options|nil
 local function CreateOptions(opt) return tMergeWithDefaults(DEFAULT_ICON_PICKER_OPTIONS, opt) end
 
@@ -245,6 +286,7 @@ function o:OnLoad()
   selectedIconBtn = firstRow.SelectedIconButton
   dragTip = self.DragTip
   historyTip = self.HistoryTip
+  TintStretchButton(self.OkayButton, OKAY_TINT)
 
   self.HeaderTitle:SetText(L['Icon Picker'])
   firstRow.Label:SetText(DEFAULT_ICON_PICKER_OPTIONS.textInput.label)
@@ -281,10 +323,7 @@ function o:OnInit()
 end
 
 --- @return table<number, number>
-function o:GetIcons()
-  local selValue = UIDropDownMenu_GetSelectedValue(dropdown)
-  return ns.iconDataProvider:GetIcons(selValue)
-end
+function o:GetIcons() return ns.iconDataProvider:GetIcons(selectedIconType) end
 
 --- @param callback LibIconPicker_CallbackFn
 --- @param _opt LibIconPicker_Options|nil
@@ -412,41 +451,36 @@ end
 
 --- @private
 function o:InitIconTypeDropdown()
-  dropdown = firstRow.IconTypeDropdown
-  dropdown.owner = self
-
-  UIDropDownMenu_SetSelectedValue(dropdown, 'both')
-  UIDropDownMenu_SetWidth(dropdown, 100, 35)
-  UIDropDownMenu_SetText(dropdown, L['All Icons'])
-
-  UIDropDownMenu_SetAnchor(dropdown, 18, 10, 'TOPLEFT', dropdown, 'BOTTOMLEFT')
-
-  UIDropDownMenu_Initialize(dropdown, function(frame, level)
-    local sel = UIDropDownMenu_GetSelectedValue(dropdown)
-
-    local function add(text, value)
-      local info = UIDropDownMenu_CreateInfo()
-      info.text = text
-      info.value = value
-      info.owner = dropdown.owner
-      info.func = o.OnClick_IconTypeDropdown
-      info.checked = (sel == value)
-      info.minWidth = 112
-      UIDropDownMenu_AddButton(info, level)
+  local prov = ns.iconDataProvider
+  local dropdown = firstRow.IconTypeDropdown
+  local order = { prov.BOTH, prov.ITEMS, prov.SPELLS }
+  local labels =
+    { [prov.BOTH] = L['All Icons'], [prov.ITEMS] = L['Items'], [prov.SPELLS] = L['Spells'] }
+  selectedIconType = prov.BOTH
+  CenterText(dropdown)
+  FitWidestLabel(dropdown, labels)
+  -- Filter template shows fixed text; keep it on the pick
+  dropdown:SetText(labels[selectedIconType])
+  local function IsSelected(iconType) return iconType == selectedIconType end
+  -- Radios keep the menu open; a filter pick closes it
+  local function SetSelected(iconType)
+    dropdown:SetText(labels[iconType])
+    self:OnIconTypeChanged(iconType)
+    return MenuResponse.Close
+  end
+  dropdown:SetupMenu(function(_, root)
+    for _, iconType in ipairs(order) do
+      root:CreateRadio(labels[iconType], IsSelected, SetSelected, iconType)
     end
-
-    local prov = ns.iconDataProvider
-    add(L['All Icons'], prov.BOTH)
-    add(L['Items'], prov.ITEMS)
-    add(L['Spells'], prov.SPELLS)
   end)
 end
 
 --- @private
 function o:InitHistoryButton()
   local button = firstRow.HistoryButton
+  CenterText(button)
   button:SetupMenu(function(_, root) self:BuildHistoryMenu(root) end)
-  button:SetDefaultText(L['Recent Icons'])
+  button:SetText(L['Recent Icons'])
   button:RegisterCallback(DropdownButtonMixin.Event.OnMenuOpen, function() historyTip:Dismiss() end)
 end
 
@@ -495,16 +529,11 @@ function o:AddHistoryCell(root, icon, isLastRow)
   cell:SetTooltip(function(tooltip) tooltip:SetText(tostring(icon)) end)
 end
 
---- @param self UIDropDownMenuButton
-function o.OnClick_IconTypeDropdown(self)
-  UIDropDownMenu_SetSelectedValue(dropdown, self.value)
-  o:OnIconTypeChanged(self.value)
-end
-
 --- @private
 --- @param iconType "'spells'" | "'items'" | "'both'"
 --- @see LibIconPicker_IconDataProvider#{SPELLS, ITEMS, BOTH}
 function o:OnIconTypeChanged(iconType)
+  selectedIconType = iconType
   -- 1) Fetch new icons
   icons = self:GetIcons()
 
@@ -572,9 +601,8 @@ function o:Redraw()
 
   local contentHeight = rows * ROW_HEIGHT
   scrollFrame.scrollChild:SetHeight(contentHeight)
-  local selectedType = UIDropDownMenu_GetSelectedValue(dropdown)
   if IsAltKeyDown() then
-    p(ns.sformat('Redraw:: total=%s, type=%s, offset=%s', total, selectedType, offset))
+    p(ns.sformat('Redraw:: total=%s, type=%s, offset=%s', total, selectedIconType, offset))
   end
 
   HybridScrollFrame_Update(scrollFrame, contentHeight, scrollFrame:GetHeight())
