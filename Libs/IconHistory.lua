@@ -4,7 +4,7 @@ local ns = select(2, ...).LibIconPicker; if not ns then return end
 --[[-----------------------------------------------------------------------------
 Local Vars
 -------------------------------------------------------------------------------]]
-local MAX_ICON_HISTORY = 10
+local MAX_ICON_HISTORY = 15
 
 --[[-----------------------------------------------------------------------------
 LibIconPicker_IconHistory: confirmed picks, newest first
