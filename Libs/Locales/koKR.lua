@@ -18,3 +18,6 @@ L['Selected Icon::DragHint'] = '아이콘을 여기로 끌어다 놓아 사용�
 L['All Icons'] = '모든 아이콘'
 L['Items'] = '아이템'
 L['Spells'] = '주문'
+L['Recent Icons'] = '최근 아이콘'
+L['No Recent Icons'] = '최근 아이콘 없음'
+L['Recent Icons::Tip'] = '최근에 선택한 아이콘을 다시 사용하세요.'

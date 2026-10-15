@@ -37,7 +37,7 @@ end
 --- @param tex IconIDOrPath
 function o:SetIcon(tex)
   local type = type(tex)
-  local icon = 134400 -- question mark
+  local icon = ns.QUESTION_MARK_ICON_ID
   if type == 'string' or type == 'number' then icon = tex end
   self.icon:SetTexture(icon)
 end

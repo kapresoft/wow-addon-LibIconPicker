@@ -21,3 +21,6 @@ L['Selected Icon::DragHint'] = 'Drag an icon here to use it.'
 L['All Icons'] = true
 L['Items'] = true
 L['Spells'] = true
+L['Recent Icons'] = true
+L['No Recent Icons'] = true
+L['Recent Icons::Tip'] = 'Reuse an icon you picked recently.'

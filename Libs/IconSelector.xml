@@ -3,6 +3,7 @@
 
     <Script file="IconSelectorBackdrops.lua"/>
     <Script file="IconButton.lua"/>
+    <Script file="IconHistory.lua"/>
     <Script file="IconSelector.lua"/>
     <Script file="IconSelectorProvider.lua"/>
 
@@ -147,6 +148,16 @@
                                     relativePoint="BOTTOMRIGHT" x="0" y="-1"/>
                         </Anchors>
                     </Frame>
+                    <DropdownButton parentKey="HistoryButton" inherits="WowStyle1DropdownTemplate">
+                        <Size x="120" y="25"/>
+                        <KeyValues>
+                            <KeyValue key="menuMixin" value="MenuStyle2Mixin" type="global"/>
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="RIGHT" relativeKey="$parent.IconTypeDropdown"
+                                    relativePoint="LEFT" x="12" y="2"/>
+                        </Anchors>
+                    </DropdownButton>
                     <EditBox name="$parentEditBox" parentKey="EditBox"
                              mixin="LibIconPicker_IconSelector_EditBoxMixin"
                              autoFocus="false" inherits="InputBoxTemplate">
@@ -232,10 +243,24 @@
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
-            <Frame parentKey="DragTip" inherits="LibIconPicker_IconDragTipTemplate">
+            <Frame parentKey="DragTip" inherits="LibIconPicker_HelpTipTemplate">
+                <KeyValues>
+                    <KeyValue key="tipKey" value="DragTip"/>
+                    <KeyValue key="textKey" value="Selected Icon::DragHint"/>
+                </KeyValues>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.FirstRow.SelectedIconButton"
                             relativePoint="TOPLEFT" x="-10" y="19"/>
+                </Anchors>
+            </Frame>
+            <Frame parentKey="HistoryTip" inherits="LibIconPicker_HelpTipTemplate">
+                <KeyValues>
+                    <KeyValue key="tipKey" value="HistoryTip"/>
+                    <KeyValue key="textKey" value="Recent Icons::Tip"/>
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.FirstRow.HistoryButton"
+                            relativePoint="TOPLEFT" x="0" y="19"/>
                 </Anchors>
             </Frame>
         </Frames>

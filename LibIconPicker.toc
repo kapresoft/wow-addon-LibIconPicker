@@ -8,7 +8,7 @@
 
 ## DefaultState: enabled
 ## LoadOnDemand: 1
-## SavedVariables: LibIconPicker_HelpTips
+## SavedVariables: LibIconPicker_HelpTips, LibIconPicker_IconHistory
 
 ## Category-enUS: Libraries
 ## Category-deDE: Bibliotheken

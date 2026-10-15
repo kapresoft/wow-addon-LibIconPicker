@@ -19,3 +19,7 @@ L['Selected Icon::DragHint'] =
 L['All Icons'] = 'Все значки'
 L['Items'] = 'Предметы'
 L['Spells'] = 'Заклинания'
+L['Recent Icons'] = 'Недавние значки'
+L['No Recent Icons'] = 'Нет недавних значков'
+L['Recent Icons::Tip'] =
+  'Используйте недавно выбранный значок снова.'
