@@ -97,7 +97,7 @@
                 </Scripts>
             </Button>
             <Button parentKey="CancelButton" name="$parentCancelButton"
-                    inherits="UIPanelButtonTemplate"
+                    inherits="UIMenuButtonStretchTemplate"
                     text="CANCEL">
                 <Size x="90" y="22"/>
                 <Anchors>
@@ -106,9 +106,10 @@
                 <Scripts>
                     <OnClick>self:GetParent():OnClickCancel()</OnClick>
                 </Scripts>
+                <NormalFont style="GameFontNormalSmall"/>
             </Button>
             <Button parentKey="OkayButton" name="$parentOkayButton"
-                    inherits="UIPanelButtonTemplate"
+                    inherits="UIMenuButtonStretchTemplate"
                     text="OKAY">
                 <Size x="90" y="22"/>
                 <Anchors>
@@ -119,6 +120,7 @@
                 <Scripts>
                     <OnClick>self:GetParent():OnClickOkay()</OnClick>
                 </Scripts>
+                <NormalFont style="GameFontNormalSmall"/>
             </Button>
             <Frame name="$parentFirstRow" parentKey="FirstRow" inherits="BackdropTemplate">
                 <Size y="80"/>
@@ -140,22 +142,29 @@
                     </Layer>
                 </Layers>
                 <Frames>
-                    <Frame name="$parentIconTypeDropdown"
-                           parentKey="IconTypeDropdown"
-                           inherits="UIDropDownMenuTemplate">
-                        <Anchors>
-                            <Anchor point="BOTTOMRIGHT" relativeTo="$parent"
-                                    relativePoint="BOTTOMRIGHT" x="0" y="-1"/>
-                        </Anchors>
-                    </Frame>
-                    <DropdownButton parentKey="HistoryButton" inherits="WowStyle1DropdownTemplate">
-                        <Size x="120" y="25"/>
+                    <DropdownButton parentKey="IconTypeDropdown" inherits="WowStyle1FilterDropdownTemplate">
+                        <Size x="120" y="20"/>
                         <KeyValues>
                             <KeyValue key="menuMixin" value="MenuStyle2Mixin" type="global"/>
+                            <KeyValue key="resizeToText" value="false" type="boolean"/>
+                            <KeyValue key="resizeToTextPadding" value="38" type="number"/>
+                            <KeyValue key="baseFontObject" value="GameFontHighlightSmall" type="string"/>
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="BOTTOMRIGHT" relativeTo="$parent"
+                                    relativePoint="BOTTOMRIGHT" x="-4" y="4"/>
+                        </Anchors>
+                    </DropdownButton>
+                    <DropdownButton parentKey="HistoryButton" inherits="WowStyle1FilterDropdownTemplate">
+                        <Size x="120" y="20"/>
+                        <KeyValues>
+                            <KeyValue key="menuMixin" value="MenuStyle2Mixin" type="global"/>
+                            <KeyValue key="resizeToTextPadding" value="38" type="number"/>
+                            <KeyValue key="baseFontObject" value="GameFontHighlightSmall" type="string"/>
                         </KeyValues>
                         <Anchors>
                             <Anchor point="RIGHT" relativeKey="$parent.IconTypeDropdown"
-                                    relativePoint="LEFT" x="12" y="2"/>
+                                    relativePoint="LEFT" x="-8" y="0"/>
                         </Anchors>
                     </DropdownButton>
                     <EditBox name="$parentEditBox" parentKey="EditBox"
