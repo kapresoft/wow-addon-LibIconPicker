@@ -410,7 +410,6 @@ end
 
 --- @private
 function o:OnClickCancel()
-  p(self:GetName() .. '::', 'Cancel clicked')
   self:Hide()
 end
 
