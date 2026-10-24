@@ -2,6 +2,7 @@
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 local O = ns.O
 local IconHistory = O.IconHistory
+local HelpTour = O.HelpTour
 
 local strlenutf8 = strlenutf8
 local tMergeWithDefaults = O.Util.Table_MergeWithDefaults
@@ -52,11 +53,6 @@ local scrollFrame
 
 --- @type LibIconPicker_SelectedIconButton
 local selectedIconBtn
-
---- @type LibIconPicker_HelpTip
-local dragTip
---- @type LibIconPicker_HelpTip
-local historyTip
 
 local maxText = ns.sformat('%s %s %s', L['Max'], 16, L['Characters'])
 local labelText = ns.sformat('%s (%s):', L['Name'], maxText)
@@ -124,8 +120,7 @@ New Library
 --- @field ScrollFrame LibIconPicker_IconScrollFrame
 --- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
---- @field DragTip LibIconPicker_HelpTip
---- @field HistoryTip LibIconPicker_HelpTip
+--- @field HelpTip LibIconPicker_HelpTip
 --- @field OkayButton Button
 LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
 local p = ns.log('IconSelector')
@@ -171,7 +166,7 @@ local function OnDropCursorIcon(self)
   if not icon then return end
   self:SetIcon(icon)
   ClearCursor()
-  dragTip:Dismiss()
+  HelpTour:CompleteStep('DragTip')
 end
 
 --- @param self LibIconPicker_SelectedIconButton
@@ -284,8 +279,6 @@ end
 function o:OnLoad()
   firstRow = self.FirstRow
   selectedIconBtn = firstRow.SelectedIconButton
-  dragTip = self.DragTip
-  historyTip = self.HistoryTip
   TintStretchButton(self.OkayButton, OKAY_TINT)
 
   self.HeaderTitle:SetText(L['Icon Picker'])
@@ -363,15 +356,8 @@ function o:ShowDialog(callback, _opt)
     self:ClearAllPoints()
     self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
   end
-  self:ShowHelpTip()
   self:Show()
-end
-
---- One tip at a time; history waits until it has picks.
---- @private
-function o:ShowHelpTip()
-  if dragTip:ShowOnce() then return end
-  if #IconHistory:GetIcons() > 0 then historyTip:ShowOnce() end
+  HelpTour:OnHostShown(self, self.HelpTip)
 end
 
 --- @private
@@ -480,7 +466,10 @@ function o:InitHistoryButton()
   CenterText(button)
   button:SetupMenu(function(_, root) self:BuildHistoryMenu(root) end)
   button:SetText(L['Recent Icons'])
-  button:RegisterCallback(DropdownButtonMixin.Event.OnMenuOpen, function() historyTip:Dismiss() end)
+  button:RegisterCallback(
+    DropdownButtonMixin.Event.OnMenuOpen,
+    function() HelpTour:CompleteStep('HistoryTip') end
+  )
 end
 
 --- Newest first; picking one only sets the selected icon.

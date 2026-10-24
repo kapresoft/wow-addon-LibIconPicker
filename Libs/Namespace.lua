@@ -28,8 +28,9 @@ Override in DeveloperSetup to enable
 local settings = { developer = false }
 
 --- @class LibIconPicker_HelpTips
---- @field DragTip boolean|nil
+--- @field DragTip boolean?
 --- @field HistoryTip boolean?
+--- @field tourBaseline number? @Highest tour `since` at the first open; nil until then
 
 --[[-----------------------------------------------------------------------------
 NoOp Logger by Default

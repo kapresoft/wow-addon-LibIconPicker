@@ -252,26 +252,7 @@
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
-            <Frame parentKey="DragTip" inherits="LibIconPicker_HelpTipTemplate">
-                <KeyValues>
-                    <KeyValue key="tipKey" value="DragTip"/>
-                    <KeyValue key="textKey" value="Selected Icon::DragHint"/>
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.FirstRow.SelectedIconButton"
-                            relativePoint="TOPLEFT" x="-10" y="19"/>
-                </Anchors>
-            </Frame>
-            <Frame parentKey="HistoryTip" inherits="LibIconPicker_HelpTipTemplate">
-                <KeyValues>
-                    <KeyValue key="tipKey" value="HistoryTip"/>
-                    <KeyValue key="textKey" value="Recent Icons::Tip"/>
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.FirstRow.HistoryButton"
-                            relativePoint="TOPLEFT" x="0" y="19"/>
-                </Anchors>
-            </Frame>
+            <Frame parentKey="HelpTip" inherits="LibIconPicker_HelpTipTemplate"/>
         </Frames>
     </Frame>
 

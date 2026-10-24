@@ -6,6 +6,10 @@ local o = {
   IconSelector = {},
   --- @type LibIconPicker_IconHistory
   IconHistory = {},
+  --- @type LibIconPicker_HelpTour
+  HelpTour = {},
+  --- @type LibIconPicker_HelpTourDef[]
+  TourList = {},
   --- @type LibIconPicker_LibIconPickerUtil
   LibIconPickerUtil = {},
   --- @type AceLocale-3.0
