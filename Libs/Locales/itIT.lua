@@ -14,7 +14,8 @@ L['Characters'] = 'Caratteri'
 L['Selected Icon'] = 'Icona selezionata'
 L['Selected Icon::Desc'] =
   "Mostra l'icona selezionata più di recente. La scelta precedente viene ricordata per questa sessione."
-L['Selected Icon::DragHint'] = "Trascina qui un'icona per usarla."
+L['Selected Icon::DragHint'] =
+  "Puoi anche trascinare qui un'icona dal libro degli incantesimi, dalle borse o da qualsiasi altro punto."
 L['All Icons'] = 'Tutte le icone'
 L['Items'] = 'Oggetti'
 L['Spells'] = 'Incantesimi'

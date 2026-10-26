@@ -14,7 +14,8 @@ L['Characters'] = '字符'
 L['Selected Icon'] = '已选图标'
 L['Selected Icon::Desc'] =
   '显示最近选择的图标。您之前的选择会在本次会话中保留。'
-L['Selected Icon::DragHint'] = '将图标拖到此处即可使用。'
+L['Selected Icon::DragHint'] =
+  '您也可以从法术书、背包或其他任何地方将图标拖到此处。'
 L['All Icons'] = '所有图标'
 L['Items'] = '物品'
 L['Spells'] = '法术'

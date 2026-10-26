@@ -17,7 +17,8 @@ L['Characters'] = true
 L['Selected Icon'] = true
 L['Selected Icon::Desc'] =
   'Shows the most recently selected icon. Your previous choice is remembered for this session.'
-L['Selected Icon::DragHint'] = 'Drag an icon here to use it.'
+L['Selected Icon::DragHint'] =
+  'You can also drag an icon here from your spellbook, bags, or anywhere else.'
 L['All Icons'] = true
 L['Items'] = true
 L['Spells'] = true

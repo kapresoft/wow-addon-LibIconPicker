@@ -14,7 +14,8 @@ L['Characters'] = 'Caracteres'
 L['Selected Icon'] = 'Ícone selecionado'
 L['Selected Icon::Desc'] =
   'Mostra o ícone selecionado mais recentemente. Sua escolha anterior é lembrada durante esta sessão.'
-L['Selected Icon::DragHint'] = 'Arraste um ícone para cá para usá-lo.'
+L['Selected Icon::DragHint'] =
+  'Você também pode arrastar um ícone para cá do seu grimório, das suas bolsas ou de qualquer outro lugar.'
 L['All Icons'] = 'Todos os ícones'
 L['Items'] = 'Itens'
 L['Spells'] = 'Feitiços'
