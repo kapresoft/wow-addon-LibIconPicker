@@ -9,10 +9,11 @@ it see them. Step keys must be unique across all tours.
 --- @type LibIconPicker_Namespace
 local ns = select(2, ...).LibIconPicker; if not ns then return end
 
---- @type LibIconPicker_HelpTourDef[]
+--- @type LibHelpTour_Tour[]
 ns.O.TourList = {
   {
     id = 'welcome',
+    targetId = 'IconSelector',
     steps = {
       {
         key = 'DragTip',

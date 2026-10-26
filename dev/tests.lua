@@ -4,7 +4,7 @@ For LuaDevKit Editor
 local function load()
   local loaded, msg = C_AddOns.LoadAddOn('LibIconPicker')
   local x = { loaded = loaded, msg = msg }
-  p('LIP', 'Loaded=', fs(x))
+  print('LIP', 'Loaded=', fs(x))
 end; load()
 
 local function t1()
@@ -19,17 +19,15 @@ end; t1()
 
 local function open1()
   p('LibIconPicker=', LibIconPicker)
-  local n, tr = 'Test::IconOnly', LIP_NS.tr
-  LibIconPicker:Open(function(sel) tr(n, 'sel:', sel.icon) end)
+  LibIconPicker:Open(function(sel) t('LIP:open1', 'sel:', sel.icon) end)
 end; open1()
 
 local function open2()
+  -- prints out to LDK, conflicts with print to console
+  local p = print
   LibIconPicker:Open(function(sel)
-      local n, msg, tr =
-      'Test::Text-And-Icon',
-      ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon),
-      LIP_NS.tr
-      tr(n, msg)
+      local msg = ('text=[%s], icon=[%s]'):format(sel.textInputValue, sel.icon)
+      p('LIP:open2', msg)
     end, { showTextInput = true })
 end; open2()
 

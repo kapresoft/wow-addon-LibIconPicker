@@ -16,6 +16,13 @@ manual-changelog:
 externals:
   ThirdParty-Libs/LibStub: https://github.com/lua-wow/LibStub
   ThirdParty-Libs/Ace3: https://github.com/WoWUIDev/Ace3
+  ThirdParty-Libs/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    tag: latest
+  # No Annotations folder; its classes live in Libs
+  ThirdParty-Libs/Annotations/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    path: Libs
 
 ignore:
   - "*.md"
@@ -41,6 +48,9 @@ ignore:
   - ThirdParty-Libs/Ace3/AceTab-3.0
   - ThirdParty-Libs/Ace3/AceTimer-3.0
   - ThirdParty-Libs/Ace3/CallbackHandler-1.0
+  - ThirdParty-Libs/LibHelpTour/dev
+  - ThirdParty-Libs/LibHelpTour/ThirdParty
+  - ThirdParty-Libs/LibHelpTour/LICENSE
   - ThirdParty/Ace3.xml
   - ThirdParty/ThirdParty.xml
   - Libs
