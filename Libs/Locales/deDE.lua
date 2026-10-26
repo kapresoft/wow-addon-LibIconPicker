@@ -14,7 +14,8 @@ L['Characters'] = 'Zeichen'
 L['Selected Icon'] = 'Ausgewähltes Symbol'
 L['Selected Icon::Desc'] =
   'Zeigt das zuletzt ausgewählte Symbol an. Deine vorherige Wahl wird für diese Sitzung gespeichert.'
-L['Selected Icon::DragHint'] = 'Ziehe ein Symbol hierher, um es zu verwenden.'
+L['Selected Icon::DragHint'] =
+  'Du kannst auch ein Symbol aus deinem Zauberbuch, deinen Taschen oder von überall sonst hierher ziehen.'
 L['All Icons'] = 'Alle Symbole'
 L['Items'] = 'Gegenstände'
 L['Spells'] = 'Zauber'
