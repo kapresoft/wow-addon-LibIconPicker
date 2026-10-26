@@ -6,9 +6,9 @@ local o = {
   IconSelector = {},
   --- @type LibIconPicker_IconHistory
   IconHistory = {},
-  --- @type LibIconPicker_HelpTour
+  --- @type LibHelpTour_Controller
   HelpTour = {},
-  --- @type LibIconPicker_HelpTourDef[]
+  --- @type LibHelpTour_Tour[]
   TourList = {},
   --- @type LibIconPicker_LibIconPickerUtil
   LibIconPickerUtil = {},

@@ -120,7 +120,6 @@ New Library
 --- @field ScrollFrame LibIconPicker_IconScrollFrame
 --- @field FirstRow LibIconPicker_FirstRow
 --- @field HeaderTitle FontString
---- @field HelpTip LibIconPicker_HelpTip
 --- @field OkayButton Button
 LibIconPicker_IconSelectorMixin = {}; local o = LibIconPicker_IconSelectorMixin
 local p = ns.log('IconSelector')
@@ -357,7 +356,7 @@ function o:ShowDialog(callback, _opt)
     self:SetPoint(anchor.point, anchor.relativeTo, anchor.relativePoint, anchor.x, anchor.y)
   end
   self:Show()
-  HelpTour:OnHostShown(self, self.HelpTip)
+  HelpTour:OnTargetShown('IconSelector', self)
 end
 
 --- @private

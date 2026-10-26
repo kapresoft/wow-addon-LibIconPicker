@@ -9,6 +9,7 @@ manual-changelog:
 embedded-libraries:
   - LibStub
   - Ace3
+  - LibHelpTour
 
 tools-used:
   - DevSuite
@@ -24,6 +25,9 @@ tools-used:
 externals:
   ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
   ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
+  ThirdParty/Libs/LibHelpTour:
+    url: https://github.com/kapresoft/wow-addon-LibHelpTour
+    tag: latest
 
 ignore:
   - "*.sh"
@@ -51,6 +55,9 @@ ignore:
   - ThirdParty/Libs/Ace3/AceTab-3.0
   - ThirdParty/Libs/Ace3/AceTimer-3.0
   - ThirdParty/Libs/Ace3/CallbackHandler-1.0
+  - ThirdParty/Libs/LibHelpTour/dev
+  - ThirdParty/Libs/LibHelpTour/*.toc
+  - ThirdParty/Libs/LibHelpTour/ThirdParty
   - Libs/Developer
 
 # REQUIRED for CurseForge packager (non-obvious):
