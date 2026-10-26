@@ -1,7 +1,6 @@
 # This is used for development to pull external libraries.
-# @see also: ./dev/pull-extlib.sh
 # --------------------------
-# cmd: ./dev/release.sh -duz -r ./.release -m _setup.yml
+# cmd: w-sync-libs
 # Note: This will build in ./.release/_setup directory
 package-as: _setup
 # --------------------------
