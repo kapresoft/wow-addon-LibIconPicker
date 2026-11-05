@@ -24,7 +24,10 @@ tools-used:
 
 externals:
   ThirdParty/Libs/LibStub: https://github.com/lua-wow/LibStub
-  ThirdParty/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
+  # r1424-alpha (Release-r1403 + 21), needed for WoW Forever
+  ThirdParty/Libs/Ace3:
+    url: https://github.com/WoWUIDev/Ace3
+    commit: ac3d1225037e0dc74e025a72342c0f7824aae147
   ThirdParty/Libs/LibHelpTour:
     url: https://github.com/kapresoft/wow-addon-LibHelpTour
     tag: latest
