@@ -16,6 +16,8 @@ L['Selected Icon::Desc'] =
   "Mostra l'icona selezionata più di recente. La scelta precedente viene ricordata per questa sessione."
 L['Selected Icon::DragHint'] =
   "Puoi anche trascinare qui un'icona dal libro degli incantesimi, dalle borse o da qualsiasi altro punto."
+L['Selected Icon::ClickHint'] = "Fai clic per mostrarla nell'elenco."
+L['Selected Icon::JumpTip'] = "Fai clic su questa icona per trovarla nell'elenco delle icone."
 L['All Icons'] = 'Tutte le icone'
 L['Items'] = 'Oggetti'
 L['Spells'] = 'Incantesimi'

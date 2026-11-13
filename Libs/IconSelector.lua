@@ -40,13 +40,15 @@ local L = ns:GetLocale()
 local FIRST_ROW_HEIGHT = 80
 local FIRST_ROW_HEIGHT_NO_TEXT_FIELD = 65
 
---- @type table<number, number>
+--- @type IconIDOrPath[]
 local icons
 
 --- @type LibIconPicker_FirstRow
 local firstRow
 --- @type LibIconPicker_IconTypeFilter
 local selectedIconType
+--- @type table<LibIconPicker_IconTypeFilter, string>
+local iconTypeLabels
 
 --- @type LibIconPicker_IconScrollFrame
 local scrollFrame
@@ -166,6 +168,15 @@ local function OnDropCursorIcon(self)
   self:SetIcon(icon)
   ClearCursor()
   HelpTour:CompleteStep('DragTip')
+end
+
+--- @param list IconIDOrPath[]
+--- @param icon IconIDOrPath
+--- @return number? @nil if the list doesn't have the icon
+local function IndexOf(list, icon)
+  for i, v in ipairs(list) do
+    if v == icon then return i end
+  end
 end
 
 --- @param self LibIconPicker_SelectedIconButton
@@ -309,7 +320,7 @@ end
 function o:OnInit()
   tinsert(UISpecialFrames, self:GetName())
   self:InitTooltips()
-  self:InitDragAndDrop()
+  self:InitSelectedIconButton()
   self:InitIconTypeDropdown()
   self:InitHistoryButton()
 end
@@ -411,23 +422,29 @@ end
 
 --- @private
 function o:InitTooltips()
-  selectedIconBtn:SetScript('OnEnter', function(self)
+  selectedIconBtn:SetScript('OnEnter', function(button)
     if GetCursorIcon() then return end
-    GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+    GameTooltip:SetOwner(button, 'ANCHOR_RIGHT')
     GameTooltip:SetText(L['Selected Icon'])
     GameTooltip:AddLine(L['Selected Icon::Desc'], 0.8, 0.8, 0.8, true)
     GameTooltip:AddLine(' ')
     local r, g, b = GREEN_FONT_COLOR:GetRGB()
     GameTooltip:AddLine(L['Selected Icon::DragHint'], r, g, b, true)
+    if self:FindSelectedIcon() then
+      GameTooltip:AddLine(L['Selected Icon::ClickHint'], r, g, b, true)
+    end
     GameTooltip:Show()
   end)
   selectedIconBtn:SetScript('OnLeave', function() GameTooltip:Hide() end)
 end
 
 --- @private
-function o:InitDragAndDrop()
+function o:InitSelectedIconButton()
   selectedIconBtn:SetScript('OnReceiveDrag', OnDropCursorIcon)
-  selectedIconBtn:SetScript('OnClick', OnDropCursorIcon)
+  selectedIconBtn:SetScript('OnClick', function(button)
+    if GetCursorIcon() then return OnDropCursorIcon(button) end
+    self:JumpToSelectedIcon()
+  end)
   selectedIconBtn:SetScript('OnEvent', UpdateCheckedState)
   selectedIconBtn:HookScript('OnShow', OnShowSelectedIcon)
   selectedIconBtn:HookScript('OnHide', OnHideSelectedIcon)
@@ -438,25 +455,84 @@ function o:InitIconTypeDropdown()
   local prov = ns.iconDataProvider
   local dropdown = firstRow.IconTypeDropdown
   local order = { prov.BOTH, prov.ITEMS, prov.SPELLS }
-  local labels =
+  iconTypeLabels =
     { [prov.BOTH] = L['All Icons'], [prov.ITEMS] = L['Items'], [prov.SPELLS] = L['Spells'] }
   selectedIconType = prov.BOTH
   CenterText(dropdown)
-  FitWidestLabel(dropdown, labels)
-  -- Filter template shows fixed text; keep it on the pick
-  dropdown:SetText(labels[selectedIconType])
+  FitWidestLabel(dropdown, iconTypeLabels)
+  dropdown:SetText(iconTypeLabels[selectedIconType])
   local function IsSelected(iconType) return iconType == selectedIconType end
   -- Radios keep the menu open; a filter pick closes it
   local function SetSelected(iconType)
-    dropdown:SetText(labels[iconType])
-    self:OnIconTypeChanged(iconType)
+    self:SetIconType(iconType)
     return MenuResponse.Close
   end
   dropdown:SetupMenu(function(_, root)
     for _, iconType in ipairs(order) do
-      root:CreateRadio(labels[iconType], IsSelected, SetSelected, iconType)
+      root:CreateRadio(iconTypeLabels[iconType], IsSelected, SetSelected, iconType)
     end
   end)
+end
+
+--- Filter template shows fixed text; set it with the filter.
+--- @private
+--- @param iconType LibIconPicker_IconTypeFilter
+function o:SetIconType(iconType)
+  firstRow.IconTypeDropdown:SetText(iconTypeLabels[iconType])
+  self:OnIconTypeChanged(iconType)
+end
+
+--- @private
+--- @return number?                       @Index; nil if no list has the icon
+--- @return LibIconPicker_IconTypeFilter? @The filter whose list has it
+function o:FindSelectedIcon()
+  local icon = selectedIconBtn:GetIcon()
+  -- Every list starts with it; a later copy repeats it
+  if icon == ns.QUESTION_MARK_ICON_ID then return 1, selectedIconType end
+  local index = IndexOf(icons, icon)
+  if index then return index, selectedIconType end
+  local BOTH = ns.iconDataProvider.BOTH
+  if selectedIconType == BOTH then return nil end
+  index = IndexOf(ns.iconDataProvider:GetIcons(BOTH), icon)
+  if index then return index, BOTH end
+end
+
+--- Switches to All Icons when the current filter lacks the icon.
+--- @private
+function o:JumpToSelectedIcon()
+  local index, iconType = self:FindSelectedIcon()
+  if not index then return end
+  HelpTour:CompleteStep('JumpTip')
+  if iconType ~= selectedIconType then
+    self:SetIconType(iconType)
+    -- The scroll range must match the new list first
+    self:Redraw()
+  end
+  self:ScrollToIndex(index)
+  local button = self:GetButtonAt(index)
+  if button then button:PlayFoundPulse() end
+end
+
+--- Centers the icon's row; no scroll if it's fully in view.
+--- @private
+--- @param index number
+function o:ScrollToIndex(index)
+  local row = math.ceil(index / ICON_COLS)
+  local offset = HybridScrollFrame_GetOffset(scrollFrame)
+  local fullRows = math.floor(scrollFrame:GetHeight() / ROW_HEIGHT)
+  if row > offset and row <= offset + fullRows then return end
+  local top = math.max(0, row - 1 - math.floor(fullRows / 2))
+  scrollFrame.scrollBar:SetValue(top * ROW_HEIGHT)
+  self:Redraw()
+end
+
+--- @private
+--- @param index number
+--- @return LibIconPicker_IconButton? @nil if the icon is scrolled out of view
+function o:GetButtonAt(index)
+  local offset = HybridScrollFrame_GetOffset(scrollFrame)
+  local row = scrollFrame.buttons[math.ceil(index / ICON_COLS) - offset]
+  return row and row[(index - 1) % ICON_COLS + 1]
 end
 
 --- @private
@@ -576,10 +652,14 @@ function o:Redraw()
 
         if not b then break end
         if index <= total then
-          local tex = icons[index]
-          b:SetIcon(tex)
+          local shown = b:GetIcon()
+          b:SetIcon(icons[index])
+          -- Buttons are reused; a pulse belongs to its icon.
+          -- Compare GetIcon to GetIcon: a path reads back as an ID
+          if b:GetIcon() ~= shown then b:StopFoundPulse() end
           b:Show()
         else
+          b:StopFoundPulse()
           b:Hide()
         end
       end

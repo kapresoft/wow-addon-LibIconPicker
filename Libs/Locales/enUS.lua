@@ -19,6 +19,8 @@ L['Selected Icon::Desc'] =
   'Shows the most recently selected icon. Your previous choice is remembered for this session.'
 L['Selected Icon::DragHint'] =
   'You can also drag an icon here from your spellbook, bags, or anywhere else.'
+L['Selected Icon::ClickHint'] = 'Click to show it in the list.'
+L['Selected Icon::JumpTip'] = 'Click this icon to find it in the icon list.'
 L['All Icons'] = true
 L['Items'] = true
 L['Spells'] = true
