@@ -22,6 +22,12 @@ ns.O.TourList = {
         anchor = function(d) return d.FirstRow.SelectedIconButton end,
       },
       {
+        key = 'JumpTip',
+        textKey = 'Selected Icon::JumpTip',
+        --- @param d LibIconPicker_IconSelector
+        anchor = function(d) return d.FirstRow.SelectedIconButton end,
+      },
+      {
         key = 'HistoryTip',
         textKey = 'Recent Icons::Tip',
         --- @param d LibIconPicker_IconSelector

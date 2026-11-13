@@ -31,4 +31,22 @@ function o:LIP()
   return LibIconPicker
 end
 
+--- Pulses the found-icon outline on a visible list icon.
+--- Open the icon picker first.
+--- ### Example:
+--- ```lua
+--- lipd:PulseIcon(3, 4)
+--- ```
+--- @param row number? @Visible row, default 1
+--- @param col number? @Default 1
+function o:PulseIcon(row, col)
+  local selector = ns.O.IconSelector
+  if not (selector and selector:IsShown()) then return print('Open the icon picker first.') end
+  local rowFrame = selector.ScrollFrame.buttons[row or 1]
+  local button = rowFrame and rowFrame[col or 1]
+  if not (button and button:IsShown()) then return print('No visible icon there.') end
+  button:PlayFoundPulse()
+  print('Pulsing icon', button:GetIcon())
+end
+
 C_Timer.After(1, function() tr(libName, 'loaded', 'isDev=', ns:IsDev()) end)

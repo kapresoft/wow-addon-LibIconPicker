@@ -16,6 +16,8 @@ L['Selected Icon::Desc'] =
   'Muestra el icono seleccionado más recientemente. Tu elección anterior se recuerda durante esta sesión.'
 L['Selected Icon::DragHint'] =
   'También puedes arrastrar aquí un icono desde tu libro de hechizos, tus bolsas o cualquier otro lugar.'
+L['Selected Icon::ClickHint'] = 'Haz clic para mostrarlo en la lista.'
+L['Selected Icon::JumpTip'] = 'Haz clic en este icono para encontrarlo en la lista de iconos.'
 L['All Icons'] = 'Todos los iconos'
 L['Items'] = 'Objetos'
 L['Spells'] = 'Hechizos'

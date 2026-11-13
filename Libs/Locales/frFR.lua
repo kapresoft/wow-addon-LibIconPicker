@@ -16,6 +16,8 @@ L['Selected Icon::Desc'] =
   "Affiche l'icône sélectionnée le plus récemment. Votre choix précédent est mémorisé pour cette session."
 L['Selected Icon::DragHint'] =
   "Vous pouvez aussi faire glisser une icône ici depuis votre grimoire, vos sacs ou n'importe où ailleurs."
+L['Selected Icon::ClickHint'] = "Cliquez pour l'afficher dans la liste."
+L['Selected Icon::JumpTip'] = 'Cliquez sur cette icône pour la retrouver dans la liste des icônes.'
 L['All Icons'] = 'Toutes les icônes'
 L['Items'] = 'Objets'
 L['Spells'] = 'Sorts'

@@ -4,6 +4,8 @@ if not ns then return end
 
 --- @class LibIconPicker_IconButtonMixin
 --- @field icon Texture
+--- @field FoundOutline Texture
+--- @field FoundPulse AnimationGroup
 LibIconPicker_IconButtonMixin = {}
 
 local o = LibIconPicker_IconButtonMixin
@@ -43,6 +45,16 @@ function o:SetIcon(tex)
 end
 
 function o:GetIcon() return self.icon:GetTexture() end
+
+function o:PlayFoundPulse()
+  self.FoundOutline:Show()
+  self.FoundPulse:Restart()
+end
+
+function o:StopFoundPulse()
+  self.FoundPulse:Stop()
+  self.FoundOutline:Hide()
+end
 
 function o:HideNormalTexture()
   local normalTex = self:GetNormalTexture()
